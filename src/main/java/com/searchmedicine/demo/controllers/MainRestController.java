@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping(value = "api/change")
+@RequestMapping(value = "api/chang")
 public class MainRestController {
 }

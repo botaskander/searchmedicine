@@ -1,0 +1,31 @@
+package com.searchmedicine.demo.entities;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "addresses")
+public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name ="id")
+    private Long id;
+
+    @Column(name = "street_name",columnDefinition="TEXT")
+    private String name;
+
+    @Column(name = "street_number")
+    private String number;
+
+    @Column(name = "postcode")
+    private String postcode;
+
+    @ManyToOne
+    private Region region;
+}

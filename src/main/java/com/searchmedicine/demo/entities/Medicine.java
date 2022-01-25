@@ -36,8 +36,5 @@ public class Medicine {
     private String indications;
 
     @ManyToOne
-    private Company company;
-
-    @ManyToOne
     private FarmGroup farmGroup;
 }

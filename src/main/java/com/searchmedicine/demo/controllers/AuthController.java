@@ -1,24 +1,27 @@
 package com.searchmedicine.demo.controllers;
 
 
+import com.searchmedicine.demo.dto.JwtRequest;
+import com.searchmedicine.demo.dto.JwtResponse;
+import com.searchmedicine.demo.dto.UserDTO;
 import com.searchmedicine.demo.entities.Roles;
 import com.searchmedicine.demo.entities.Users;
-import com.searchmedicine.demo.jwt.JwtUtils;
-import com.searchmedicine.demo.payload.request.LoginRequest;
-import com.searchmedicine.demo.payload.request.SignupRequest;
-import com.searchmedicine.demo.payload.response.JwtResponse;
-import com.searchmedicine.demo.payload.response.MessageResponse;
+
+import com.searchmedicine.demo.jwt.JWTTokenGenerator;
 import com.searchmedicine.demo.repositories.RolesRepository;
 import com.searchmedicine.demo.repositories.UsersRepository;
-import com.searchmedicine.demo.services.impl.UserDetailsImpl;
+import com.searchmedicine.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,99 +30,93 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private JWTTokenGenerator jwtTokenGenerator;
 
     @Autowired
-    UsersRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    RolesRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
 
-    @Autowired
-    JwtUtils jwtUtils;
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    @RequestMapping(value = "/auth")
+    public ResponseEntity<?> auth(@RequestBody JwtRequest request) throws Exception{
+        authenticate(request.getEmail(), request.getPassword());
+        final UserDetails userDetails =
+                userService.loadUserByUsername(request.getEmail());
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        final String token = jwtTokenGenerator.generateToken(userDetails);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-        List <Roles> roless=new ArrayList<>();
-        Roles role= new Roles();
-        for (String r: roles){
-            if(roleRepository.findByRole(r).isPresent()){
-                role=roleRepository.findByRole(r).orElseThrow(() -> new UsernameNotFoundException("User Not Found with roles: "));
-                roless.add(role);
-            }
-
-        }
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getFullname(),
-                userDetails.getEmail(),
-                roless));
+        System.out.println("//////"+"login"+"////");
+        return ResponseEntity.ok(new JwtResponse(token));
     }
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
+    @PostMapping("/authentication/register")
+    public ResponseEntity<?> registerUser(@RequestBody Users request_user) throws Exception {
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
-
-        // Create new user's account
+        System.out.println("/////////"+"registration"+"////////");
         Users user = new Users();
-        user.setEmail(signUpRequest.getEmail());
-        user.setFullName(signUpRequest.getFullname());
-        user.setPassword( passwordEncoder.encode(signUpRequest.getPassword()));
-        List<Roles> strRoles = signUpRequest.getRole();
-        List<Roles> roles = new ArrayList<>();
-
-        if (strRoles == null) {
-            Roles userRole = roleRepository.findByRole("ROLE_USER")
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role.getRole()) {
-                    case "ROLE_ADMIN":
-                        Roles adminRole = roleRepository.findByRole("ROLE_ADMIN")
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "ROLE_MODERATOR":
-                        Roles modRole = roleRepository.findByRole("ROLE_MODERATOR")
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-                    default:
-                        Roles userRole = roleRepository.findByRole("ROLE_USER")
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
+        user.setEmail(request_user.getEmail());
+        user.setPassword(request_user.getPassword());
+        user.setFullName(request_user.getFullName());
+        if (!userService.saveUser(user)){
+            return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
 
-        user.setRoles(roles);
-        userRepository.save(user);
+//        authenticate(request_user.getEmail(), request_user.getPassword());
+//        final UserDetails userDetails =
+//                userService.loadUserByUsername(request_user.getEmail());
+//
+//        final String token = jwtTokenGenerator.generateToken(userDetails);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+//        return ResponseEntity.ok(new JwtResponse(token));
+
+        return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/authentication/register/confirm")
+    public ResponseEntity<?> confirm(@RequestParam("token") String token) {
+        System.out.println("/////////"+"registration"+"////////");
+        userService.confirmToken(token);
+        return ResponseEntity.ok().build();
+    }
+
+    public void authenticate(String email, String password) throws Exception{
+
+        try{
+
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+
+        }catch (DisabledException e){
+            throw new DisabledException("User disabled. Please activate", e);
+        }catch (BadCredentialsException e){
+            throw new BadCredentialsException("Invalid email or password", e);
+        }
+
+    }
+
+    @GetMapping(value = "/profile")
+    public ResponseEntity<?> profilePage(){
+        Users user = getUser();
+        return new ResponseEntity<>(new UserDTO(user.getId(), user.getFullName(), user.getEmail(), user.getRoles()), HttpStatus.OK);
+    }
+
+    private Users getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            return (Users) authentication.getPrincipal();
+        }
+        return null;
+    }
+
+
+
+
+
 }

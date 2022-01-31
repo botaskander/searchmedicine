@@ -29,6 +29,6 @@ public class CompanyMedicine {
   private Medicine medicine;
 
   @ManyToOne
-  private Company pharmacy;
+  private Company company;
 
 }

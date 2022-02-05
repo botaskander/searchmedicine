@@ -108,6 +108,11 @@ public class UserServiceImpl implements UserService {
         return "confirmed";
     }
 
+    @Override
+    public Users getUser(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public int enableAppUser(String email) {
         return userRepository.enableAppUser(email);
     }

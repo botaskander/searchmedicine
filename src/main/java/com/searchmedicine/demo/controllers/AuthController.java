@@ -47,14 +47,31 @@ public class AuthController {
 
     @RequestMapping(value = "/auth")
     public ResponseEntity<?> auth(@RequestBody JwtRequest request) throws Exception{
-        authenticate(request.getEmail(), request.getPassword());
-        final UserDetails userDetails =
-                userService.loadUserByUsername(request.getEmail());
+        System.out.println("hello");
 
-        final String token = jwtTokenGenerator.generateToken(userDetails);
+        Users user= userService.getUser(request.getEmail());
+        if(user!=null){
+            if (passwordEncoder.matches(request.getPassword(),user.getPassword())){
+                authenticate(request.getEmail(), request.getPassword());
+                final UserDetails userDetails =
+                        userService.loadUserByUsername(request.getEmail());
 
-        System.out.println("//////"+"login"+"////");
-        return ResponseEntity.ok(new JwtResponse(token));
+
+                final String token = jwtTokenGenerator.generateToken(userDetails);
+
+                System.out.println("//////"+"login"+"////");
+                return ResponseEntity.ok(new JwtResponse(token));
+            }
+            else {
+                System.out.println("/////////// password /////////////");
+                return new ResponseEntity<>("password is not correct",HttpStatus.OK);
+            }
+        }
+        else {
+            System.out.println("/////////// email /////////////");
+            return new ResponseEntity<>("email is not correct",HttpStatus.OK);
+        }
+
     }
 
     @PostMapping("/authentication/register")

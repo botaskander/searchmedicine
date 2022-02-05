@@ -9,4 +9,6 @@ public interface UserService  extends UserDetailsService  {
     Users editUser(Users user);
     Roles getRole(Long id);
     String confirmToken(String token);
+
+    Users getUser(String email);
 }

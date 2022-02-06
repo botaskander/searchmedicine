@@ -10,12 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PharmacyMedicineDto {
+public class CompanyMedicineDto {
 
-  private Medicine medicine;
-  private Pharmacy pharmacy;
-  private Company company;
-  private double price;
+  private Long id;
+  private String medicine;
+  private String company;
   private String imageUrl;
 
 }

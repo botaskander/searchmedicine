@@ -1,6 +1,5 @@
 package com.searchmedicine.demo.controllers.mobileControllers;
 
-import com.searchmedicine.demo.entities.PharmacyMedicine;
 import com.searchmedicine.demo.entities.dto.CompanyMedicineDto;
 import com.searchmedicine.demo.services.CompanyMedicineService;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
@@ -8,7 +7,10 @@ import com.searchmedicine.demo.services.PharmacyMedicineService;
 import java.io.Console;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,15 +22,10 @@ public class MobileController {
   private final CompanyMedicineService companyMedicineService;
 
   @GetMapping()
-  public List<CompanyMedicineDto> getAllCompanyMedicine() {
+  public List<CompanyMedicineDto> getMiniFarms() {
+    System.out.println("-----------------------Diana------------------------");
+    System.out.println(companyMedicineService.getAllCompanyMedicine());
     return companyMedicineService.getAllCompanyMedicine();
   }
 
-  @GetMapping("/medicine/{id}")
-  public List<PharmacyMedicine> getAllPharmacyCompany(@PathVariable Long id){
-    System.out.println("**********************************************");
-    System.out.println(id);
-    System.out.println(pharmacyMedicineService.getAllPharmacyMedicine(id));
-    return pharmacyMedicineService.getAllPharmacyMedicine(id);
-  }
 }

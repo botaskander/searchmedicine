@@ -13,3 +13,4 @@ import java.util.List;
 public interface PharmacyMedicineRepository extends JpaRepository<PharmacyMedicine,Long> {
     List<PharmacyMedicine> findAllByCompanyMedicine_Id(Long id);
 }
+

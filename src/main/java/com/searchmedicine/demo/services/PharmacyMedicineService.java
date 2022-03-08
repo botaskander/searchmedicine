@@ -1,5 +1,6 @@
 package com.searchmedicine.demo.services;
 
+import com.searchmedicine.demo.entities.PharmacyMedicine;
 import com.searchmedicine.demo.entities.dto.CompanyMedicineDto;
 import com.searchmedicine.demo.repositories.PharmacyMedicineRepository;
 import java.util.List;
@@ -12,6 +13,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PharmacyMedicineService {
   private final PharmacyMedicineRepository pharmacyMedicineRepository;
+
+  public List<PharmacyMedicine> getAllPharmacyMedicine(Long id){
+    return  pharmacyMedicineRepository.findAllByCompanyMedicine_Id(id);
+  }
 
 
 }

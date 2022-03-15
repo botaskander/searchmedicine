@@ -1,4 +1,4 @@
-package com.searchmedicine.demo.entities.dto;
+package com.searchmedicine.demo.dto;
 
 import com.searchmedicine.demo.entities.Company;
 import com.searchmedicine.demo.entities.Medicine;
@@ -10,12 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PharmacyMedicineDto {
+public class CompanyMedicineDto {
 
-  private Medicine medicine;
-  private Pharmacy pharmacy;
-  private Company company;
-  private double price;
+  private Long id;
+  private String medicine;
+  private String company;
   private String imageUrl;
 
 }

@@ -1,6 +1,6 @@
 package com.searchmedicine.demo.services;
 
-import com.searchmedicine.demo.entities.dto.CompanyMedicineDto;
+import com.searchmedicine.demo.dto.CompanyMedicineDto;
 import com.searchmedicine.demo.repositories.CompanyMedicineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

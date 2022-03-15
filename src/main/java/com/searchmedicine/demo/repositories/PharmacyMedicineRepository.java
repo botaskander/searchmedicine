@@ -1,6 +1,5 @@
 package com.searchmedicine.demo.repositories;
 
-import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.PharmacyMedicine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

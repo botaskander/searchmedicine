@@ -1,4 +1,4 @@
-package com.searchmedicine.demo.entities.dto;
+package com.searchmedicine.demo.dto;
 
 import com.searchmedicine.demo.entities.Company;
 import com.searchmedicine.demo.entities.Medicine;

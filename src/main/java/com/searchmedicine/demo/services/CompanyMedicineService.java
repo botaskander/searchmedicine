@@ -18,7 +18,7 @@ public class CompanyMedicineService {
   public List<CompanyMedicineDto> getAllCompanyMedicine(){
 
     List<CompanyMedicineDto> pharmacyMedicine = em.createQuery(" select "
-                    + " new com.searchmedicine.demo.entities.dto.CompanyMedicineDto ("
+                    + " new com.searchmedicine.demo.dto.CompanyMedicineDto ("
                     + "cm.id, m.name,c.name, cm.imageUrl )"
                     + " from Medicine m, Company c  "
                     + " inner join CompanyMedicine cm on c.id = cm.company.id"

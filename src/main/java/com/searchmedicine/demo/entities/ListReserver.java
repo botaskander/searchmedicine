@@ -21,14 +21,23 @@ public class ListReserver {
     @Column(name = "is_took")
     private Boolean isTook;
 
+    @Column(name = "is_expired")
+    private Boolean  isExpired;
+
     @Column(name = "until_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime untilTime;
 
     @Column(name = "reserved_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime reservedTime;
 
+    @Column(name = "count")
+    private int count;
+
     @ManyToOne
     private Medicine medicine;
+
+    @ManyToOne
+    private Company company;
 
     @ManyToOne
     private Pharmacy pharmacy;

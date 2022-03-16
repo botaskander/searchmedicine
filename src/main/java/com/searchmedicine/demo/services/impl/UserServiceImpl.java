@@ -79,7 +79,9 @@ public class UserServiceImpl implements UserService {
         String link = "http://localhost:8081/authentication/register/confirm?token=" + token;
         emailSender.send(
                 user.getEmail(),
-                buildEmail(user.getFullName(), link));
+                buildEmail(user.getFullName(), link),
+            "Confirm your email"
+        );
 
         return true;
     }

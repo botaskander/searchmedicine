@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -18,20 +19,24 @@ public class UserMedicine {
     @Column(name = "id")
     private  Long id;
 
-    @Column(name = "count")
-    private int count;
 
-    @Column(name = "price")
-    private double price;
-
-    @Column(name = "comment",columnDefinition = "TEXT")
-    private String comment;
+    @Column(name = "description",columnDefinition = "TEXT")
+    private String description;
 
     @Column(name = "exp_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime expDate;
 
+    @Column(name = "url_image", columnDefinition = "TEXT")
+    private String urlImage;
+
+    @Column(name = "addedDate")
+    private Date addedDate;
+
     @ManyToOne
-    private Medicine medicine;
+    private CompanyMedicine companyMedicine;
+
+    @Column(name = "phone",columnDefinition = "TEXT")
+    private String phone;
 
     @ManyToOne
     private Users user;

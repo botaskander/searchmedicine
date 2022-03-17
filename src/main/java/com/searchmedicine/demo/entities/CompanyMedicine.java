@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "companies_medicines")
 public class CompanyMedicine {
@@ -23,12 +26,17 @@ public class CompanyMedicine {
   @Column(name ="id")
   private Long id;
 
-  @Column(name ="image_url")
-  private String imageUrl;
   @ManyToOne
   private Medicine medicine;
 
   @ManyToOne
-  private Company pharmacy;
+  private Company company;
+
+  @Column(name = "url",columnDefinition = "TEXT")
+  private  String  url;
+
+  @Column(name = "is_exchange")
+  private Boolean isExchange;
+
 
 }

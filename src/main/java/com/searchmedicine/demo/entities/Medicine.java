@@ -26,6 +26,7 @@ public class Medicine {
     @Column(name = "is_pres_only")
     private Boolean isPresOnly;
 
+
     @Column(name = "storage_condition",columnDefinition="TEXT")
     private String storageCondition;
 
@@ -37,4 +38,6 @@ public class Medicine {
 
     @ManyToOne
     private FarmGroup farmGroup;
+
+
 }

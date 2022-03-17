@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -17,8 +18,11 @@ public class ImagesUserMedicine {
     @Column(name ="id")
     private Long id;
 
-    @Column(name = "img",columnDefinition = "TEXT")
-    private  String  img;
+    @Column(name = "url",columnDefinition = "TEXT")
+    private  String  url;
+
+    @Column(name = "addedDate")
+    private Date addedDate;
 
     @ManyToOne
     private UserMedicine userMedicine;

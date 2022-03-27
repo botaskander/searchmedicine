@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserMedicineService {
     UserMedicine addMedicine(UserMedicine userMedicine);
+    void deleteUserMedicine(UserMedicine userMedicine);
     ImagesUserMedicine addImage(ImagesUserMedicine imagesUserMedicine);
     UserMedicine getUserMedicine(Long id);
     List<UserMedicine> getAllUserMedicine();

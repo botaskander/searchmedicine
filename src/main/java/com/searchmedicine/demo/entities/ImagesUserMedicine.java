@@ -24,6 +24,6 @@ public class ImagesUserMedicine {
     @Column(name = "addedDate")
     private Date addedDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private UserMedicine userMedicine;
 }

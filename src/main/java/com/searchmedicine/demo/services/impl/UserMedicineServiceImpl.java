@@ -24,6 +24,12 @@ public class UserMedicineServiceImpl implements UserMedicineService {
     }
 
     @Override
+    public void deleteUserMedicine(UserMedicine userMedicine) {
+         userMedicineRepository.delete(userMedicine);
+    }
+
+
+    @Override
     public ImagesUserMedicine addImage(ImagesUserMedicine imagesUserMedicine) {
         return imagesUserMedicineRepository.save(imagesUserMedicine);
     }
@@ -47,4 +53,6 @@ public class UserMedicineServiceImpl implements UserMedicineService {
     public ImagesUserMedicine getImage(Long id) {
         return imagesUserMedicineRepository.findByUserMedicineId(id);
     }
+
+
 }

@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(value = "api/chang")
 @RequiredArgsConstructor
+@RequestMapping(value = "api/chang")
 public class MainRestController {
     @Autowired
     UserMedicineService userMedicineService;
@@ -72,7 +72,7 @@ public class MainRestController {
         return "hello";}
 
 
-    private final PharmacyMedicineService pharmacyMedicineService;
+//    private final PharmacyMedicineService pharmacyMedicineService;
     private final CompanyMedicineService companyMedicineService;
 
     @GetMapping("/farm")
@@ -141,6 +141,19 @@ public class MainRestController {
 
         }
         return   new ResponseEntity<>( userMedicine, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteUserMedicine/{id}")
+    public ResponseEntity<?> deleteUserMedicine(@PathVariable Long id){
+        try {
+            System.out.println(id);
+            System.out.println("helo//////////////// delete function");
+            UserMedicine userMedicine =userMedicineService.getUserMedicine(id);
+            userMedicineService.deleteUserMedicine(userMedicine);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

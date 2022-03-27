@@ -1,6 +1,7 @@
 package com.searchmedicine.demo.services;
 
 import com.searchmedicine.demo.dto.CompanyMedicineDto;
+import com.searchmedicine.demo.entities.CompanyMedicine;
 import com.searchmedicine.demo.repositories.CompanyMedicineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,33 @@ public class CompanyMedicineService {
   public List<CompanyMedicineDto> getAllCompanyMedicine(){
 
     List<CompanyMedicineDto> pharmacyMedicine = em.createQuery(" select "
-                    + " new com.searchmedicine.demo.dto.CompanyMedicineDto ("
-                    + "cm.id, m.name,c.name, cm.imageUrl )"
-                    + " from Medicine m, Company c  "
-                    + " inner join CompanyMedicine cm on c.id = cm.company.id"
-                    + " where  c.id = cm.company.id "
-                    + " and m.id = cm.medicine.id", CompanyMedicineDto.class)
+            + " new com.searchmedicine.demo.dto.CompanyMedicineDto ("
+            + "cm.id, m.name,c.name, cm.url )"
+            + " from Medicine m, Company c  "
+            + " inner join CompanyMedicine cm on c.id = cm.company.id"
+            + " where  c.id = cm.company.id "
+            + " and m.id = cm.medicine.id", CompanyMedicineDto.class)
             .getResultList();
 
     return pharmacyMedicine;
   }
+  public List<CompanyMedicineDto> getAllCompanyMedicineisAvailable(){
+
+    List<CompanyMedicineDto> pharmacyMedicine = em.createQuery(" select "
+            + " new com.searchmedicine.demo.dto.CompanyMedicineDto ("
+            + "cm.id, m.name,c.name, cm.url )"
+            + " from Medicine m, Company c  "
+            + " inner join CompanyMedicine cm on c.id = cm.company.id"
+            + " where  c.id = cm.company.id "
+            + " and m.id = cm.medicine.id and cm.isExchange=true", CompanyMedicineDto.class)
+            .getResultList();
+
+    return pharmacyMedicine;
+  }
+  public CompanyMedicine findById(Long id){
+    return companyMedicineRepository.getById(id);
+  }
+
+
 
 }

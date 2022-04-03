@@ -1,7 +1,6 @@
 package com.searchmedicine.demo.controllers.web;
 
-import com.searchmedicine.demo.entities.FarmGroup;
-import com.searchmedicine.demo.entities.Medicine;
+import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +30,13 @@ public class AdminController {
     }
 
     @PostMapping("/farm-groups/save")
-    public ResponseEntity<?> saveFarmGroup(@RequestBody FarmGroup farmGroup){
-        return  ResponseEntity.ok(adminService.saveFarmGroup(farmGroup));
+    public Response saveFarmGroup(@RequestBody FarmGroup farmGroup){
+        return  adminService.saveFarmGroup(farmGroup);
     }
 
     @DeleteMapping("/farm-groups/delete/{id}")
-    public ResponseEntity<?> deleteFarmGroup(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(adminService.deleteFartmGroup(id));
+    public Response deleteFarmGroup(@PathVariable("id") Long id) {
+        return adminService.deleteFarmGroup(id);
     }
 
     @GetMapping("/farm-groups/get-by-id/{id}")
@@ -51,15 +50,13 @@ public class AdminController {
     }
 
     @PostMapping("/medicines/save")
-    public ResponseEntity<?> saveMedicine(@RequestBody Medicine medicine){
-        adminService.saveMedicine(medicine);
-        return  ResponseEntity.ok().build();
+    public Response saveMedicine(@RequestBody Medicine medicine){
+        return adminService.saveMedicine(medicine);
     }
 
     @DeleteMapping("/medicines/delete/{id}")
-    public ResponseEntity<?> deleteMedicine(@PathVariable("id") Long id) {
-        adminService.deleteMedicine(id);
-        return ResponseEntity.ok().build();
+    public Response deleteMedicine(@PathVariable("id") Long id) {
+        return adminService.deleteMedicine(id);
     }
 
     @GetMapping("/medicines/get-by-id/{id}")
@@ -67,6 +64,64 @@ public class AdminController {
         return  ResponseEntity.ok(adminService.getMedicine(id));
     }
 
+    @GetMapping("/countries/get-all")
+    public ResponseEntity<?> getAllCountries(){
+        return  ResponseEntity.ok(adminService.getAllCountries());
+    }
 
+    @PostMapping("/countries/save")
+    public Response saveCountry(@RequestBody Country country){
+        return adminService.saveCountry(country);
+    }
+
+    @DeleteMapping("/countries/delete/{id}")
+    public Response deleteCountry(@PathVariable("id") Long id) {
+        return adminService.deleteCountry(id);
+    }
+
+    @GetMapping("/countries/get-by-id/{id}")
+    public ResponseEntity<?> getCountry(@PathVariable("id") Long id){
+        return  ResponseEntity.ok(adminService.getCountry(id));
+    }
+
+    @GetMapping("/cities/get-all")
+    public ResponseEntity<?> getAllCities(){
+        return  ResponseEntity.ok(adminService.getAllCities());
+    }
+
+    @PostMapping("/cities/save")
+    public Response saveCity(@RequestBody City city){
+        return adminService.saveCity(city);
+    }
+
+    @DeleteMapping("/cities/delete/{id}")
+    public Response deleteCity(@PathVariable("id") Long id) {
+        return adminService.deleteCity(id);
+    }
+
+    @GetMapping("/cities/get-by-id/{id}")
+    public ResponseEntity<?> getCity(@PathVariable("id") Long id){
+        return  ResponseEntity.ok(adminService.getCity(id));
+    }
+
+    @GetMapping("/regions/get-by-id/{id}")
+    public ResponseEntity<?> getRegion(@PathVariable("id") Long id){
+        return  ResponseEntity.ok(adminService.getRegion(id));
+    }
+
+    @GetMapping("/regions/get-all")
+    public ResponseEntity<?> getAllRegions(){
+        return  ResponseEntity.ok(adminService.getAllRegions());
+    }
+
+    @PostMapping("/regions/save")
+    public Response saveRegion(@RequestBody Region region){
+        return adminService.saveRegion(region);
+    }
+
+    @DeleteMapping("/regions/delete/{id}")
+    public Response deleteRegion(@PathVariable("id") Long id) {
+        return adminService.deleteRegion(id);
+    }
 
 }

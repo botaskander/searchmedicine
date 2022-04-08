@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -28,7 +29,6 @@ public class Medicine {
     @Column(name = "is_pres_only")
     private Boolean isPresOnly;
 
-
     @Column(name = "storage_condition",columnDefinition="TEXT")
     private String storageCondition;
 
@@ -37,6 +37,15 @@ public class Medicine {
 
     @Column(name = "indications", columnDefinition="TEXT")
     private String indications;
+
+    @Column(name="added_date")
+    private LocalDateTime addedDate;
+
+    @Column(name="view_amount")
+    private int viewAmount;
+
+    @Column(name="search_amount")
+    private int searchAmount;
 
     @ManyToOne
     private FarmGroup farmGroup;

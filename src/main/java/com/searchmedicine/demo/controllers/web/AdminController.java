@@ -1,12 +1,10 @@
 package com.searchmedicine.demo.controllers.web;
 
 import com.searchmedicine.demo.entities.*;
+import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +23,8 @@ public class AdminController {
     }
 
     @GetMapping("/farm-groups/get-all")
-    public ResponseEntity<?> getAllFarmGroups(){
-        return  ResponseEntity.ok(adminService.getAllFarmGroups());
+    public List<FarmGroup> getAllFarmGroups(){
+        return adminService.getAllFarmGroups();
     }
 
     @PostMapping("/farm-groups/save")
@@ -40,13 +38,13 @@ public class AdminController {
     }
 
     @GetMapping("/farm-groups/get-by-id/{id}")
-    public ResponseEntity<?> getFarmGroup(@PathVariable("id") Long id){
-        return  ResponseEntity.ok(adminService.getFarmGroup(id));
+    public FarmGroup getFarmGroup(@PathVariable("id") Long id){
+        return adminService.getFarmGroup(id);
     }
 
     @GetMapping("/medicines/get-all")
-    public ResponseEntity<?> getAllMedicines(){
-        return  ResponseEntity.ok(adminService.getAllMedicines());
+    public List<Medicine> getAllMedicines(){
+        return  adminService.getAllMedicines();
     }
 
     @PostMapping("/medicines/save")
@@ -60,13 +58,13 @@ public class AdminController {
     }
 
     @GetMapping("/medicines/get-by-id/{id}")
-    public ResponseEntity<?> getMedicine(@PathVariable("id") Long id){
-        return  ResponseEntity.ok(adminService.getMedicine(id));
+    public Medicine getMedicine(@PathVariable("id") Long id){
+        return adminService.getMedicine(id);
     }
 
     @GetMapping("/countries/get-all")
-    public ResponseEntity<?> getAllCountries(){
-        return  ResponseEntity.ok(adminService.getAllCountries());
+    public List<Country> getAllCountries(){
+        return  adminService.getAllCountries();
     }
 
     @PostMapping("/countries/save")
@@ -80,13 +78,13 @@ public class AdminController {
     }
 
     @GetMapping("/countries/get-by-id/{id}")
-    public ResponseEntity<?> getCountry(@PathVariable("id") Long id){
-        return  ResponseEntity.ok(adminService.getCountry(id));
+    public Country getCountry(@PathVariable("id") Long id){
+        return adminService.getCountry(id);
     }
 
     @GetMapping("/cities/get-all")
-    public ResponseEntity<?> getAllCities(){
-        return  ResponseEntity.ok(adminService.getAllCities());
+    public List<City> getAllCities(){
+        return adminService.getAllCities();
     }
 
     @PostMapping("/cities/save")
@@ -100,18 +98,18 @@ public class AdminController {
     }
 
     @GetMapping("/cities/get-by-id/{id}")
-    public ResponseEntity<?> getCity(@PathVariable("id") Long id){
-        return  ResponseEntity.ok(adminService.getCity(id));
+    public City getCity(@PathVariable("id") Long id){
+        return  adminService.getCity(id);
     }
 
     @GetMapping("/regions/get-by-id/{id}")
-    public ResponseEntity<?> getRegion(@PathVariable("id") Long id){
-        return  ResponseEntity.ok(adminService.getRegion(id));
+    public Region getRegion(@PathVariable("id") Long id){
+        return  adminService.getRegion(id);
     }
 
     @GetMapping("/regions/get-all")
-    public ResponseEntity<?> getAllRegions(){
-        return  ResponseEntity.ok(adminService.getAllRegions());
+    public List<Region> getAllRegions(){
+        return adminService.getAllRegions();
     }
 
     @PostMapping("/regions/save")
@@ -122,6 +120,41 @@ public class AdminController {
     @DeleteMapping("/regions/delete/{id}")
     public Response deleteRegion(@PathVariable("id") Long id) {
         return adminService.deleteRegion(id);
+    }
+
+    @GetMapping("/companies/get-by-id/{id}")
+    public Company getCompany(@PathVariable("id") Long id){
+        return  adminService.getCompany(id);
+    }
+
+    @GetMapping("/companies/get-all")
+    public List<Company> getAllCompanies(){
+        return  adminService.getAllCompanies();
+    }
+
+    @PostMapping("/companies/save")
+    public Response saveCompany(@RequestBody Company company){
+        return adminService.saveCompany(company);
+    }
+
+    @DeleteMapping("/companies/delete/{id}")
+    public Response deleteCompany(@PathVariable("id") Long id) {
+        return adminService.deleteCompany(id);
+    }
+
+    @GetMapping("/users/get-by-id/{id}")
+    public Users getUser(@PathVariable("id") Long id){
+        return  adminService.getUser(id);
+    }
+
+    @GetMapping("/users/get-all")
+    public List<Users> getAllUsers(@RequestParam(name = "roleCode",required = false, defaultValue = "") String roleCode){
+        return  adminService.getAllUsers(roleCode);
+    }
+
+    @GetMapping("/users/get-home-info")
+    public AdminHomeInfo getLastUsersInfo(){
+        return  adminService.getAdminHomeUserInfo();
     }
 
 }

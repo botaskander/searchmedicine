@@ -1,6 +1,8 @@
 package com.searchmedicine.demo.services.impl;
 
 import com.searchmedicine.demo.entities.*;
+import com.searchmedicine.demo.entities.views.AdminHomeInfo;
+import com.searchmedicine.demo.entities.views.ChartLine;
 import com.searchmedicine.demo.repositories.*;
 import com.searchmedicine.demo.services.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +10,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +30,11 @@ public class AdminServiceImpl implements AdminService {
     private final CountryRepository countryRepository;
     private final CityRepository cityRepository;
     private final PharmacyRepository pharmacyRepository;
+    private final CompanyRepository companyRepository;
     private final ListReserverRepository listReserverRepository;
     private final ListWaiterRepository listWaiterRepository;
+
+    private final static String EDIT_SUCCESS_MSG="Изменения сохранены";
 
     @SneakyThrows
     @Override
@@ -35,6 +44,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveFarmGroup(FarmGroup farmGroup) {
+        String resMessage=farmGroup.getId()==null? "Группа успешно добавлена!" : EDIT_SUCCESS_MSG;
         try {
             farmGroupRepository.save(farmGroup);
         }
@@ -43,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
             return new Response(1,"Ошибка при сохранении группы лекарства: "+e.getMessage());
         }
         return Response.builder()
-                .responseMessage(farmGroup.getId()==null? "Группа успешно добавлена!":" Изменения сохранены")
+                .responseMessage(resMessage)
                 .responseCode(0)
                 .build();
     }
@@ -83,22 +93,23 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveMedicine(Medicine medicine) {
+        String resMessage=medicine.getId()==null? "Лекарство успешно добавлено!": EDIT_SUCCESS_MSG;
         try {
             if (medicine.getFarmGroup() == null) {
                 return new Response(1," Ошибка в группе: Пустая группа");
             }
             val farmGroup = farmGroupRepository.getById(medicine.getFarmGroup().getId());
             medicine.setFarmGroup(farmGroup);
+            if (medicine.getId() == null) {
+                medicine.setAddedDate(LocalDateTime.now());
+            }
             medicineRepository.save(medicine);
         }
         catch (Exception e){
             log.error("Ошибка при сохранении лекарства",e);
             return new Response(1,"Ошибка при сохранении лекарства: "+e.getMessage());
         }
-        return Response.builder()
-                .responseMessage(medicine.getId()==null? "Лекарство успешно добавлено!":" Изменения сохранены")
-                .responseCode(0)
-                .build();
+        return new Response(0,resMessage);
     }
 
     @Override
@@ -128,7 +139,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveCountry(Country country) {
-        System.out.println("CCCCC "+country.getId());
+        String resMessage= country.getId()==null? "Страна успешно добавлена!": EDIT_SUCCESS_MSG;
         try {
             countryRepository.save(country);
         }
@@ -136,10 +147,7 @@ public class AdminServiceImpl implements AdminService {
             log.error("Ошибка при сохранении страны",e);
             return new Response(1,"Ошибка при сохранении страны: "+e.getMessage());
         }
-        return Response.builder()
-                .responseMessage(country.getId()==null? "Страна успешно добавлена!":" Изменения сохранены")
-                .responseCode(0)
-                .build();
+        return new Response(0,resMessage);
     }
 
     @Override
@@ -169,6 +177,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveCity(City city) {
+        String resMessage=city.getId()==null? "Город успешно добавлен!": EDIT_SUCCESS_MSG;
         try {
             cityRepository.save(city);
         }
@@ -176,10 +185,7 @@ public class AdminServiceImpl implements AdminService {
             log.error("Ошибка при сохранении города",e);
             return new Response(1,"Ошибка при сохранении города: "+e.getMessage());
         }
-        return Response.builder()
-                .responseMessage(city.getId()==null? "Город успешно добавлен!":" Изменения сохранены")
-                .responseCode(0)
-                .build();
+        return new Response(0,resMessage);
     }
 
     @Override
@@ -208,6 +214,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveRegion(Region region) {
+        String resMessage=region.getId()==null? "Регион успешно добавлен!" : EDIT_SUCCESS_MSG;
         try {
             if (region.getCity() == null) {
                 return new Response(1," Ошибка : Пустой город");
@@ -220,10 +227,8 @@ public class AdminServiceImpl implements AdminService {
             log.error("Ошибка при сохранении региона",e);
             return new Response(1,"Ошибка при сохранении региона: "+e.getMessage());
         }
-        return Response.builder()
-                .responseMessage(region.getId()==null? "Регион успешно добавлен!":" Изменения сохранены")
-                .responseCode(0)
-                .build();    }
+        return new Response(0,resMessage);
+    }
 
     @Override
     public Response deleteRegion(Long id) {
@@ -236,6 +241,50 @@ public class AdminServiceImpl implements AdminService {
         }
         return Response.builder()
                 .responseMessage("Регион удален")
+                .responseCode(0)
+                .build();
+    }
+
+    @SneakyThrows
+    @Override
+    public Company getCompany(Long id) {
+        return companyRepository.getById(id);
+    }
+
+    @SneakyThrows
+    @Override
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAll();
+    }
+
+    @Override
+    public Response saveCompany(Company company) {
+        String resMessage=company.getId()==null? "Компания успешно добавлена!" : EDIT_SUCCESS_MSG;
+        try {
+            if (company.getCountry() == null) {
+                return new Response(1," Ошибка : Пустая страна");
+            }
+            val country = countryRepository.getById(company.getCountry().getId());
+            company.setCountry(country);
+            companyRepository.save(company);
+        }
+        catch (Exception e){
+            log.error("Ошибка при сохранении компании",e);
+            return new Response(1,"Ошибка при сохранении компании: "+e.getMessage());
+        }
+        return new Response(0,resMessage);    }
+
+    @Override
+    public Response deleteCompany(Long id) {
+        try {
+            companyRepository.deleteById(id);
+        }
+        catch (Exception e){
+            log.error("Ошибка при удалении компании",e);
+            return new Response(1,"Ошибка при удалении компании: "+e.getMessage());
+        }
+        return Response.builder()
+                .responseMessage("Компания удалена")
                 .responseCode(0)
                 .build();    }
 
@@ -279,14 +328,64 @@ public class AdminServiceImpl implements AdminService {
         return null;
     }
 
+    @SneakyThrows
     @Override
     public Users getUser(Long id) {
         return usersRepository.getById(id);
     }
 
+    @SneakyThrows
     @Override
-    public List<Users> getAllUsers() {
-        return usersRepository.findAll();
+    public List<Users> getAllUsers(String roleCode) {
+
+        if(StringUtils.hasText(roleCode)){
+            val role=rolesRepository.findByRole(roleCode).get();
+                return usersRepository.findAll().stream().filter(user->
+                    user.getRoles().contains(role)==true
+                ).collect(Collectors.toList());
+        }
+
+        return  usersRepository.findAll();
+    }
+
+    @SneakyThrows
+    @Override
+    public AdminHomeInfo getAdminHomeUserInfo() {
+
+        val users=usersRepository.findAllByOrderByRegisterDateDesc();
+        val lastMonthUsers= users.stream()
+                .filter(user->user.getRegisterDate().isAfter(LocalDateTime.now().minusMonths(1)))
+                .collect(Collectors.toList());
+        val pharmacies= pharmacyRepository.findAllByOrderByLastUpdateDateDesc();
+        val medicines= medicineRepository.findAllByOrderByViewAmountAscSearchAmountAsc();
+        List<ChartLine> chartLineList=new ArrayList<>();
+        medicines.forEach(x->{
+
+        });
+        for(int i=0; i<medicines.size(); i++){
+            if(i==10){
+                break;
+            }
+            chartLineList.add(ChartLine.builder()
+                    .medicineName(medicines.get(i).getName())
+                    .searchAmount(medicines.get(i).getSearchAmount())
+                    .viewAmount(medicines.get(i).getViewAmount())
+                    .build());
+        }
+        val lastMonthMedicines=medicines.stream()
+                .filter(medicine->medicine.getAddedDate().isAfter(LocalDateTime.now().minusMonths(1)))
+                .collect(Collectors.toList());
+        return AdminHomeInfo.builder()
+                .chartLineList(chartLineList)
+                .lastMonthUsers(lastMonthUsers.size())
+                .totalUsers(users.size())
+                .lastMonthExchanges(0)
+                .totalExchanges(0)
+                .lastMonthMedicines(lastMonthMedicines.size())
+                .totalMedicines(medicines.size())
+                .lastRegisteredUsers(users.size()>3 ? users.subList(0,3) : users)
+                .lastUpdatedPharmacies(pharmacies.size()>4? pharmacies.subList(0,4) : pharmacies)
+                .build();
     }
 
     @Override
@@ -305,7 +404,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Roles> getAllRoles() {
+    public List<Roles> getAllRoles(String roleCode) {
+
         return rolesRepository.findAll();
     }
 

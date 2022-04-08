@@ -1,6 +1,7 @@
 package com.searchmedicine.demo.services;
 
 import com.searchmedicine.demo.entities.*;
+import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 
 import java.util.List;
 
@@ -45,6 +46,14 @@ public interface AdminService {
 
     Response deleteRegion(Long id);
 
+    Company getCompany(Long id);
+
+    List<Company> getAllCompanies();
+
+    Response saveCompany(Company company);
+
+    Response deleteCompany(Long id);
+
     ListReserver getListReserver(Long id);
 
     List<ListReserver> getAllListReservers();
@@ -63,7 +72,9 @@ public interface AdminService {
 
     Users getUser(Long id);
 
-    List<Users> getAllUsers();
+    List<Users> getAllUsers(String roleCode);
+
+    AdminHomeInfo getAdminHomeUserInfo();
 
     Response saveUser(Users user);
 
@@ -71,14 +82,9 @@ public interface AdminService {
 
     Roles getRole(Long id);
 
-    List<Roles> getAllRoles();
+    List<Roles> getAllRoles(String roleCode);
 
     Response saveRole(Roles role);
 
     Response deleteRoles(Long id);
-
-
-
-
-
 }

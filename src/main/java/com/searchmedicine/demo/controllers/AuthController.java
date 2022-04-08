@@ -25,7 +25,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,10 +82,11 @@ public class AuthController {
         user.setEmail(request_user.getEmail());
         user.setPassword(request_user.getPassword());
         user.setFullName(request_user.getFullName());
+        user.setRegisterDate(LocalDateTime.now());
+        user.setArc(false);
         if (!userService.saveUser(user)){
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
-
         return ResponseEntity.ok().build();
     }
 

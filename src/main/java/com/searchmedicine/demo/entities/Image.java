@@ -26,7 +26,7 @@ public class Image {
     private Date addedDate;
 
     @ManyToOne
-    private CompanyMedicine companyMedicine;
+    private Medicine medicine;
 
 
 }

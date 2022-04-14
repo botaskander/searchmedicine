@@ -33,7 +33,7 @@ public class UserMedicine {
     private Date addedDate;
 
     @ManyToOne
-    private CompanyMedicine companyMedicine;
+    private Medicine medicine;
 
     @Column(name = "phone",columnDefinition = "TEXT")
     private String phone;

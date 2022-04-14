@@ -2,6 +2,7 @@ package com.searchmedicine.demo.controllers;
 
 import com.searchmedicine.demo.entities.ImagesUserMedicine;
 import com.searchmedicine.demo.entities.UserMedicine;
+import com.searchmedicine.demo.entities.Users;
 import com.searchmedicine.demo.payload.UploadFileResponse;
 import com.searchmedicine.demo.services.FileStorageService;
 import com.searchmedicine.demo.services.UserMedicineService;
@@ -14,6 +15,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -40,20 +44,50 @@ public class FileController {
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+        String fileName = fileStorageService.storeFile(file,getUser().getId());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
 
+
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
+    }
+    @PostMapping(path="/editImage", consumes = {"multipart/form-data"})
+    public List<UploadFileResponse> editImage(@RequestParam("files") MultipartFile[] files,@RequestParam(required=false,name="id") Object id) {
+        String stringToConvert = String.valueOf(id);
+        Long convertedLong = Long.parseLong(stringToConvert);
+        UserMedicine userMedicine= userMedicineService.getUserMedicine(convertedLong);
+        System.out.println(userMedicine);
+        List<UploadFileResponse> listFile =Arrays.asList(files)
+                .stream()
+                .map(file -> uploadFile(file))
+                .collect(Collectors.toList());
+
+        long date=System.currentTimeMillis();
+        Date addeddate=new Date(date);
+        userMedicine.setUrlImage(listFile.get(0).getFileName());
+        System.out.println("////////////error//////////////");
+        UserMedicine userMedicine1=userMedicineService.editUserMedicine(userMedicine);
+        System.out.println("****************error****************");
+        List<ImagesUserMedicine> imagesUserMedicines=userMedicineService.getImageList(userMedicine.getId());
+        userMedicineService.deleteUserMedicineImagesAll(imagesUserMedicines);
+        System.out.println("/////////////////////"+userMedicineService.getUserMedicine(convertedLong));
+        for(int i=0;i<listFile.size();i++){
+            ImagesUserMedicine imagesUserMedicine=new ImagesUserMedicine();
+            System.out.println(listFile.get(i).getFileName());
+            imagesUserMedicine.setUrl(listFile.get(i).getFileName());
+            imagesUserMedicine.setUserMedicine(userMedicine);
+            imagesUserMedicine.setAddedDate(addeddate);
+            userMedicineService.addImage(imagesUserMedicine);
+        }
+        return  listFile;
     }
 
     @PostMapping(path="/uploadMultipleFiles", consumes = {"multipart/form-data"})
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@RequestParam(required=false,name="id") Object id) {
-        System.out.println(id);
         String stringToConvert = String.valueOf(id);
         Long convertedLong = Long.parseLong(stringToConvert);
         UserMedicine userMedicine= userMedicineService.getUserMedicine(convertedLong);
@@ -64,7 +98,11 @@ public class FileController {
 
         long date=System.currentTimeMillis();
         Date addeddate=new Date(date);
+        userMedicine.setUrlImage(listFile.get(0).getFileName());
+        UserMedicine userMedicine1=userMedicineService.editUserMedicine(userMedicine);
+        System.out.println(userMedicine);
         for(int i=0;i<listFile.size();i++){
+
             ImagesUserMedicine imagesUserMedicine=new ImagesUserMedicine();
             System.out.println(listFile.get(i).getFileName());
             imagesUserMedicine.setUrl(listFile.get(i).getFileName());
@@ -112,6 +150,13 @@ public class FileController {
         System.out.println(IOUtils.toByteArray(in));
         return IOUtils.toByteArray(in);
 
+    }
+    private Users getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            return (Users) authentication.getPrincipal();
+        }
+        return null;
     }
 
 

@@ -9,26 +9,17 @@ import com.searchmedicine.demo.entities.email.EmailSender;
 import com.searchmedicine.demo.repositories.PharmacyMedicineRepository;
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-@Service
-@RequiredArgsConstructor
-public class PharmacyMedicineService {
-    private final PharmacyMedicineRepository pharmacyMedicineRepository;
-    private final ListWaiterService listWaiterService;
-    private final EmailSender emailSender;
-
-    public List<PharmacyMedicine> getAllPharmacyMedicine(Long id){
-        return  pharmacyMedicineRepository.findAllByMedicine_Id(id);
-    }
+public interface PharmacyMedicineService {
+  List<PharmacyMedicine> getAllPharmacyMedicine(Long id);
+  void sendNotification( PharmacyMedicine pharmacyMedicine);
+}
 
     public void sendNotification( PharmacyMedicine pharmacyMedicine){
-        List<ListWaiter> listWaiters = listWaiterService.getNotification(pharmacyMedicine.getMedicine().getId());
+        List<ListWaiter> listWaiters = listWaiterService.getNotification(pharmacyMedicine.getCompanyMedicine().getMedicine().getId());
         String setSubject = "Notification about medicine";
         System.out.println("***************");
         System.out.println("Send notification");
-        emailSender.send("botaskander@gmail.com",buildEmail("Diana", pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
+        emailSender.send("botaskander@gmail.com",buildEmail("Diana", pharmacyMedicine.getCompanyMedicine().getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
 //    for(ListWaiter lw: listWaiters){
 //      emailSender.send( lw.getUsers().getEmail(),
 //          buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getCompanyMedicine().getMedicine(), pharmacyMedicine.getPharmacy()),

@@ -13,4 +13,8 @@ import java.util.List;
 @Repository
 public interface MedicineRepository extends JpaRepository<Medicine,Long> {
         List<Medicine> getAllByIsExchangeTrue();
+
+    List<Medicine> findAllByOrderByAddedDateDesc();
+
+    List<Medicine> findAllByOrderByViewAmountAscSearchAmountAsc();
 }

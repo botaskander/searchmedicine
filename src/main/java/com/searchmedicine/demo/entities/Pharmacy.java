@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
@@ -39,6 +40,12 @@ public class Pharmacy {
     @Column(name = "off_phone")
     private String offPhone;
 
+    @Column(name="last_update_date")
+    private LocalDateTime lastUpdateDate;
+
     @ManyToOne
     private Address address;
+
+    @OneToOne
+    private Users user;
 }

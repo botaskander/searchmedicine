@@ -6,27 +6,23 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "images_medicine")
+@Table(name = "images")
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="id")
     private Long id;
 
-    @Column(name = "url",columnDefinition = "TEXT")
-    private  String  url;
-
-    @Column(name = "addedDate")
-    private Date addedDate;
+    @Column(name = "img",columnDefinition = "TEXT")
+    private  String  img;
 
     @ManyToOne
-    private CompanyMedicine companyMedicine;
+    private Medicine medicine;
 
 
 }

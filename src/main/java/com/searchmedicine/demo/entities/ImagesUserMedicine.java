@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -18,12 +17,9 @@ public class ImagesUserMedicine {
     @Column(name ="id")
     private Long id;
 
-    @Column(name = "url",columnDefinition = "TEXT")
-    private  String  url;
+    @Column(name = "img",columnDefinition = "TEXT")
+    private  String  img;
 
-    @Column(name = "addedDate")
-    private Date addedDate;
-
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private UserMedicine userMedicine;
 }

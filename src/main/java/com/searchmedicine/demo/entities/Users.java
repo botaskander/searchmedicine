@@ -2,7 +2,6 @@ package com.searchmedicine.demo.entities;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,17 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Builder
 @Table(name = "m_users")
 public class Users implements UserDetails  {
     @Id
@@ -36,12 +31,6 @@ public class Users implements UserDetails  {
 
     @Column(name = "fullname")
     private String fullName;
-
-    @Column(name="register_date")
-    private LocalDateTime registerDate;
-
-    @Column(name="is_arc")
-    private boolean isArc;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Roles> roles;

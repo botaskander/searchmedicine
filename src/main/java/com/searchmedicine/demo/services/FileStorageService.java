@@ -3,6 +3,7 @@ package com.searchmedicine.demo.services;
 import com.searchmedicine.demo.exception.FileStorageException;
 import com.searchmedicine.demo.exception.MyFileNotFoundException;
 import com.searchmedicine.demo.property.FileStorageProperties;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,21 +34,23 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file,Long id) {
         // Normalize file name
+
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String picName= DigestUtils.sha1Hex(fileName+id)+".png";
 
         try {
             // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
-                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+            if(picName.contains("..")) {
+                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + picName);
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Path targetLocation = this.fileStorageLocation.resolve(picName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return fileName;
+            return picName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }

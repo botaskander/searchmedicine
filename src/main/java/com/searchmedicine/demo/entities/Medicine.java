@@ -1,5 +1,6 @@
 package com.searchmedicine.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "medicines")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +28,8 @@ public class Medicine {
     @Column(name = "is_pres_only")
     private Boolean isPresOnly;
 
+    @Column(name = "is_exchange")
+    private Boolean isExchange;
 
     @Column(name = "storage_condition",columnDefinition="TEXT")
     private String storageCondition;
@@ -38,6 +42,11 @@ public class Medicine {
 
     @ManyToOne
     private FarmGroup farmGroup;
+
+    @ManyToOne
+    private  Company company;
+
+
 
 
 }

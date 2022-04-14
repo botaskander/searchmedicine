@@ -1,7 +1,9 @@
 package com.searchmedicine.demo.services;
 
+import com.searchmedicine.demo.entities.Image;
 import com.searchmedicine.demo.entities.ImagesUserMedicine;
 import com.searchmedicine.demo.entities.UserMedicine;
+import org.h2.engine.User;
 
 import java.util.List;
 
@@ -13,5 +15,8 @@ public interface UserMedicineService {
     List<UserMedicine> getAllUserMedicine();
     List<ImagesUserMedicine> getImageList(Long id);
     ImagesUserMedicine getImage(Long id);
-
+    List<UserMedicine> getUserMedicineByUser(Long id);
+    UserMedicine editUserMedicine(UserMedicine userMedicine);
+    void deleteUserMedicineImages(ImagesUserMedicine imagesUserMedicine);
+    void deleteUserMedicineImagesAll(List<ImagesUserMedicine> imagesUserMedicinesList);
 }

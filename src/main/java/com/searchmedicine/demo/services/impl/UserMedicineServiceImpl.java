@@ -54,5 +54,25 @@ public class UserMedicineServiceImpl implements UserMedicineService {
         return imagesUserMedicineRepository.findByUserMedicineId(id);
     }
 
+    @Override
+    public List<UserMedicine> getUserMedicineByUser(Long id) {
+        return userMedicineRepository.findAllByUserId(id);
+    }
+
+    @Override
+    public UserMedicine editUserMedicine(UserMedicine userMedicine) {
+        return userMedicineRepository.save(userMedicine);
+    }
+
+    @Override
+    public void deleteUserMedicineImages(ImagesUserMedicine imagesUserMedicine) {
+        imagesUserMedicineRepository.delete(imagesUserMedicine);
+    }
+
+    @Override
+    public void deleteUserMedicineImagesAll(List<ImagesUserMedicine> imagesUserMedicinesList) {
+        imagesUserMedicineRepository.deleteAll(imagesUserMedicinesList);
+    }
+
 
 }

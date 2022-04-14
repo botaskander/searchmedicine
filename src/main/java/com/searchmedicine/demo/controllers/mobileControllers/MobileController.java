@@ -1,13 +1,16 @@
 package com.searchmedicine.demo.controllers.mobileControllers;
 
+import com.searchmedicine.demo.entities.Medicine;
 import com.searchmedicine.demo.entities.PharmacyMedicine;
 import com.searchmedicine.demo.dto.CompanyMedicineDto;
-import com.searchmedicine.demo.job.SendNotification;
-import com.searchmedicine.demo.services.CompanyMedicineService;
+import com.searchmedicine.demo.services.MedicineService;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,11 +20,15 @@ import org.springframework.web.bind.annotation.*;
 public class MobileController {
 
   private final PharmacyMedicineService pharmacyMedicineService;
-  private final CompanyMedicineService companyMedicineService;
+
+  @Autowired
+  MedicineService medicineService;
 
   @GetMapping()
-  public List<CompanyMedicineDto> getAllCompanyMedicine() {
-    return companyMedicineService.getAllCompanyMedicine();
+  public ResponseEntity<?> getAllCompanyMedicine() {
+    System.out.println(medicineService.getAllMedicine());
+    System.out.println("heli");
+    return new ResponseEntity<>(medicineService.getAllMedicine(), HttpStatus.OK);
   }
 
   @GetMapping("/medicine/{id}")

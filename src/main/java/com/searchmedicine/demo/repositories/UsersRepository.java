@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -18,4 +19,7 @@ public interface UsersRepository extends JpaRepository<Users,Long> {
     @Query("UPDATE Users u " +
             "SET u.enabled = TRUE WHERE u.email = ?1")
     int enableAppUser(String email);
+
+    List<Users> findAllByOrderByRegisterDateDesc();
+
 }

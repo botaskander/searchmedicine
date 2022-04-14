@@ -19,9 +19,9 @@ public class CheckJob {
 
   @Scheduled(fixedDelay = 60000)
   public void run(){
-    System.out.println("*********************************");
-    System.out.println("Start check");
-    checkBook();
+//    System.out.println("*********************************");
+//    System.out.println("Start check");
+//    checkBook();
   }
 
   public void checkBook(){

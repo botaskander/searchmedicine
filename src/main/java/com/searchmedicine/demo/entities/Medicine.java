@@ -1,15 +1,18 @@
 package com.searchmedicine.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "medicines")
 public class Medicine {
     @Id
@@ -35,6 +38,17 @@ public class Medicine {
     @Column(name = "indications", columnDefinition="TEXT")
     private String indications;
 
+    @Column(name="added_date")
+    private LocalDateTime addedDate;
+
+    @Column(name="view_amount")
+    private int viewAmount;
+
+    @Column(name="search_amount")
+    private int searchAmount;
+
     @ManyToOne
     private FarmGroup farmGroup;
+
+
 }

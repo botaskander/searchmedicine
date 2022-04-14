@@ -3,10 +3,9 @@ import com.searchmedicine.demo.dto.CompanyMedicineDto;
 import com.searchmedicine.demo.dto.MedicineExchange;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.payload.UploadFileResponse;
-import com.searchmedicine.demo.repositories.UserMedicineRepository;
-import com.searchmedicine.demo.services.CompanyMedicineService;
 import com.searchmedicine.demo.services.FileStorageService;
-import com.searchmedicine.demo.services.PharmacyMedicineService;
+import com.searchmedicine.demo.services.MedicineService;
+//import com.searchmedicine.demo.services.PharmacyMedicineService;
 import com.searchmedicine.demo.services.UserMedicineService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,18 +21,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -42,6 +40,9 @@ import java.util.stream.Collectors;
 public class MainRestController {
     @Autowired
     UserMedicineService userMedicineService;
+
+    @Autowired
+    MedicineService medicineService;
 
     @GetMapping("/all")
     public String allAccess() {
@@ -54,7 +55,7 @@ public class MainRestController {
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+        String fileName = fileStorageService.storeFile(file,getUser().getId());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
@@ -73,29 +74,29 @@ public class MainRestController {
 
 
 //    private final PharmacyMedicineService pharmacyMedicineService;
-    private final CompanyMedicineService companyMedicineService;
+
 
     @GetMapping("/farm")
-    public List<CompanyMedicineDto> getMiniFarms() {
+    public ResponseEntity<?> getMiniFarms() {
         System.out.println("-----------------------Diana------------------------");
-        System.out.println(companyMedicineService.getAllCompanyMedicine());
-        return companyMedicineService.getAllCompanyMedicine();
+        System.out.println(medicineService.getAllMedicine());
+        return new ResponseEntity<>(medicineService.getAllMedicine(), HttpStatus.OK);
     }
     @GetMapping("/listMedicinesAvailable")
-    public List<CompanyMedicineDto> getListMedicinesAvailable() {
+    public ResponseEntity<?> getListMedicinesAvailable() {
         System.out.println("-----------------------list of medicines ------------------------");
-        System.out.println(companyMedicineService.getAllCompanyMedicine());
-        return companyMedicineService.getAllCompanyMedicine();
+        System.out.println(medicineService.getAllAviableMedicine());
+        return   new ResponseEntity<>(medicineService.getAllAviableMedicine(), HttpStatus.OK);
     }
     @PostMapping("/addPostForExchange")
     public ResponseEntity<?> addPostForExchange(@RequestBody MedicineExchange medicineExchange) {
         System.out.println("-----------------------adding Medicines ------------------------");
-        CompanyMedicine companyMedicine = companyMedicineService.findById(Long.parseLong(medicineExchange.getIdMedicine()));
+        Medicine medicine = medicineService.getMedicine(Long.parseLong(medicineExchange.getIdMedicine()));
         UserMedicine userMedicine= new UserMedicine();
         long date=System.currentTimeMillis();
         Date addeddate=new Date(date);
         userMedicine.setDescription(medicineExchange.getDescription());
-        userMedicine.setCompanyMedicine(companyMedicine);
+        userMedicine.setMedicine(medicine);
 
         LocalDate localDate = LocalDate.parse(convertDate(medicineExchange.getMonth(), medicineExchange.getYear()));
         LocalDateTime localDateTime1 = localDate.atStartOfDay();
@@ -122,25 +123,21 @@ public class MainRestController {
         return  date;
 
     }
-    private Users getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(authentication instanceof AnonymousAuthenticationToken)){
-            return (Users) authentication.getPrincipal();
-        }
-        return null;
-    }
+
     @GetMapping("/listExchangeUser")
     public ResponseEntity<?> getListExchangeUser() {
         System.out.println("-----------------------list of exchange  ------------------------");
-        List<UserMedicine> userMedicine= userMedicineService.getAllUserMedicine();
-        System.out.println(userMedicine);
-        for(int i=0;i<userMedicine.size();i++){
-            List<ImagesUserMedicine> imagesUserMedicines=userMedicineService.getImageList(userMedicine.get(i).getId());
-            System.out.println(userMedicine.get(i).getId());
-            userMedicine.get(i).setUrlImage(imagesUserMedicines.get(0).getUrl());
+        Users user = getUser();
+        List<UserMedicine> userMedicine= userMedicineService.getUserMedicineByUser(user.getId());
 
-        }
         return   new ResponseEntity<>( userMedicine, HttpStatus.OK);
+    }
+    @GetMapping("/listImageUser/{id}")
+    public ResponseEntity<?> getListImageUser(@PathVariable Long id) {
+        System.out.println("-----------------------list of images  ------------------------"+id);
+        List<ImagesUserMedicine> imagesUserMedicines= new ArrayList<>();
+        imagesUserMedicines.addAll( userMedicineService.getImageList(id));
+        return   new ResponseEntity<>( imagesUserMedicines, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteUserMedicine/{id}")
@@ -149,11 +146,48 @@ public class MainRestController {
             System.out.println(id);
             System.out.println("helo//////////////// delete function");
             UserMedicine userMedicine =userMedicineService.getUserMedicine(id);
+            List<ImagesUserMedicine> imagesUserMedicines=userMedicineService.getImageList(id);
+
+            String filePath="C:\\Users\\бота\\IdeaProjects\\diploma\\downloadImages\\images\\";
+            for(int i=0;i<imagesUserMedicines.size();i++){
+                String imagesPath=filePath+imagesUserMedicines.get(i).getUrl();
+                Files.delete( Paths.get(imagesPath));
+                System.out.println("File "
+                        + imagesPath
+                        + " successfully removed");
+            }
             userMedicineService.deleteUserMedicine(userMedicine);
+
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/editExchangeMedicine")
+    public ResponseEntity<?> editExchangeMedicine(@RequestBody MedicineExchange medicineExchange) {
+        System.out.println("-----------------------editing Medicines ------------------------");
+        Medicine medicine = medicineService.getMedicine(Long.parseLong(medicineExchange.getIdMedicine()));
+        UserMedicine userMedicine= userMedicineService.getUserMedicine(medicineExchange.getId());
+        System.out.println(userMedicine);
+        userMedicine.setDescription(medicineExchange.getDescription());
+        userMedicine.setMedicine(medicine);
+        LocalDate localDate = LocalDate.parse(convertDate(medicineExchange.getMonth(), medicineExchange.getYear()));
+        LocalDateTime localDateTime1 = localDate.atStartOfDay();
+        userMedicine.setExpDate(localDateTime1);
+        userMedicine.setPhone(medicineExchange.getPhone());
+        UserMedicine newUserMedicine= userMedicineService.editUserMedicine(userMedicine);
+        return   new ResponseEntity<>( newUserMedicine, HttpStatus.OK);
+    }
+
+
+    private Users getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            return (Users) authentication.getPrincipal();
+        }
+        return null;
     }
 
 

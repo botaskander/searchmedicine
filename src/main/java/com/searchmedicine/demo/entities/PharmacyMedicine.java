@@ -28,7 +28,7 @@ public class PharmacyMedicine {
     private double price;
 
     @ManyToOne
-    private CompanyMedicine companyMedicine;
+    private Medicine medicine;
 
     @ManyToOne
     private Pharmacy pharmacy;

@@ -25,12 +25,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-
 @RestController
 public class AuthController {
     @Autowired
@@ -76,36 +78,25 @@ public class AuthController {
 
     @PostMapping("/authentication/register")
     public ResponseEntity<?> registerUser(@RequestBody Users request_user) throws Exception {
-
-        System.out.println("/////////"+"registration"+"////////");
         Users user = new Users();
         user.setEmail(request_user.getEmail());
         user.setPassword(request_user.getPassword());
         user.setFullName(request_user.getFullName());
+        user.setRegisterDate(LocalDateTime.now());
+        user.setArc(false);
         if (!userService.saveUser(user)){
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
-
-//        authenticate(request_user.getEmail(), request_user.getPassword());
-//        final UserDetails userDetails =
-//                userService.loadUserByUsername(request_user.getEmail());
-//
-//        final String token = jwtTokenGenerator.generateToken(userDetails);
-
-//        return ResponseEntity.ok(new JwtResponse(token));
-
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/authentication/register/confirm")
     public ResponseEntity<?> confirm(@RequestParam("token") String token) {
-        System.out.println("/////////"+"registration"+"////////");
         userService.confirmToken(token);
         return ResponseEntity.ok().build();
     }
 
     public void authenticate(String email, String password) throws Exception{
-
         try{
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -130,6 +121,15 @@ public class AuthController {
             return (Users) authentication.getPrincipal();
         }
         return null;
+    }
+
+    @PostMapping(value = "/changeName")
+    public ResponseEntity<?> changeName(@RequestBody Users request_user)throws Exception{
+        System.out.println("hello");
+        Users user = userService.getUser(request_user.getEmail());
+        user.setFullName(request_user.getFullName());
+        userService.editUser(user);
+        return ResponseEntity.ok().build();
     }
 
 

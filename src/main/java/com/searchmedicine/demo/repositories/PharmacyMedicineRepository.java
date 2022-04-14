@@ -10,6 +10,10 @@ import java.util.List;
 @Transactional
 @Repository
 public interface PharmacyMedicineRepository extends JpaRepository<PharmacyMedicine,Long> {
-    List<PharmacyMedicine> findAllByCompanyMedicine_Id(Long id);
+    List<PharmacyMedicine> findAllByMedicineId(Long id);
+
+    List<PharmacyMedicine> findAllByPharmacyIdOrderByAddedDateDesc(Long id);
+
+
 }
 

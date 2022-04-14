@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface CompanyMedicineRepository extends JpaRepository<CompanyMedicine,Long> {
     List<CompanyMedicine> findAllByIsExchangeIsTrue();
+
 }

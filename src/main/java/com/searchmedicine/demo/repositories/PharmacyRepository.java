@@ -13,4 +13,6 @@ import java.util.List;
 public interface PharmacyRepository extends JpaRepository<Pharmacy,Long> {
 
     List<Pharmacy> findAllByOrderByLastUpdateDateDesc();
+
+    Pharmacy getByUser_Id(Long id);
 }

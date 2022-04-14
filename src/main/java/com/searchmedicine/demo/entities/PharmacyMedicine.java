@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
@@ -27,10 +28,15 @@ public class PharmacyMedicine {
     @Column(name = "price")
     private double price;
 
+    @Column(name="added_date")
+    private LocalDateTime addedDate;
+
     @ManyToOne
-    private CompanyMedicine companyMedicine;
+    private Medicine medicine;
 
     @ManyToOne
     private Pharmacy pharmacy;
+
+
 
 }

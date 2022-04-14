@@ -356,18 +356,15 @@ public class AdminServiceImpl implements AdminService {
         val lastMonthUsers= users.stream()
                 .filter(user->user.getRegisterDate().isAfter(LocalDateTime.now().minusMonths(1)))
                 .collect(Collectors.toList());
+
         val pharmacies= pharmacyRepository.findAllByOrderByLastUpdateDateDesc();
+
         val medicines= medicineRepository.findAllByOrderByViewAmountAscSearchAmountAsc();
         List<ChartLine> chartLineList=new ArrayList<>();
-        medicines.forEach(x->{
-
-        });
         for(int i=0; i<medicines.size(); i++){
-            if(i==10){
-                break;
-            }
+            if(i==10){ break; }
             chartLineList.add(ChartLine.builder()
-                    .medicineName(medicines.get(i).getName())
+                    .medicineName(medicines.get(i).getName()+"("+medicines.get(i).getCompany().getName()+")")
                     .searchAmount(medicines.get(i).getSearchAmount())
                     .viewAmount(medicines.get(i).getViewAmount())
                     .build());

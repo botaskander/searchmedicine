@@ -15,8 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminHomeInfo {
-//    private List<SearchResult> searchResults;
-//    private List<ViewResult> viewResults;
     private List<ChartLine> chartLineList;
     private int totalUsers;
     private int lastMonthUsers;

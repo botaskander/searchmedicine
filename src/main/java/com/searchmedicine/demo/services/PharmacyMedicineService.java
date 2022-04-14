@@ -20,15 +20,15 @@ public class PharmacyMedicineService {
     private final EmailSender emailSender;
 
     public List<PharmacyMedicine> getAllPharmacyMedicine(Long id){
-        return  pharmacyMedicineRepository.findAllByCompanyMedicine_Id(id);
+        return  pharmacyMedicineRepository.findAllByMedicineId(id);
     }
 
     public void sendNotification( PharmacyMedicine pharmacyMedicine){
-        List<ListWaiter> listWaiters = listWaiterService.getNotification(pharmacyMedicine.getCompanyMedicine().getMedicine().getId());
+        List<ListWaiter> listWaiters = listWaiterService.getNotification(pharmacyMedicine.getMedicine().getId());
         String setSubject = "Notification about medicine";
         System.out.println("***************");
         System.out.println("Send notification");
-        emailSender.send("botaskander@gmail.com",buildEmail("Diana", pharmacyMedicine.getCompanyMedicine().getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
+        emailSender.send("botaskander@gmail.com",buildEmail("Diana", pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
 //    for(ListWaiter lw: listWaiters){
 //      emailSender.send( lw.getUsers().getEmail(),
 //          buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getCompanyMedicine().getMedicine(), pharmacyMedicine.getPharmacy()),

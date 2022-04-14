@@ -17,6 +17,7 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+
     @GetMapping("/medicines/test")
     public void test(){
         log.info("We're in test method");

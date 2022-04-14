@@ -22,15 +22,15 @@ public class PharmacyMedicineServiceImpl implements
   private final EmailSender emailSender;
 
   public List<PharmacyMedicine> getAllPharmacyMedicine(Long id){
-    return  pharmacyMedicineRepository.findAllByCompanyMedicine_Id(id);
+    return  pharmacyMedicineRepository.findAllByMedicine_Id(id);
   }
 
   public void sendNotification( PharmacyMedicine pharmacyMedicine){
-    List<ListWaiter> listWaiters = listWaiterServiceImpl.getNotification(pharmacyMedicine.getCompanyMedicine().getMedicine().getId());
+    List<ListWaiter> listWaiters = listWaiterServiceImpl.getNotification(pharmacyMedicine.getMedicine().getId());
     String setSubject = "Notification about medicine";
     System.out.println("*******************************************");
     System.out.println("Send notification");
-    emailSender.send("kh.diana0@gmail.com",buildEmail("Diana", pharmacyMedicine.getCompanyMedicine().getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
+    emailSender.send("kh.diana0@gmail.com",buildEmail("Diana", pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
 //    for(ListWaiter lw: listWaiters){
 //      emailSender.send( lw.getUsers().getEmail(),
 //          buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getCompanyMedicine().getMedicine(), pharmacyMedicine.getPharmacy()),

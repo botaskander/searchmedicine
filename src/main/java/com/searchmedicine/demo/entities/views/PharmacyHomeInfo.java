@@ -1,6 +1,5 @@
 package com.searchmedicine.demo.entities.views;
 
-
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.Users;
 import lombok.AllArgsConstructor;
@@ -14,14 +13,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminHomeInfo {
+public class PharmacyHomeInfo {
     private List<ChartLine> chartLineList;
-    private int totalUsers;
-    private int lastMonthUsers;
     private int totalMedicines;
     private int lastMonthMedicines;
-    private int totalExchanges;
-    private int lastMonthExchanges;
-    private List<Pharmacy> lastUpdatedPharmacies;
-    private List<Users> lastRegisteredUsers;
+    private int totalReserves;
+    private int lastMonthReserves;
+
 }

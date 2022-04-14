@@ -1,8 +1,7 @@
 package com.searchmedicine.demo.repositories;
 
-import com.searchmedicine.demo.entities.Pharmacy;
+import com.searchmedicine.demo.entities.CompanyMedicine;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,9 +9,7 @@ import java.util.List;
 
 @Transactional
 @Repository
-public interface PharmacyRepository extends JpaRepository<Pharmacy,Long> {
+public interface CompanyMedicineRepository extends JpaRepository<CompanyMedicine,Long> {
+    List<CompanyMedicine> findAllByIsExchangeIsTrue();
 
-    List<Pharmacy> findAllByOrderByLastUpdateDateDesc();
-
-    Pharmacy getByUser_Id(Long id);
 }

@@ -14,4 +14,8 @@ public interface ListReserverRepository extends JpaRepository<ListReserver,Long>
       + " from ListReserver lr "
       + "where lr.isTook = false and lr.isExpired = false")
   List<ListReserver> getAllIsNotTokenAndIsNotExpired();
+
+//  @Query("")
+  List<ListReserver> findAllByPharmacyId(Long id);
+
 }

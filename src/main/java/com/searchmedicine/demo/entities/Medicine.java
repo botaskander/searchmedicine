@@ -29,9 +29,6 @@ public class Medicine {
     @Column(name = "is_pres_only")
     private Boolean isPresOnly;
 
-    @Column(name = "is_exchange")
-    private Boolean isExchange;
-
     @Column(name = "storage_condition",columnDefinition="TEXT")
     private String storageCondition;
 
@@ -53,10 +50,13 @@ public class Medicine {
     @ManyToOne
     private FarmGroup farmGroup;
 
+    @Column(name = "url",columnDefinition = "TEXT")
+    private  String  url;
+
     @ManyToOne
-    private  Company company;
+    private Company company;
 
-
-
+    @Column(name = "is_exchange")
+    private Boolean isExchange;
 
 }

@@ -7,9 +7,8 @@ import com.searchmedicine.demo.entities.PharmacyMedicine;
 import com.searchmedicine.demo.entities.email.EmailSender;
 import com.searchmedicine.demo.repositories.PharmacyMedicineRepository;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
-import com.searchmedicine.demo.services.impl.ListWaiterServiceImpl;
-import java.util.List;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +29,12 @@ public class PharmacyMedicineServiceImpl implements
     String setSubject = "Notification about medicine";
     System.out.println("*******************************************");
     System.out.println("Send notification");
-    emailSender.send("kh.diana0@gmail.com",buildEmail("Diana", pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
-//    for(ListWaiter lw: listWaiters){
-//      emailSender.send( lw.getUsers().getEmail(),
-//          buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getCompanyMedicine().getMedicine(), pharmacyMedicine.getPharmacy()),
-//          setSubject);
-//    }
-
+    //emailSender.send(getUser().getEmail(),buildEmail(getUser().getFullName(), pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
+    for(ListWaiter lw: listWaiters){
+      emailSender.send(lw.getUsers().getEmail(),
+          buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy()),
+          setSubject);
+    }
   }
 
   private String buildEmail(String name, Medicine medicine, Pharmacy pharmacy){
@@ -111,6 +109,4 @@ public class PharmacyMedicineServiceImpl implements
         "\n" +
         "</div></div>";
   }
-
-
 }

@@ -26,6 +26,12 @@ public class Address {
     @Column(name = "postcode")
     private String postcode;
 
+    @Column(name = "longitude")
+    private Double longitude;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
     @ManyToOne
     private Region region;
 }

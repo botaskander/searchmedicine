@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class AdminServiceImpl implements AdminService {
-
     private final FarmGroupRepository farmGroupRepository;
     private final MedicineRepository medicineRepository;
     private final UsersRepository usersRepository;

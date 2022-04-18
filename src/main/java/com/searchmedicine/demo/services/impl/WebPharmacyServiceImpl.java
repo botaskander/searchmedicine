@@ -40,7 +40,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     @Override
     public PharmacyHomeInfo getPharmacyHomeInfo(Users user) {
         Users currentPharmacyUser= usersRepository.findByEmail(user.getEmail());
-        Pharmacy pharmacy= pharmacyRepository.getByUser_Id(currentPharmacyUser.getId());
+        Pharmacy pharmacy= pharmacyRepository.getByUser_Id(currentPharmacyUser.getId()).orElse(null);
 
         val reserves= listReserverRepository.findAllByPharmacyId(pharmacy.getId());
         val lastMonthReserves= reserves.stream()
@@ -71,5 +71,10 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
                 .totalMedicines(pharmacyMedicines.size())
                 .lastMonthMedicines(lastMonthPharmacyMedicines.size())
                 .build();
+    }
+
+    @Override
+    public Pharmacy getPharmacyByUserId(Long id) {
+        return pharmacyRepository.getByUser_Id(id).orElse(null) ;
     }
 }

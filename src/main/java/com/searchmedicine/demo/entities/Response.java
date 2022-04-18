@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Response {
-    private int responseCode;
+    private int responseCode;  // 1 - error, 0 - success
     private String responseMessage;
 }

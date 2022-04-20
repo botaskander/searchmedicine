@@ -1,14 +1,23 @@
 package com.searchmedicine.demo.services.impl;
 
+import com.searchmedicine.demo.dto.MedicineDto;
+import com.searchmedicine.demo.dto.PharmacyMedicineDto;
+import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.ListWaiter;
 import com.searchmedicine.demo.entities.Medicine;
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.PharmacyMedicine;
+import com.searchmedicine.demo.entities.UserMedicine;
 import com.searchmedicine.demo.entities.email.EmailSender;
+import com.searchmedicine.demo.repositories.MedicineRepository;
 import com.searchmedicine.demo.repositories.PharmacyMedicineRepository;
+import com.searchmedicine.demo.repositories.UserMedicineRepository;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +25,61 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PharmacyMedicineServiceImpl implements
     PharmacyMedicineService {
+
   private final PharmacyMedicineRepository pharmacyMedicineRepository;
+  private final UserMedicineRepository userMedicineRepository;
   private final ListWaiterServiceImpl listWaiterServiceImpl;
+  private final MedicineRepository medicineRepository;
+  private final EntityManager entityManager;
   private final EmailSender emailSender;
 
-  public List<PharmacyMedicine> getAllPharmacyMedicine(Long id){
-    return  pharmacyMedicineRepository.findAllByMedicine_Id(id);
+  public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc){
+    Medicine medicine = medicineRepository.findById(id).orElse(null);
+    List<MedicineDto> medicineDtoList = new ArrayList<>();
+    if(medicine != null) {
+      if ("all".equals(type) || "pharmacy".equals(type)) {
+        String sortBy = "ph.price";
+        if (isAsc == null || isAsc) {
+          sortBy += " asc";
+        } else {
+          sortBy += " desc";
+        }
+        List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
+                "SELECT ph FROM PharmacyMedicine ph "
+                    + " WHERE ph.medicine.id =" + id
+                    + " ORDER BY " + sortBy)
+            .getResultList();
+        for (PharmacyMedicine ph : pharmacyMedicines) {
+          MedicineDto medicineDTO = new MedicineDto();
+          medicineDTO.setId(ph.getId());
+          medicineDTO.setMedicine(ph.getMedicine());
+          medicineDTO.setAddress(ph.getPharmacy().getAddress());
+          medicineDTO.setOwner(ph.getPharmacy().getName());
+          medicineDTO.setPrice(ph.getPrice());
+          medicineDTO.setType("pharmacy");
+          medicineDtoList.add(medicineDTO);
+        }
+      }
+      if ("all".equals(type) || "user".equals(type)) {
+        List<UserMedicine> userMedicines = userMedicineRepository.findAllByMedicine_Id(id);
+        for (UserMedicine u : userMedicines) {
+          MedicineDto medicineDTO = new MedicineDto();
+          medicineDTO.setType("user");
+          medicineDTO.setId(u.getId());
+          medicineDTO.setMedicine(u.getMedicine());
+          medicineDTO.setOwner(u.getUser().getFullName());
+          medicineDTO.setPrice(0.0);
+          medicineDtoList.add(medicineDTO);
+        }
+      }
+
+      int amount = medicine.getSearchAmount();
+      amount +=1;
+      medicine.setSearchAmount(amount);
+      medicineRepository.save(medicine);
+    }
+
+    return medicineDtoList;
   }
 
   public void sendNotification( PharmacyMedicine pharmacyMedicine){
@@ -35,6 +93,35 @@ public class PharmacyMedicineServiceImpl implements
           buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy()),
           setSubject);
     }
+  }
+
+  public PharmacyMedicineDto getPharmacyMedicine(Long id){
+    PharmacyMedicineDto pharmacyMedicineDto = new PharmacyMedicineDto();
+    PharmacyMedicine pharmacyMedicine = pharmacyMedicineRepository.findById(id).orElse(null);
+
+    pharmacyMedicineDto.setPharmacyName(pharmacyMedicine.getPharmacy().getName());
+    pharmacyMedicineDto.setPharmacyAddress(pharmacyMedicine.getPharmacy().getAddress().getName() + ", №" +pharmacyMedicine.getPharmacy().getAddress().getNumber());
+    pharmacyMedicineDto.setWorkStartTime(pharmacyMedicine.getPharmacy().getWorkStartTime());
+    pharmacyMedicineDto.setWorkEndTime(pharmacyMedicine.getPharmacy().getWorkEndTime());
+    pharmacyMedicineDto.setWhatsappNumber(pharmacyMedicine.getPharmacy().getWhatsappNumber());
+    pharmacyMedicineDto.setOffPhone(pharmacyMedicine.getPharmacy().getOffPhone());
+    pharmacyMedicineDto.setOffPhone(pharmacyMedicine.getPharmacy().getPhoneNumber());
+    pharmacyMedicineDto.setMedicineName(pharmacyMedicine.getMedicine().getName());
+    pharmacyMedicineDto.setCount(pharmacyMedicine.getCount());
+    pharmacyMedicineDto.setPrice(pharmacyMedicine.getPrice());
+    pharmacyMedicineDto.setInstructions(pharmacyMedicine.getMedicine().getInstructions());
+    pharmacyMedicineDto.setIndications(pharmacyMedicine.getMedicine().getIndications());
+    pharmacyMedicineDto.setCompanyName(pharmacyMedicine.getMedicine().getCompany().getName());
+    pharmacyMedicineDto.setDescription(pharmacyMedicine.getMedicine().getDescription());
+    pharmacyMedicineDto.setUrl(pharmacyMedicine.getMedicine().getUrl());
+
+    Medicine medicine = medicineRepository.findById(pharmacyMedicine.getMedicine().getId()).orElse(null);
+    int amount = medicine.getViewAmount();
+    amount +=1;
+    medicine.setViewAmount(amount);
+    medicineRepository.save(medicine);
+
+    return pharmacyMedicineDto;
   }
 
   private String buildEmail(String name, Medicine medicine, Pharmacy pharmacy){

@@ -37,9 +37,6 @@ public class ListReserver {
     private Medicine medicine;
 
     @ManyToOne
-    private Company company;
-
-    @ManyToOne
     private Pharmacy pharmacy;
 
     @ManyToOne

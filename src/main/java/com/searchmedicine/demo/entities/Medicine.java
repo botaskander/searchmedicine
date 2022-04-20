@@ -29,6 +29,9 @@ public class Medicine {
     @Column(name = "is_pres_only")
     private Boolean isPresOnly;
 
+    @Column(name = "dose",columnDefinition="TEXT")
+    private String dose;
+
     @Column(name = "is_exchange")
     private Boolean isExchange;
 
@@ -55,8 +58,5 @@ public class Medicine {
 
     @ManyToOne
     private  Company company;
-
-
-
 
 }

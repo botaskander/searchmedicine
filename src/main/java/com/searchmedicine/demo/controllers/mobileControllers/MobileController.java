@@ -3,6 +3,7 @@ package com.searchmedicine.demo.controllers.mobileControllers;
 import com.searchmedicine.demo.entities.Medicine;
 import com.searchmedicine.demo.entities.PharmacyMedicine;
 import com.searchmedicine.demo.dto.CompanyMedicineDto;
+import com.searchmedicine.demo.services.AdminService;
 import com.searchmedicine.demo.services.MedicineService;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
 
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.swing.text.html.HTML;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,8 @@ public class MobileController {
 
   @Autowired
   MedicineService medicineService;
+
+  private final AdminService adminService;
 
   @GetMapping()
   public ResponseEntity<?> getAllCompanyMedicine() {
@@ -36,5 +41,30 @@ public class MobileController {
     System.out.println("******************");
     pharmacyMedicineService.sendNotification(pharmacyMedicineService.getAllPharmacyMedicine(id).get(0));
     return pharmacyMedicineService.getAllPharmacyMedicine(id);
+  }
+  @GetMapping("/medicine/top-by-views")
+  public ResponseEntity<?> getMedicinesTopView(){
+    return new ResponseEntity<>(medicineService.getMedicineTopView(), HttpStatus.OK);
+  }
+
+  @GetMapping("/medicine/top-by-search")
+  public ResponseEntity<?> getMedicinesTopSearch(){
+   return new ResponseEntity<>(medicineService.getMedicineTopSearch(), HttpStatus.OK);
+  }
+
+  @GetMapping("/medicine/top-by-reservation")
+  public ResponseEntity<?> getMedicinesTopReserved(){
+    return new ResponseEntity<>(medicineService.getMedicineTopReserved(),HttpStatus.OK);
+  }
+
+  @GetMapping("/medicines/farm-group/{id}")
+  public ResponseEntity<?> getMedicinesByFarmGroup(@PathVariable Long id){
+    return new ResponseEntity<>(medicineService.getMedicineByFarmGroup(id),HttpStatus.OK);
+  }
+
+  @GetMapping("/farm-groups/get-all")
+  public ResponseEntity<?> getFarmGroup(){
+    System.out.println(adminService.getAllFarmGroups());
+    return new ResponseEntity<>(adminService.getAllFarmGroups(),HttpStatus.OK);
   }
 }

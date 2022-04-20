@@ -12,7 +12,7 @@ import java.util.List;
 @Transactional
 @Repository
 public interface MedicineRepository extends JpaRepository<Medicine,Long> {
-    List<Medicine> getAllByIsExchangeTrue();
+        List<Medicine> getAllByIsExchangeTrue();
 
     List<Medicine> findAllByOrderByAddedDateDesc();
 

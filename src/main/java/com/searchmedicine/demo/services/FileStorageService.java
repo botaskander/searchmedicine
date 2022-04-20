@@ -20,53 +20,53 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {
-    private final Path fileStorageLocation;
+  private final Path fileStorageLocation;
 
-    @Autowired
-    public FileStorageService(FileStorageProperties fileStorageProperties) {
-        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
-                .toAbsolutePath().normalize();
+  @Autowired
+  public FileStorageService(FileStorageProperties fileStorageProperties) {
+    this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
+        .toAbsolutePath().normalize();
 
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
+    try {
+      Files.createDirectories(this.fileStorageLocation);
+    } catch (Exception ex) {
+      throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
     }
+  }
 
-    public String storeFile(MultipartFile file,Long id) {
-        // Normalize file name
+  public String storeFile(MultipartFile file,Long id) {
+    // Normalize file name
 
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String picName= DigestUtils.sha1Hex(fileName+id)+".png";
+    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    String picName= DigestUtils.sha1Hex(fileName+id)+".png";
 
-        try {
-            // Check if the file's name contains invalid characters
-            if(picName.contains("..")) {
-                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + picName);
-            }
+    try {
+      // Check if the file's name contains invalid characters
+      if(picName.contains("..")) {
+        throw new FileStorageException("Sorry! Filename contains invalid path sequence " + picName);
+      }
 
-            // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(picName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+      // Copy file to the target location (Replacing existing file with the same name)
+      Path targetLocation = this.fileStorageLocation.resolve(picName);
+      Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return picName;
-        } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
-        }
+      return picName;
+    } catch (IOException ex) {
+      throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
     }
+  }
 
-    public Resource loadFileAsResource(String fileName) {
-        try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists()) {
-                return resource;
-            } else {
-                throw new MyFileNotFoundException("File not found " + fileName);
-            }
-        } catch (MalformedURLException ex) {
-            throw new MyFileNotFoundException("File not found " + fileName, ex);
-        }
+  public Resource loadFileAsResource(String fileName) {
+    try {
+      Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+      Resource resource = new UrlResource(filePath.toUri());
+      if(resource.exists()) {
+        return resource;
+      } else {
+        throw new MyFileNotFoundException("File not found " + fileName);
+      }
+    } catch (MalformedURLException ex) {
+      throw new MyFileNotFoundException("File not found " + fileName, ex);
     }
+  }
 }

@@ -3,6 +3,8 @@ package com.searchmedicine.demo.filters;
 import com.searchmedicine.demo.jwt.JWTTokenGenerator;
 import com.searchmedicine.demo.services.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -46,7 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         }
         else {
-            System.out.println("Token doesn't starts with Bearer");
+            log.warn("Token doesn't starts with Bearer");
         }
 
         if(email!=null && SecurityContextHolder.getContext().getAuthentication()==null){

@@ -1,13 +1,13 @@
 package com.searchmedicine.demo.controllers.mobileControllers;
 
-import com.searchmedicine.demo.entities.Medicine;
-import com.searchmedicine.demo.entities.PharmacyMedicine;
-import com.searchmedicine.demo.dto.CompanyMedicineDto;
-import com.searchmedicine.demo.services.AdminService;
+import com.searchmedicine.demo.dto.ListReserverRequestDto;
+import com.searchmedicine.demo.entities.Response;
+import com.searchmedicine.demo.services.ListReserverService;
+import com.searchmedicine.demo.services.ListWaiterService;
 import com.searchmedicine.demo.services.MedicineService;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
 
-import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,24 +23,43 @@ import javax.swing.text.html.HTML;
 public class MobileController {
 
   private final PharmacyMedicineService pharmacyMedicineService;
+  private final MedicineService medicineService;
+  private final ListWaiterService listWaiterService;
+  private final ListReserverService listReserverService;
 
   @Autowired
   MedicineService medicineService;
 
   private final AdminService adminService;
 
-  @GetMapping()
+  @GetMapping("")
   public ResponseEntity<?> getAllCompanyMedicine() {
-    System.out.println(medicineService.getAllMedicine());
-    System.out.println("heli");
     return new ResponseEntity<>(medicineService.getAllMedicine(), HttpStatus.OK);
   }
 
   @GetMapping("/medicine/{id}")
-  public List<PharmacyMedicine> getAllPharmacyCompany(@PathVariable Long id){
-    System.out.println("******************");
-    pharmacyMedicineService.sendNotification(pharmacyMedicineService.getAllPharmacyMedicine(id).get(0));
-    return pharmacyMedicineService.getAllPharmacyMedicine(id);
+  public ResponseEntity<?>getAllPharmacyCompany(@PathVariable Long id,
+      @RequestParam("type") Optional<String> type,
+      @RequestParam("isSortAsc") Optional<Boolean> isSortAsc){
+
+    String filterType = type.orElse("all");
+    Boolean isAsc = isSortAsc.orElse(false);
+
+    return new ResponseEntity<>(pharmacyMedicineService.getAllPharmacyUserMedicine(id,filterType,isAsc),HttpStatus.OK);
+  }
+
+  @GetMapping("/medicine/pharmacy/{id}")
+  public ResponseEntity<?> getPharmacyCompany(@PathVariable Long id){
+    return new ResponseEntity<>(pharmacyMedicineService.getPharmacyMedicine(id),HttpStatus.OK);
+  }
+  @GetMapping("/notification/{id}")
+  public Response sendNotification(@PathVariable Long id){
+    return listWaiterService.saveListWaiter(id);
+  }
+
+  @PostMapping("/book")
+  public Response sendBook(@RequestBody ListReserverRequestDto listReserverRequestDto){
+    return listReserverService.saveListReserver(listReserverRequestDto);
   }
   @GetMapping("/medicine/top-by-views")
   public ResponseEntity<?> getMedicinesTopView(){

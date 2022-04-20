@@ -5,6 +5,7 @@ import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +15,19 @@ import java.util.List;
 @Slf4j
 @CrossOrigin(origins = "*")
 @RequestMapping(value = "api/web/admin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
 
     private final AdminService adminService;
+
     @GetMapping("/medicines/test")
     public void test(){
         log.info("We're in test method");
+    }
+
+    @GetMapping("/check")
+    public boolean access() {
+        return true;
     }
 
     @GetMapping("/farm-groups/get-all")

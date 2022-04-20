@@ -56,7 +56,13 @@ public class Medicine {
     @ManyToOne
     private FarmGroup farmGroup;
 
+    @Column(name = "url",columnDefinition = "TEXT")
+    private  String  url;
+
     @ManyToOne
     private  Company company;
+
+
+
 
 }

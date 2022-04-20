@@ -1,5 +1,4 @@
 package com.searchmedicine.demo.controllers;
-import com.searchmedicine.demo.dto.CompanyMedicineDto;
 import com.searchmedicine.demo.dto.MedicineExchange;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.payload.UploadFileResponse;

@@ -6,85 +6,85 @@ import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import java.util.List;
 
 public interface AdminService {
-    List<FarmGroup> getAllFarmGroups();
+  List<FarmGroup> getAllFarmGroups();
 
-    Response saveFarmGroup(FarmGroup farmGroup);
+  Response saveFarmGroup(FarmGroup farmGroup);
 
-    Response deleteFarmGroup(Long id);
+  Response deleteFarmGroup(Long id);
 
-    FarmGroup getFarmGroup(Long id);
+  FarmGroup getFarmGroup(Long id);
 
-    Medicine getMedicine(Long id);
+  Medicine getMedicine(Long id);
 
-    List<Medicine> getAllMedicines();
+  List<Medicine> getAllMedicines();
 
-    Response saveMedicine(Medicine medicine);
+  Response saveMedicine(Medicine medicine);
 
-    Response deleteMedicine(Long id);
+  Response deleteMedicine(Long id);
 
-    Country getCountry(Long id);
+  Country getCountry(Long id);
 
-    List<Country> getAllCountries();
+  List<Country> getAllCountries();
 
-    Response saveCountry(Country country);
+  Response saveCountry(Country country);
 
-    Response deleteCountry(Long id);
+  Response deleteCountry(Long id);
 
-    City getCity(Long id);
+  City getCity(Long id);
 
-    List<City> getAllCities();
+  List<City> getAllCities();
 
-    Response saveCity(City city);
+  Response saveCity(City city);
 
-    Response deleteCity(Long id);
+  Response deleteCity(Long id);
 
-    Region getRegion(Long id);
+  Region getRegion(Long id);
 
-    List<Region> getAllRegions();
+  List<Region> getAllRegions();
 
-    Response saveRegion(Region region);
+  Response saveRegion(Region region);
 
-    Response deleteRegion(Long id);
+  Response deleteRegion(Long id);
 
-    Company getCompany(Long id);
+  Company getCompany(Long id);
 
-    List<Company> getAllCompanies();
+  List<Company> getAllCompanies();
 
-    Response saveCompany(Company company);
+  Response saveCompany(Company company);
 
-    Response deleteCompany(Long id);
+  Response deleteCompany(Long id);
 
-    ListReserver getListReserver(Long id);
+  ListReserver getListReserver(Long id);
 
-    List<ListReserver> getAllListReservers();
+  List<ListReserver> getAllListReservers();
 
-    Response saveListReserver(ListReserver listReserver);
+  Response saveListReserver(ListReserver listReserver);
 
-    Response deleteListReserver(Long id);
+  Response deleteListReserver(Long id);
 
-    ListWaiter getListWaiter(Long id);
+  ListWaiter getListWaiter(Long id);
 
-    List<ListWaiter> getAllListWaiters();
+  List<ListWaiter> getAllListWaiters();
 
-    Response saveListWaiter(ListWaiter listWaiter);
+  Response saveListWaiter(ListWaiter listWaiter);
 
-    Response deleteListWaiter(Long id);
+  Response deleteListWaiter(Long id);
 
-    Users getUser(Long id);
+  Users getUser(Long id);
 
-    List<Users> getAllUsers(String roleCode);
+  List<Users> getAllUsers(String roleCode);
 
-    AdminHomeInfo getAdminHomeUserInfo();
+  AdminHomeInfo getAdminHomeUserInfo();
 
-    Response saveUser(Users user);
+  Response saveUser(Users user);
 
-    Response deleteUsers(Long id);
+  Response deleteUsers(Long id);
 
-    Roles getRole(Long id);
+  Roles getRole(Long id);
 
-    List<Roles> getAllRoles(String roleCode);
+  List<Roles> getAllRoles(String roleCode);
 
-    Response saveRole(Roles role);
+  Response saveRole(Roles role);
 
-    Response deleteRoles(Long id);
+  Response deleteRoles(Long id);
 }

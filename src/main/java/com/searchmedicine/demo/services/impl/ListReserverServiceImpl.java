@@ -77,6 +77,16 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
       .build();
  }
 
+ @Override
+ public List<ListReserver> getReservationByUser(Long id) {
+  return listReserverRepository.findAllByUsersId(id);
+ }
+
+ @Override
+ public void delete(ListReserver listReserver) {
+  listReserverRepository.delete(listReserver);
+ }
+
  private Users getUser(){
   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
   if(!(authentication instanceof AnonymousAuthenticationToken)){

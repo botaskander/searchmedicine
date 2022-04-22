@@ -1,17 +1,20 @@
 package com.searchmedicine.demo.controllers.mobileControllers;
 
 import com.searchmedicine.demo.dto.ListReserverRequestDto;
+import com.searchmedicine.demo.entities.ListReserver;
+import com.searchmedicine.demo.entities.ListWaiter;
 import com.searchmedicine.demo.entities.Response;
-import com.searchmedicine.demo.services.ListReserverService;
-import com.searchmedicine.demo.services.ListWaiterService;
-import com.searchmedicine.demo.services.MedicineService;
-import com.searchmedicine.demo.services.PharmacyMedicineService;
+import com.searchmedicine.demo.entities.Users;
+import com.searchmedicine.demo.services.*;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.HTML;
@@ -26,10 +29,6 @@ public class MobileController {
   private final MedicineService medicineService;
   private final ListWaiterService listWaiterService;
   private final ListReserverService listReserverService;
-
-  @Autowired
-  MedicineService medicineService;
-
   private final AdminService adminService;
 
   @GetMapping("")
@@ -44,7 +43,7 @@ public class MobileController {
 
     String filterType = type.orElse("all");
     Boolean isAsc = isSortAsc.orElse(false);
-
+    System.out.println("Diana salem");
     return new ResponseEntity<>(pharmacyMedicineService.getAllPharmacyUserMedicine(id,filterType,isAsc),HttpStatus.OK);
   }
 
@@ -85,5 +84,40 @@ public class MobileController {
   public ResponseEntity<?> getFarmGroup(){
     System.out.println(adminService.getAllFarmGroups());
     return new ResponseEntity<>(adminService.getAllFarmGroups(),HttpStatus.OK);
+  }
+
+  @GetMapping("/reservation/get-by-user")
+  public ResponseEntity<?> getReservationByUser(){
+    Users user = getUser();
+    System.out.println(listReserverService.getReservationByUser(user.getId()));
+    return new ResponseEntity<>(listReserverService.getReservationByUser(user.getId()),HttpStatus.OK);
+  }
+  @GetMapping("/notification/get-by-user")
+  public ResponseEntity<?> getNotificationByUser(){
+    Users user = getUser();
+    System.out.println(listWaiterService.getWaiterByUserId(user.getId()));
+    return new ResponseEntity<>(listWaiterService.getWaiterByUserId(user.getId()),HttpStatus.OK);
+  }
+
+  @DeleteMapping("/reservation/delete/{id}")
+  public ResponseEntity<?> deleteReservation(@PathVariable Long id){
+    ListReserver listReserver=adminService.getListReserver(id);
+    listReserver.setIsDeleted(true);
+    listReserverService.save(listReserver);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+  @DeleteMapping("/notification/delete/{id}")
+  public ResponseEntity<?> deleteNotification(@PathVariable Long id){
+    ListWaiter listWaiter=adminService.getListWaiter(id);
+    listWaiter.setIsDeleted(true);
+    listWaiterService.save(listWaiter);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+  private Users getUser(){
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if(!(authentication instanceof AnonymousAuthenticationToken)){
+      return (Users) authentication.getPrincipal();
+    }
+    return null;
   }
 }

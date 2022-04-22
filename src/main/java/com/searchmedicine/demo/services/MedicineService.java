@@ -1,5 +1,6 @@
 package com.searchmedicine.demo.services;
 
+import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.Medicine;
 import com.searchmedicine.demo.entities.UserMedicine;
 
@@ -20,4 +21,6 @@ public interface MedicineService {
     List<Medicine> getMedicineTopSearch();
 
     List<Medicine> getMedicineByFarmGroup(Long id);
+
+
 }

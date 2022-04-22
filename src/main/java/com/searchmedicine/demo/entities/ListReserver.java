@@ -24,6 +24,9 @@ public class ListReserver {
     @Column(name = "is_expired")
     private Boolean  isExpired;
 
+    @Column(name = "is_deleted")
+    private Boolean  isDeleted;
+
     @Column(name = "until_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime untilTime;
 

@@ -9,4 +9,6 @@ public interface ListReserverService {
   List<ListReserver> getAllIsNotTokenAndIsNotExpired();
   void save(ListReserver listReserver);
   Response saveListReserver(ListReserverRequestDto list);
+  List<ListReserver> getReservationByUser(Long id);
+  void delete(ListReserver listReserver);
 }

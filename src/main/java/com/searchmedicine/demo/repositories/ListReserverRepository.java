@@ -21,4 +21,7 @@ public interface ListReserverRepository extends JpaRepository<ListReserver,Long>
 //  @Query("")
   List<ListReserver> findAllByPharmacyId(Long id);
 
+  List<ListReserver> findAllByUsersId(Long id);
+
+
 }

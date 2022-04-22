@@ -156,8 +156,7 @@ public class MainRestController {
                         + " successfully removed");
             }
             userMedicineService.deleteUserMedicine(userMedicine);
-
-            return new ResponseEntity<>(HttpStatus.OK);
+            return  ResponseEntity.ok("Entity deleted");
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

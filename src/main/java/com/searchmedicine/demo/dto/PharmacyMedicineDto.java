@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class PharmacyMedicineDto {
 
   private String pharmacyName;
-  private String pharmacyAddress;
+  private String address;
   private LocalTime workStartTime;
   private LocalTime workEndTime;
   private String whatsappNumber;

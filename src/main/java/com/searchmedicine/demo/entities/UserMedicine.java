@@ -40,4 +40,8 @@ public class UserMedicine {
 
     @ManyToOne
     private Users user;
+
+    @ManyToOne
+    private Address address;
+
 }

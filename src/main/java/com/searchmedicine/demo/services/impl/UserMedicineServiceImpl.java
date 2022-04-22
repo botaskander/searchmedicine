@@ -1,5 +1,6 @@
 package com.searchmedicine.demo.services.impl;
 
+import com.searchmedicine.demo.dto.UserMedicineDto;
 import com.searchmedicine.demo.entities.ImagesUserMedicine;
 import com.searchmedicine.demo.entities.UserMedicine;
 import com.searchmedicine.demo.repositories.ImagesUserMedicineRepository;
@@ -37,6 +38,23 @@ public class UserMedicineServiceImpl implements UserMedicineService {
     @Override
     public UserMedicine getUserMedicine(Long id) {
         return userMedicineRepository.findById(id).get();
+    }
+    @Override
+    public UserMedicineDto getUserMedicineDetail(Long id) {
+        UserMedicine userMedicine = getUserMedicine(id);
+        UserMedicineDto userMedicineDto = new UserMedicineDto();
+
+        userMedicineDto.setFullName(userMedicine.getUser().getFullName());
+        userMedicineDto.setPhoneNumber(userMedicine.getPhone());
+        userMedicineDto.setMedicineName(userMedicine.getMedicine().getName());
+        userMedicineDto.setIndications(userMedicine.getMedicine().getIndications());
+        userMedicineDto.setInstructions(userMedicine.getMedicine().getInstructions());
+        userMedicineDto.setInstructions(userMedicine.getMedicine().getDescription());
+        userMedicineDto.setInstructions(userMedicine.getMedicine().getCompany().getName());
+        userMedicineDto.setAddress(userMedicine.getAddress().getName() + ", №" +userMedicine.getAddress().getNumber());
+        userMedicineDto.setUrl(userMedicine.getUrlImage());
+
+        return userMedicineDto;
     }
 
     @Override

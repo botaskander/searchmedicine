@@ -37,7 +37,7 @@ public class PharmacyMedicineServiceImpl implements
     Medicine medicine = medicineRepository.findById(id).orElse(null);
     List<MedicineDto> medicineDtoList = new ArrayList<>();
     if(medicine != null) {
-      if ("all".equals(type) || "pharmacy".equals(type)) {
+      if ("Все".equals(type) || "Аптеки".equals(type)) {
         String sortBy = "ph.price";
         if (isAsc == null || isAsc) {
           sortBy += " asc";
@@ -60,13 +60,14 @@ public class PharmacyMedicineServiceImpl implements
           medicineDtoList.add(medicineDTO);
         }
       }
-      if ("all".equals(type) || "user".equals(type)) {
+      if ("Все".equals(type) || "Пользователи".equals(type)) {
         List<UserMedicine> userMedicines = userMedicineRepository.findAllByMedicine_Id(id);
         for (UserMedicine u : userMedicines) {
           MedicineDto medicineDTO = new MedicineDto();
           medicineDTO.setType("user");
           medicineDTO.setId(u.getId());
           medicineDTO.setMedicine(u.getMedicine());
+          medicineDTO.setAddress(u.getAddress());
           medicineDTO.setOwner(u.getUser().getFullName());
           medicineDTO.setPrice(0.0);
           medicineDtoList.add(medicineDTO);
@@ -100,7 +101,7 @@ public class PharmacyMedicineServiceImpl implements
     PharmacyMedicine pharmacyMedicine = pharmacyMedicineRepository.findById(id).orElse(null);
 
     pharmacyMedicineDto.setPharmacyName(pharmacyMedicine.getPharmacy().getName());
-    pharmacyMedicineDto.setPharmacyAddress(pharmacyMedicine.getPharmacy().getAddress().getName() + ", №" +pharmacyMedicine.getPharmacy().getAddress().getNumber());
+    pharmacyMedicineDto.setAddress(pharmacyMedicine.getPharmacy().getAddress().getName() + ", №" +pharmacyMedicine.getPharmacy().getAddress().getNumber());
     pharmacyMedicineDto.setWorkStartTime(pharmacyMedicine.getPharmacy().getWorkStartTime());
     pharmacyMedicineDto.setWorkEndTime(pharmacyMedicine.getPharmacy().getWorkEndTime());
     pharmacyMedicineDto.setWhatsappNumber(pharmacyMedicine.getPharmacy().getWhatsappNumber());

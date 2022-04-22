@@ -7,6 +7,7 @@ import com.searchmedicine.demo.services.ListWaiterService;
 import com.searchmedicine.demo.services.MedicineService;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
 
+import com.searchmedicine.demo.services.UserMedicineService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class MobileController {
   private final MedicineService medicineService;
   private final ListWaiterService listWaiterService;
   private final ListReserverService listReserverService;
+  private final UserMedicineService userMedicineService;
 
   @GetMapping("")
   public ResponseEntity<?> getAllCompanyMedicine() {
@@ -34,7 +36,7 @@ public class MobileController {
       @RequestParam("type") Optional<String> type,
       @RequestParam("isSortAsc") Optional<Boolean> isSortAsc){
 
-    String filterType = type.orElse("all");
+    String filterType = type.orElse("Все");
     Boolean isAsc = isSortAsc.orElse(false);
 
     return new ResponseEntity<>(pharmacyMedicineService.getAllPharmacyUserMedicine(id,filterType,isAsc),HttpStatus.OK);
@@ -44,6 +46,17 @@ public class MobileController {
   public ResponseEntity<?> getPharmacyCompany(@PathVariable Long id){
     return new ResponseEntity<>(pharmacyMedicineService.getPharmacyMedicine(id),HttpStatus.OK);
   }
+
+  @GetMapping("/medicine/user/{id}")
+  public ResponseEntity<?> getUserMedicine(@PathVariable Long id){
+    return new ResponseEntity<>(userMedicineService.getUserMedicineDetail(id),HttpStatus.OK);
+  }
+  @GetMapping("/medicine/image/{id}")
+  public ResponseEntity<?> getUserImageUser(@PathVariable Long id){
+    return new ResponseEntity<>(userMedicineService.getUserMedicineDetail(id),HttpStatus.OK);
+  }
+
+
   @GetMapping("/notification/{id}")
   public Response sendNotification(@PathVariable Long id){
     return listWaiterService.saveListWaiter(id);

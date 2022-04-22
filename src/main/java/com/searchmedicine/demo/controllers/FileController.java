@@ -25,7 +25,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,7 +59,7 @@ public class FileController {
                 file.getContentType(), file.getSize());
     }
     @PostMapping(path="/editImage", consumes = {"multipart/form-data"})
-    public List<UploadFileResponse> editImage(@RequestParam("files") MultipartFile[] files,@RequestParam(required=false,name="id") Object id) {
+    public List<UploadFileResponse> editImage(@RequestParam("files") MultipartFile[] files,@RequestParam(required=false,name="id") Object id) throws IOException {
         String stringToConvert = String.valueOf(id);
         Long convertedLong = Long.parseLong(stringToConvert);
         UserMedicine userMedicine= userMedicineService.getUserMedicine(convertedLong);
@@ -72,9 +75,18 @@ public class FileController {
         System.out.println("////////////error//////////////");
         UserMedicine userMedicine1=userMedicineService.editUserMedicine(userMedicine);
         System.out.println("****************error****************");
-        List<ImagesUserMedicine> imagesUserMedicines=userMedicineService.getImageList(userMedicine.getId());
-        userMedicineService.deleteUserMedicineImagesAll(imagesUserMedicines);
-        System.out.println("/////////////////////"+userMedicineService.getUserMedicine(convertedLong));
+        List<ImagesUserMedicine> imagesUserMedicines =new ArrayList<>();
+        imagesUserMedicines.addAll(userMedicineService.getImageList(userMedicine.getId()));
+        String filePath="C:\\Users\\бота\\IdeaProjects\\diploma\\downloadImages\\images\\";
+        for(int i=0;i<imagesUserMedicines.size();i++){
+            String imagesPath=filePath+imagesUserMedicines.get(i).getUrl();
+            Files.delete( Paths.get(imagesPath));
+            System.out.println("File "
+                    + imagesPath
+                    + " successfully removed");
+        }
+        userMedicineService.deleteUserMedicineImagesAll(userMedicine.getId());
+        System.out.println("/////////////////////"+userMedicine.getId());
         for(int i=0;i<listFile.size();i++){
             ImagesUserMedicine imagesUserMedicine=new ImagesUserMedicine();
             System.out.println(listFile.get(i).getFileName());
@@ -114,7 +126,7 @@ public class FileController {
         return  listFile;
     }
 
-    @GetMapping("/downloadFile/{fileName:.+}")
+    @GetMapping("/downloadFile/{fileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(fileName);

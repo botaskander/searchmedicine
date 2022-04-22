@@ -54,6 +54,21 @@ public class ListWaiterServiceImpl implements ListWaiterService {
         .build();
   }
 
+  @Override
+  public List<ListWaiter> getWaiterByUserId(Long id) {
+    return listWaiterRepository.findAllByUsers_Id(id);
+  }
+
+  @Override
+  public void deleteListWaiter(ListWaiter listWaiter) {
+    listWaiterRepository.delete(listWaiter);
+  }
+
+  @Override
+  public ListWaiter save(ListWaiter listWaiter) {
+    return listWaiterRepository.save(listWaiter);
+  }
+
   private Users getUser(){
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if(!(authentication instanceof AnonymousAuthenticationToken)){

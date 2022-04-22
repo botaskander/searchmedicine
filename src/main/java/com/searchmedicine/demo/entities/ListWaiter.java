@@ -20,6 +20,9 @@ public class ListWaiter {
     @Column(name = "is_appear")
     private Boolean isAppear;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @ManyToOne
     private Medicine medicine;
 

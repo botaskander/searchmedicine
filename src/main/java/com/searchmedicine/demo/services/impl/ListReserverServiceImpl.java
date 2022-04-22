@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +35,7 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
   }
 
 
- public Response saveListReserver(ListReserverRequestDto reserverRequestDto) {
+ public Response saveListReserver(ListReserverRequestDto reserverRequestDto,Users users) {
   ListReserver listReserver = new ListReserver();
   PharmacyMedicine pharmacyMedicine = pharmacyMedicineRepository.findById(reserverRequestDto.getPharmacyMedicineId()).orElse(null);
 
@@ -52,6 +53,7 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
   else if ("48 hour".equals(reserverRequestDto.getUntilTime())){
    untilTime = currentDate.plusDays(2);
   }
+  System.out.println(reserverRequestDto.getUntilTime());
 
   if(pharmacyMedicine != null) {
    listReserver.setMedicine(pharmacyMedicine.getMedicine());
@@ -59,7 +61,7 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
    listReserver.setPharmacy(pharmacyMedicine.getPharmacy());
    listReserver.setCount(Integer.valueOf(reserverRequestDto.getCount()));
    listReserver.setUntilTime(untilTime);
-   listReserver.setUsers(getUser());
+   listReserver.setUsers(users);
   }
   else {
    return  new Response(1,"Ошибка при сохранении ListWaiter, лекарства пустая : NullPointer Exception");
@@ -75,6 +77,16 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
       .responseMessage("Успешно ListReserver добавлено")
       .responseCode(0)
       .build();
+ }
+
+ @Override
+ public List<ListReserver> getReservationByUser(Long id) {
+  return listReserverRepository.findAllByUsersId(id);
+ }
+
+ @Override
+ public void delete(ListReserver listReserver) {
+  listReserverRepository.delete(listReserver);
  }
 
  private Users getUser(){

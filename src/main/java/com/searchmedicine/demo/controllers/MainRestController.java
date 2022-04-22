@@ -84,8 +84,8 @@ public class MainRestController {
     @GetMapping("/listMedicinesAvailable")
     public ResponseEntity<?> getListMedicinesAvailable() {
         System.out.println("-----------------------list of medicines ------------------------");
-        System.out.println(medicineService.getAllAviableMedicine());
-        return   new ResponseEntity<>(medicineService.getAllAviableMedicine(), HttpStatus.OK);
+        System.out.println(medicineService.getAllAvailableMedicine());
+        return   new ResponseEntity<>(medicineService.getAllAvailableMedicine(), HttpStatus.OK);
     }
     @PostMapping("/addPostForExchange")
     public ResponseEntity<?> addPostForExchange(@RequestBody MedicineExchange medicineExchange) {
@@ -156,8 +156,7 @@ public class MainRestController {
                         + " successfully removed");
             }
             userMedicineService.deleteUserMedicine(userMedicine);
-
-            return new ResponseEntity<>(HttpStatus.OK);
+            return  ResponseEntity.ok("Entity deleted");
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

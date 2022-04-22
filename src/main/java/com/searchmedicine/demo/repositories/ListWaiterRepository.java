@@ -15,5 +15,7 @@ public interface ListWaiterRepository extends JpaRepository<ListWaiter,Long> {
       + " from ListWaiter lw"
       + " where lw.isAppear = false and lw.medicine.id = ?1")
   List<ListWaiter> getNotificationItems(Long medicineId);
+
+  List<ListWaiter> findAllByUsers_Id(Long id);
 }
 

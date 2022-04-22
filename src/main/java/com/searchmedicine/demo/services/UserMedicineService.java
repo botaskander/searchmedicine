@@ -20,5 +20,5 @@ public interface UserMedicineService {
     List<UserMedicine> getUserMedicineByUser(Long id);
     UserMedicine editUserMedicine(UserMedicine userMedicine);
     void deleteUserMedicineImages(ImagesUserMedicine imagesUserMedicine);
-    void deleteUserMedicineImagesAll(List<ImagesUserMedicine> imagesUserMedicinesList);
+    void deleteUserMedicineImagesAll(Long id);
 }

@@ -88,8 +88,8 @@ public class UserMedicineServiceImpl implements UserMedicineService {
     }
 
     @Override
-    public void deleteUserMedicineImagesAll(List<ImagesUserMedicine> imagesUserMedicinesList) {
-        imagesUserMedicineRepository.deleteAll(imagesUserMedicinesList);
+    public void deleteUserMedicineImagesAll(Long id ) {
+        imagesUserMedicineRepository.deleteImagesById(id);
     }
 
 

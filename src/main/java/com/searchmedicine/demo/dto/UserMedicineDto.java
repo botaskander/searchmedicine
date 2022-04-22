@@ -17,6 +17,7 @@ public class UserMedicineDto {
   private String description;
   private String companyName;
   private String url;
+  private String address;
 
 
 }

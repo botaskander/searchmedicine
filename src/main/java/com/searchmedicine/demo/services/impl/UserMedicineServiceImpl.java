@@ -51,6 +51,7 @@ public class UserMedicineServiceImpl implements UserMedicineService {
         userMedicineDto.setInstructions(userMedicine.getMedicine().getInstructions());
         userMedicineDto.setInstructions(userMedicine.getMedicine().getDescription());
         userMedicineDto.setInstructions(userMedicine.getMedicine().getCompany().getName());
+        userMedicineDto.setAddress(userMedicine.getAddress().getName() + ", №" +userMedicine.getAddress().getNumber());
         userMedicineDto.setUrl(userMedicine.getUrlImage());
 
         return userMedicineDto;

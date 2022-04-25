@@ -37,10 +37,7 @@ public class ListReserver {
     private int count;
 
     @ManyToOne
-    private Medicine medicine;
-
-    @ManyToOne
-    private Pharmacy pharmacy;
+    PharmacyMedicine pharmacyMedicine;
 
     @ManyToOne
     private Users users;

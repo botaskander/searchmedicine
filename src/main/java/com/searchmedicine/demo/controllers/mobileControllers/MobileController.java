@@ -54,6 +54,11 @@ public class MobileController {
     return new ResponseEntity<>(pharmacyMedicineService.getPharmacyMedicine(id),HttpStatus.OK);
   }
 
+  @GetMapping("/all-reservation")
+  public ResponseEntity<?> getAllReservation(){
+    return new ResponseEntity<>(listReserverService.getAllReservation(),HttpStatus.OK);
+  }
+
   @GetMapping("/medicine/user/{id}")
   public ResponseEntity<?> getUserMedicine(@PathVariable Long id){
     return new ResponseEntity<>(userMedicineService.getUserMedicineDetail(id),HttpStatus.OK);
@@ -64,10 +69,11 @@ public class MobileController {
   }
 
 
-  @GetMapping("/notification/{id}")
+  @PostMapping("/notification/{id}")
   public Response sendNotification(@PathVariable Long id){
-    Users users=getUser();
-    return listWaiterService.saveListWaiter(id,users);
+    Users user = getUser();
+    System.out.println(user);
+    return listWaiterService.saveListWaiter(id,user);
   }
 
   @PostMapping("/book")

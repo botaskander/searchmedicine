@@ -42,7 +42,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
         Users currentPharmacyUser= usersRepository.findByEmail(user.getEmail());
         Pharmacy pharmacy= pharmacyRepository.getByUser_Id(currentPharmacyUser.getId()).orElse(null);
 
-        val reserves= listReserverRepository.findAllByPharmacyId(pharmacy.getId());
+        val reserves= listReserverRepository.findAllByPharmacyMedicineId(pharmacy.getId());
         val lastMonthReserves= reserves.stream()
                         .filter(reserve->
                                 reserve.getReservedTime().isAfter(LocalDateTime.now().minusMonths(1)))

@@ -36,6 +36,8 @@ public class ListWaiterServiceImpl implements ListWaiterService {
     if(medicine != null&& users!=null) {
       listWaiter.setMedicine(medicine);
       listWaiter.setUsers(users);
+      listWaiter.setIsDeleted(false);
+      listWaiter.setIsAppear(false);
     }
     else {
       return  new Response(1,"Ошибка при сохранении ListWaiter, лекарства пустая : NullPointer Exception");

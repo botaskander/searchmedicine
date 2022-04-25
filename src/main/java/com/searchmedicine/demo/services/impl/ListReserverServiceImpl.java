@@ -57,6 +57,9 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
 
   if(pharmacyMedicine != null) {
    listReserver.setPharmacyMedicine(pharmacyMedicine);
+   listReserver.setIsExpired(false);
+   listReserver.setIsDeleted(false);
+   listReserver.setIsTook(false);
    listReserver.setReservedTime(currentDate);
    listReserver.setCount(Integer.valueOf(reserverRequestDto.getCount()));
    listReserver.setUntilTime(untilTime);

@@ -41,24 +41,23 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
 
   LocalDateTime currentDate = LocalDateTime.now();
   LocalDateTime untilTime = null;
-  if("12 hours".equals(reserverRequestDto.getUntilTime())){
+  if("на 12 часов".equals(reserverRequestDto.getUntilTime())){
    untilTime = currentDate.plusHours(12);
   }
-  else if ("1 hour".equals(reserverRequestDto.getUntilTime())){
+  else if ("на час".equals(reserverRequestDto.getUntilTime())){
    untilTime = currentDate.plusHours(1);
   }
-  else if ("24 hour".equals(reserverRequestDto.getUntilTime())){
+  else if ("на 24 часов".equals(reserverRequestDto.getUntilTime())){
    untilTime = currentDate.plusDays(1);
   }
-  else if ("48 hour".equals(reserverRequestDto.getUntilTime())){
+  else if ("на 48 часов".equals(reserverRequestDto.getUntilTime())){
    untilTime = currentDate.plusDays(2);
   }
   System.out.println(reserverRequestDto.getUntilTime());
 
   if(pharmacyMedicine != null) {
-   listReserver.setMedicine(pharmacyMedicine.getMedicine());
+   listReserver.setPharmacyMedicine(pharmacyMedicine);
    listReserver.setReservedTime(currentDate);
-   listReserver.setPharmacy(pharmacyMedicine.getPharmacy());
    listReserver.setCount(Integer.valueOf(reserverRequestDto.getCount()));
    listReserver.setUntilTime(untilTime);
    listReserver.setUsers(users);

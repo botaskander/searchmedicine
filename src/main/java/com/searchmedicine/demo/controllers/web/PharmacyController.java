@@ -1,6 +1,9 @@
 package com.searchmedicine.demo.controllers.web;
 
+import com.searchmedicine.demo.dto.Address;
+import com.searchmedicine.demo.dto.ListReserverRequestDto;
 import com.searchmedicine.demo.entities.Pharmacy;
+import com.searchmedicine.demo.entities.Response;
 import com.searchmedicine.demo.entities.Users;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.entities.views.PharmacyHomeInfo;
@@ -8,6 +11,8 @@ import com.searchmedicine.demo.services.UserService;
 import com.searchmedicine.demo.services.WebPharmacyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,5 +52,10 @@ public class PharmacyController {
             return (Users) authentication.getPrincipal();
         }
         return null;
+    }
+    @PostMapping("/getLonglat")
+    public ResponseEntity<?> getLonglat(@RequestBody Address address){
+        System.out.println(address);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

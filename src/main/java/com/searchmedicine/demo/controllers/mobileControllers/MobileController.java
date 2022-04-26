@@ -71,8 +71,11 @@ public class MobileController {
 
   @PostMapping("/notification")
   public Response sendNotification(@RequestBody Long id){
+    String stringToConvert = String.valueOf(id);
+    Long convertedLong = Long.parseLong(stringToConvert);
+    System.out.println(convertedLong+"///////////////////");
     Users users=getUser();
-    return listWaiterService.saveListWaiter(id,users);
+    return listWaiterService.saveListWaiter(convertedLong,users);
   }
 
   @PostMapping("/book")

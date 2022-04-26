@@ -70,12 +70,10 @@ public class MobileController {
 
 
   @PostMapping("/notification")
-  public Response sendNotification(@RequestBody Long id){
-    String stringToConvert = String.valueOf(id);
-    Long convertedLong = Long.parseLong(stringToConvert);
-    System.out.println(convertedLong+"///////////////////");
+  public Response sendNotification(@RequestBody String id){
     Users users=getUser();
-    return listWaiterService.saveListWaiter(convertedLong,users);
+    Long value = Long.parseLong(id.replaceAll("[^0-9]", ""));
+    return listWaiterService.saveListWaiter(value,users);
   }
 
   @PostMapping("/book")

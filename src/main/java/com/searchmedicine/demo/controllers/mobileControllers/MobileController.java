@@ -65,9 +65,10 @@ public class MobileController {
 
 
   @PostMapping("/notification")
-  public Response sendNotification(@RequestBody Long id){
+  public Response sendNotification(@RequestBody String id){
     Users users=getUser();
-    return listWaiterService.saveListWaiter(id,users);
+    Long value = Long.parseLong(id.replaceAll("[^0-9]", ""));
+    return listWaiterService.saveListWaiter(value,users);
   }
 
   @PostMapping("/book")

@@ -29,13 +29,15 @@ public class ListWaiterServiceImpl implements ListWaiterService {
     return listWaiterRepository.getNotificationItems(medicineId);
   }
 
-  public Response saveListWaiter(Long id) {
+  public Response saveListWaiter(Long id, Users users) {
     ListWaiter listWaiter = new ListWaiter();
     Medicine medicine = medicineRepository.findById(id).orElse(null);
 
     if(medicine != null) {
       listWaiter.setMedicine(medicine);
-      listWaiter.setUsers(getUser());
+      listWaiter.setUsers(users);
+      listWaiter.setIsDeleted(false);
+      listWaiter.setIsAppear(false);
     }
     else {
       return  new Response(1,"Ошибка при сохранении ListWaiter, лекарства пустая : NullPointer Exception");

@@ -10,5 +10,7 @@ public interface PharmacyMedicineService {
   List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc);
   void sendNotification( PharmacyMedicine pharmacyMedicine);
   PharmacyMedicineDto getPharmacyMedicine(Long id);
+
+  PharmacyMedicine getPharmacyMedicineById(Long id);
 }
 

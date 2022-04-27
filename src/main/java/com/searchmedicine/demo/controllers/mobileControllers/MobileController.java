@@ -1,10 +1,7 @@
 package com.searchmedicine.demo.controllers.mobileControllers;
 
 import com.searchmedicine.demo.dto.ListReserverRequestDto;
-import com.searchmedicine.demo.entities.ListReserver;
-import com.searchmedicine.demo.entities.ListWaiter;
-import com.searchmedicine.demo.entities.Response;
-import com.searchmedicine.demo.entities.Users;
+import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.services.*;
 
 import com.searchmedicine.demo.services.UserMedicineService;
@@ -140,5 +137,12 @@ public class MobileController {
       return (Users) authentication.getPrincipal();
     }
     return null;
+  }
+  @GetMapping("/checkNotification")
+  public ResponseEntity<?> checkNotification(){
+    Long id =3l;
+    PharmacyMedicine pharmacyMedicine=pharmacyMedicineService.getPharmacyMedicineById(id);
+    pharmacyMedicineService.sendNotification(pharmacyMedicine);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

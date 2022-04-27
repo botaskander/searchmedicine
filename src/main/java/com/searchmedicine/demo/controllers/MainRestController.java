@@ -109,8 +109,9 @@ public class MainRestController {
         address.setLongitude(medicineExchange.getLongitude());
         String streetNumber = medicineExchange.getAddressName().replaceAll("[^0-9]", "");
         address.setNumber(streetNumber);
-        address.setName(medicineExchange.getAddressName().replace("улица",""));
-        userMedicine.setAddress(address);
+        address.setName(medicineExchange.getAddressName());
+        Address address1=userMedicineService.addAddress(address);
+        userMedicine.setAddress(address1);
 
         UserMedicine newUserMedicine= userMedicineService.addMedicine(userMedicine);
         return   new ResponseEntity<>( newUserMedicine, HttpStatus.OK);

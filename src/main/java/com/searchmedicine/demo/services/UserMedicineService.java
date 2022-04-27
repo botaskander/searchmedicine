@@ -1,6 +1,7 @@
 package com.searchmedicine.demo.services;
 
 import com.searchmedicine.demo.dto.UserMedicineDto;
+import com.searchmedicine.demo.entities.Address;
 import com.searchmedicine.demo.entities.Image;
 import com.searchmedicine.demo.entities.ImagesUserMedicine;
 import com.searchmedicine.demo.entities.UserMedicine;
@@ -21,4 +22,6 @@ public interface UserMedicineService {
     UserMedicine editUserMedicine(UserMedicine userMedicine);
     void deleteUserMedicineImages(ImagesUserMedicine imagesUserMedicine);
     void deleteUserMedicineImagesAll(Long id);
+
+    Address addAddress(Address address);
 }

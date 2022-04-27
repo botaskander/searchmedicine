@@ -101,7 +101,7 @@ public class PharmacyMedicineServiceImpl implements
     PharmacyMedicine pharmacyMedicine = pharmacyMedicineRepository.findById(id).orElse(null);
 
     pharmacyMedicineDto.setPharmacyName(pharmacyMedicine.getPharmacy().getName());
-    pharmacyMedicineDto.setAddress(pharmacyMedicine.getPharmacy().getAddress().getName() + ", №" +pharmacyMedicine.getPharmacy().getAddress().getNumber());
+    pharmacyMedicineDto.setAddress(pharmacyMedicine.getPharmacy().getAddress().getName() );
     pharmacyMedicineDto.setWorkStartTime(pharmacyMedicine.getPharmacy().getWorkStartTime());
     pharmacyMedicineDto.setWorkEndTime(pharmacyMedicine.getPharmacy().getWorkEndTime());
     pharmacyMedicineDto.setWhatsappNumber(pharmacyMedicine.getPharmacy().getWhatsappNumber());
@@ -186,7 +186,7 @@ public class PharmacyMedicineServiceImpl implements
         "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
         "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
         "        \n" +
-        "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for clicking notifications. I want to please you, <b>"+ medicine.getName() +" </b> drugs that you wanted to buy came to the <b> "+pharmacy.getName()+"</b> </p>\n <p>Address: "+pharmacy.getAddress().getRegion().getCity().getName()+", " + pharmacy.getAddress().getRegion().getName()+ ", "+ pharmacy.getAddress().getName()  + " "+ pharmacy.getAddress().getNumber() +
+        "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for clicking notifications. I want to please you, <b>"+ medicine.getName() +" </b> drugs that you wanted to buy came to the <b> "+pharmacy.getName()+"</b> </p>\n <p>Address: "+pharmacy.getAddress().getName()+
         " \n Phone number: " + pharmacy.getPhoneNumber() +
         "\n Whatsapp number: " + pharmacy.getWhatsappNumber() +
         "\n Work time: "+ pharmacy.getWorkStartTime() + " - " + pharmacy.getWorkEndTime() +

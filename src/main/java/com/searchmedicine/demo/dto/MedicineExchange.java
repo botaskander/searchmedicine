@@ -17,4 +17,7 @@ public class MedicineExchange {
     private String nameMedicine;
     private String imageUrl;
     private String phone;
+    private Double latitude;
+    private Double longitude;
+    private String addressName;
 }

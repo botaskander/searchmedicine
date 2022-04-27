@@ -29,9 +29,9 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     private final MedicineRepository medicineRepository;
     private final UsersRepository usersRepository;
     private final RolesRepository rolesRepository;
-    private final RegionRepository regionRepository;
+//    private final RegionRepository regionRepository;
     private final CountryRepository countryRepository;
-    private final CityRepository cityRepository;
+//    private final CityRepository cityRepository;
     private final PharmacyRepository pharmacyRepository;
     private final CompanyRepository companyRepository;
     private final ListReserverRepository listReserverRepository;
@@ -109,8 +109,6 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
             System.out.println(pharmacy);
             com.searchmedicine.demo.entities.Address address1 = new com.searchmedicine.demo.entities.Address();
             address1.setName(address.getStreet());
-            address1.setNumber(address.getNumber());
-            address1.setRegion(pharmacy.getAddress().getRegion());
             address1.setLatitude(address.getLat());
             address1.setLongitude(address.getLang());
             System.out.println(address1);

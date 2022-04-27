@@ -17,14 +17,8 @@ public class Address {
     @Column(name ="id")
     private Long id;
 
-    @Column(name = "street_name",columnDefinition="TEXT")
+    @Column(name = "address_name",columnDefinition="TEXT")
     private String name;
-
-    @Column(name = "street_number")
-    private String number;
-
-    @Column(name = "postcode")
-    private String postcode;
 
     @Column(name = "longitude")
     private Double longitude;
@@ -32,6 +26,4 @@ public class Address {
     @Column(name = "latitude")
     private Double latitude;
 
-    @ManyToOne
-    private Region region;
 }

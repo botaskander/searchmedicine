@@ -103,7 +103,7 @@ public class CheckJob {
         "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
         "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
         "        \n" +
-        "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Здравствуйте, " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> По истечении срока бронирования, хотим напомнить, бронь больше не действительна <b> Лекарство("+ medicine.getName() +"  "+pharmacy.getName()+"</b>) </p>\n <p>Address: "+pharmacy.getAddress().getRegion().getCity().getName()+", " +
+        "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Здравствуйте, " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> По истечении срока бронирования, хотим напомнить, бронь больше не действительна <b> Лекарство("+ medicine.getName() +"  "+pharmacy.getName()+"</b>) </p>\n <p>Address: "+pharmacy.getAddress().getName() +", " +
         "</p> \n<p>До свидания!</p>" +
         "        \n" +
         "      </td>\n" +

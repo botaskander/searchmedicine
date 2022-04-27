@@ -89,46 +89,46 @@ public class AdminController {
     public Country getCountry(@PathVariable("id") Long id){
         return adminService.getCountry(id);
     }
+//
+//    @GetMapping("/cities/get-all")
+//    public List<City> getAllCities(){
+//        return adminService.getAllCities();
+//    }
+//
+//    @PostMapping("/cities/save")
+//    public Response saveCity(@RequestBody City city){
+//        return adminService.saveCity(city);
+//    }
+//
+//    @DeleteMapping("/cities/delete/{id}")
+//    public Response deleteCity(@PathVariable("id") Long id) {
+//        return adminService.deleteCity(id);
+//    }
+//
+//    @GetMapping("/cities/get-by-id/{id}")
+//    public City getCity(@PathVariable("id") Long id){
+//        return  adminService.getCity(id);
+//    }
+//
+//    @GetMapping("/regions/get-by-id/{id}")
+//    public Region getRegion(@PathVariable("id") Long id){
+//        return  adminService.getRegion(id);
+//    }
+//
+//    @GetMapping("/regions/get-all")
+//    public List<Region> getAllRegions(){
+//        return adminService.getAllRegions();
+//    }
+//
+//    @PostMapping("/regions/save")
+//    public Response saveRegion(@RequestBody Region region){
+//        return adminService.saveRegion(region);
+//    }
 
-    @GetMapping("/cities/get-all")
-    public List<City> getAllCities(){
-        return adminService.getAllCities();
-    }
-
-    @PostMapping("/cities/save")
-    public Response saveCity(@RequestBody City city){
-        return adminService.saveCity(city);
-    }
-
-    @DeleteMapping("/cities/delete/{id}")
-    public Response deleteCity(@PathVariable("id") Long id) {
-        return adminService.deleteCity(id);
-    }
-
-    @GetMapping("/cities/get-by-id/{id}")
-    public City getCity(@PathVariable("id") Long id){
-        return  adminService.getCity(id);
-    }
-
-    @GetMapping("/regions/get-by-id/{id}")
-    public Region getRegion(@PathVariable("id") Long id){
-        return  adminService.getRegion(id);
-    }
-
-    @GetMapping("/regions/get-all")
-    public List<Region> getAllRegions(){
-        return adminService.getAllRegions();
-    }
-
-    @PostMapping("/regions/save")
-    public Response saveRegion(@RequestBody Region region){
-        return adminService.saveRegion(region);
-    }
-
-    @DeleteMapping("/regions/delete/{id}")
-    public Response deleteRegion(@PathVariable("id") Long id) {
-        return adminService.deleteRegion(id);
-    }
+//    @DeleteMapping("/regions/delete/{id}")
+//    public Response deleteRegion(@PathVariable("id") Long id) {
+//        return adminService.deleteRegion(id);
+//    }
 
     @GetMapping("/companies/get-by-id/{id}")
     public Company getCompany(@PathVariable("id") Long id){

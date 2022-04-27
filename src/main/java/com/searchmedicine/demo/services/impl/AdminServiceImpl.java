@@ -25,9 +25,9 @@ public class AdminServiceImpl implements AdminService {
     private final MedicineRepository medicineRepository;
     private final UsersRepository usersRepository;
     private final RolesRepository rolesRepository;
-    private final RegionRepository regionRepository;
+//    private final RegionRepository regionRepository;
     private final CountryRepository countryRepository;
-    private final CityRepository cityRepository;
+//    private final CityRepository cityRepository;
     private final PharmacyRepository pharmacyRepository;
     private final CompanyRepository companyRepository;
     private final ListReserverRepository listReserverRepository;
@@ -164,85 +164,85 @@ public class AdminServiceImpl implements AdminService {
                 .build();
     }
 
-    @Override
-    public City getCity(Long id) {
-        return cityRepository.getById(id);
-    }
-
-    @Override
-    public List<City> getAllCities() {
-        return cityRepository.findAll();
-    }
-
-    @Override
-    public Response saveCity(City city) {
-        String resMessage=city.getId()==null? "Город успешно добавлен!": EDIT_SUCCESS_MSG;
-        try {
-            cityRepository.save(city);
-        }
-        catch (Exception e){
-            log.error("Ошибка при сохранении города",e);
-            return new Response(1,"Ошибка при сохранении города: "+e.getMessage());
-        }
-        return new Response(0,resMessage);
-    }
-
-    @Override
-    public Response deleteCity(Long id) {
-        try {
-            cityRepository.deleteById(id);
-        }
-        catch (Exception e){
-            log.error("Ошибка при удалении города",e);
-            return new Response(1,"Ошибка при удалении города: "+e.getMessage());
-        }
-        return Response.builder()
-                .responseMessage("Город успешно удален")
-                .responseCode(0)
-                .build();    }
-
-    @Override
-    public Region getRegion(Long id) {
-        return regionRepository.getById(id);
-    }
-
-    @Override
-    public List<Region> getAllRegions() {
-        return regionRepository.findAll();
-    }
-
-    @Override
-    public Response saveRegion(Region region) {
-        String resMessage=region.getId()==null? "Регион успешно добавлен!" : EDIT_SUCCESS_MSG;
-        try {
-            if (region.getCity() == null) {
-                return new Response(1," Ошибка : Пустой город");
-            }
-            val city = cityRepository.getById(region.getCity().getId());
-            region.setCity(city);
-            regionRepository.save(region);
-        }
-        catch (Exception e){
-            log.error("Ошибка при сохранении региона",e);
-            return new Response(1,"Ошибка при сохранении региона: "+e.getMessage());
-        }
-        return new Response(0,resMessage);
-    }
-
-    @Override
-    public Response deleteRegion(Long id) {
-        try {
-            regionRepository.deleteById(id);
-        }
-        catch (Exception e){
-            log.error("Ошибка при удалении региона",e);
-            return new Response(1,"Ошибка при удалении региона: "+e.getMessage());
-        }
-        return Response.builder()
-                .responseMessage("Регион удален")
-                .responseCode(0)
-                .build();
-    }
+//    @Override
+//    public City getCity(Long id) {
+//        return cityRepository.getById(id);
+//    }
+//
+//    @Override
+//    public List<City> getAllCities() {
+//        return cityRepository.findAll();
+//    }
+//
+//    @Override
+//    public Response saveCity(City city) {
+//        String resMessage=city.getId()==null? "Город успешно добавлен!": EDIT_SUCCESS_MSG;
+//        try {
+//            cityRepository.save(city);
+//        }
+//        catch (Exception e){
+//            log.error("Ошибка при сохранении города",e);
+//            return new Response(1,"Ошибка при сохранении города: "+e.getMessage());
+//        }
+//        return new Response(0,resMessage);
+//    }
+//
+//    @Override
+//    public Response deleteCity(Long id) {
+//        try {
+//            cityRepository.deleteById(id);
+//        }
+//        catch (Exception e){
+//            log.error("Ошибка при удалении города",e);
+//            return new Response(1,"Ошибка при удалении города: "+e.getMessage());
+//        }
+//        return Response.builder()
+//                .responseMessage("Город успешно удален")
+//                .responseCode(0)
+//                .build();    }
+//
+//    @Override
+//    public Region getRegion(Long id) {
+//        return regionRepository.getById(id);
+//    }
+//
+//    @Override
+//    public List<Region> getAllRegions() {
+//        return regionRepository.findAll();
+//    }
+//
+//    @Override
+//    public Response saveRegion(Region region) {
+//        String resMessage=region.getId()==null? "Регион успешно добавлен!" : EDIT_SUCCESS_MSG;
+//        try {
+//            if (region.getCity() == null) {
+//                return new Response(1," Ошибка : Пустой город");
+//            }
+//            val city = cityRepository.getById(region.getCity().getId());
+//            region.setCity(city);
+//            regionRepository.save(region);
+//        }
+//        catch (Exception e){
+//            log.error("Ошибка при сохранении региона",e);
+//            return new Response(1,"Ошибка при сохранении региона: "+e.getMessage());
+//        }
+//        return new Response(0,resMessage);
+//    }
+//
+//    @Override
+//    public Response deleteRegion(Long id) {
+//        try {
+//            regionRepository.deleteById(id);
+//        }
+//        catch (Exception e){
+//            log.error("Ошибка при удалении региона",e);
+//            return new Response(1,"Ошибка при удалении региона: "+e.getMessage());
+//        }
+//        return Response.builder()
+//                .responseMessage("Регион удален")
+//                .responseCode(0)
+//                .build();
+//    }
 
     @SneakyThrows
     @Override

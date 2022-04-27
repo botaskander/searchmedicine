@@ -30,21 +30,21 @@ public interface AdminService {
 
   Response deleteCountry(Long id);
 
-  City getCity(Long id);
-
-  List<City> getAllCities();
-
-  Response saveCity(City city);
-
-  Response deleteCity(Long id);
-
-  Region getRegion(Long id);
-
-  List<Region> getAllRegions();
-
-  Response saveRegion(Region region);
-
-  Response deleteRegion(Long id);
+//  City getCity(Long id);
+//
+//  List<City> getAllCities();
+//
+//  Response saveCity(City city);
+//
+//  Response deleteCity(Long id);
+//
+//  Region getRegion(Long id);
+//
+//  List<Region> getAllRegions();
+//
+//  Response saveRegion(Region region);
+//
+//  Response deleteRegion(Long id);
 
   Company getCompany(Long id);
 

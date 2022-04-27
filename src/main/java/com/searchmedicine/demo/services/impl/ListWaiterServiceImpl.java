@@ -33,7 +33,7 @@ public class ListWaiterServiceImpl implements ListWaiterService {
     ListWaiter listWaiter = new ListWaiter();
     Medicine medicine = medicineRepository.findById(id).orElse(null);
 
-    if(medicine != null) {
+    if(medicine != null&& users!=null) {
       listWaiter.setMedicine(medicine);
       listWaiter.setUsers(users);
       listWaiter.setIsDeleted(false);

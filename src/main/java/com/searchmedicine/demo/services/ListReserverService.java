@@ -14,4 +14,5 @@ public interface ListReserverService {
   Response saveListReserver(ListReserverRequestDto list, Users users);
   List<ListReserver> getReservationByUser(Long id);
   void delete(ListReserver listReserver);
+  List<ListReserver> getAllReservation();
 }

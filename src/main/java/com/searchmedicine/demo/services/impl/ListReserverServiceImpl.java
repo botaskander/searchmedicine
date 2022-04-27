@@ -91,6 +91,11 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
   listReserverRepository.delete(listReserver);
  }
 
+ @Override
+ public List<ListReserver> getAllReservation() {
+  return listReserverRepository.findAll();
+ }
+
  private Users getUser(){
   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
   if(!(authentication instanceof AnonymousAuthenticationToken)){

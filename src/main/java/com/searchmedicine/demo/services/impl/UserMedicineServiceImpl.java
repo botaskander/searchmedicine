@@ -1,8 +1,10 @@
 package com.searchmedicine.demo.services.impl;
 
 import com.searchmedicine.demo.dto.UserMedicineDto;
+import com.searchmedicine.demo.entities.Address;
 import com.searchmedicine.demo.entities.ImagesUserMedicine;
 import com.searchmedicine.demo.entities.UserMedicine;
+import com.searchmedicine.demo.repositories.AddressRepository;
 import com.searchmedicine.demo.repositories.ImagesUserMedicineRepository;
 import com.searchmedicine.demo.repositories.UserMedicineRepository;
 import com.searchmedicine.demo.services.UserMedicineService;
@@ -15,6 +17,9 @@ import java.util.List;
 public class UserMedicineServiceImpl implements UserMedicineService {
     @Autowired
     private UserMedicineRepository userMedicineRepository;
+
+    @Autowired
+    private  AddressRepository addressRepository;
 
     @Autowired
     private ImagesUserMedicineRepository imagesUserMedicineRepository;
@@ -90,6 +95,11 @@ public class UserMedicineServiceImpl implements UserMedicineService {
     @Override
     public void deleteUserMedicineImagesAll(Long id ) {
         imagesUserMedicineRepository.deleteImagesById(id);
+    }
+
+    @Override
+    public Address addAddress(Address address) {
+        return addressRepository.save(address);
     }
 
 

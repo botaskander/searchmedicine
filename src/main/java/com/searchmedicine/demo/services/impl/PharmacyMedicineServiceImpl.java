@@ -125,6 +125,11 @@ public class PharmacyMedicineServiceImpl implements
     return pharmacyMedicineDto;
   }
 
+  @Override
+  public PharmacyMedicine getPharmacyMedicineById(Long id) {
+    return pharmacyMedicineRepository.findById(id).orElse(null);
+  }
+
   private String buildEmail(String name, Medicine medicine, Pharmacy pharmacy){
     return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
         "\n" +

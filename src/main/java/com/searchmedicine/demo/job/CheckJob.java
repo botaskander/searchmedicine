@@ -26,18 +26,21 @@ public class CheckJob {
   public void run(){
 //    System.out.println("*********************************");
 //    System.out.println("Start check");
-//    checkBook();
+       checkBook();
   }
 
   public void checkBook(){
     List<ListReserver> listReservers = listReserverService.getAllIsNotTokenAndIsNotExpired();
     LocalDateTime todayDate = LocalDateTime.now();
-    for(ListReserver lr: listReservers){
-      {
-        if(todayDate.isAfter(lr.getUntilTime())){
-          lr.setIsExpired(true);
-          listReserverService.save(lr);
-          emailSender.send(lr.getUsers().getEmail(),buildEmail(lr.getUsers().getFullName(),  lr.getPharmacyMedicine().getMedicine(), lr.getPharmacyMedicine().getPharmacy()) , "Истек срок бронирования");
+    if(listReservers!=null){
+      for(ListReserver lr: listReservers){
+        {
+          if(todayDate.isAfter(lr.getUntilTime())){
+            lr.setIsExpired(true);
+            System.out.println(lr);
+            listReserverService.save(lr);
+            emailSender.send(lr.getUsers().getEmail(),buildEmail(lr.getUsers().getFullName(),  lr.getPharmacyMedicine().getMedicine(), lr.getPharmacyMedicine().getPharmacy()) , "Истек срок бронирования");
+          }
         }
       }
     }

@@ -3,6 +3,8 @@ package com.searchmedicine.demo.services.impl;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.entities.views.ChartLine;
+import com.searchmedicine.demo.entities.views.MessageTypes;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.repositories.*;
 import com.searchmedicine.demo.services.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +27,11 @@ public class AdminServiceImpl implements AdminService {
     private final MedicineRepository medicineRepository;
     private final UsersRepository usersRepository;
     private final RolesRepository rolesRepository;
-//    private final RegionRepository regionRepository;
     private final CountryRepository countryRepository;
-//    private final CityRepository cityRepository;
     private final PharmacyRepository pharmacyRepository;
     private final CompanyRepository companyRepository;
     private final ListReserverRepository listReserverRepository;
     private final ListWaiterRepository listWaiterRepository;
-
-    private final static String EDIT_SUCCESS_MSG="Изменения сохранены";
 
     @SneakyThrows
     @Override
@@ -43,13 +41,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveFarmGroup(FarmGroup farmGroup) {
-        String resMessage=farmGroup.getId()==null? "Группа успешно добавлена!" : EDIT_SUCCESS_MSG;
+        String resMessage=farmGroup.getId()==null?
+                MessageTypes.ADD_FARM_GROUP_SUCCESS_MSG : MessageTypes.EDIT_SUCCESS_MSG;
         try {
             farmGroupRepository.save(farmGroup);
         }
         catch (Exception e){
-            log.error("Ошибка при сохранении группы лекарства",e);
-            return new Response(1,"Ошибка при сохранении группы лекарства: "+e.getMessage());
+            log.error(MessageTypes.SAVE_ERROR+"фарм группы",e);
+            return new Response(1,MessageTypes.SAVE_ERROR+"фарм группы: "+e.getMessage());
         }
         return Response.builder()
                 .responseMessage(resMessage)
@@ -63,11 +62,11 @@ public class AdminServiceImpl implements AdminService {
             farmGroupRepository.deleteById(id);
         }
         catch (Exception e){
-            log.error("Ошибка при удалении группы лекарства",e);
-            return new Response(1,"Ошибка при удалении группы лекарства: "+e.getMessage());
+            log.error(MessageTypes.DELETE_ERROR+"фарм группы",e);
+            return new Response(1,MessageTypes.DELETE_ERROR+"фарм группы: "+e.getMessage());
         }
         return Response.builder()
-                .responseMessage("Группа успешно удалена")
+                .responseMessage(MessageTypes.DELETE_FARM_GROUP_SUCCESS_MSG)
                 .responseCode(0)
                 .build();
     }
@@ -92,7 +91,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveMedicine(Medicine medicine) {
-        String resMessage=medicine.getId()==null? "Лекарство успешно добавлено!": EDIT_SUCCESS_MSG;
+        String resMessage=medicine.getId()==null?
+                MessageTypes.ADD_MEDICINE_SUCCESS_MSG: MessageTypes.EDIT_SUCCESS_MSG;
         try {
             if (medicine.getFarmGroup() == null) {
                 return new Response(1," Ошибка в группе: Пустая группа");
@@ -105,8 +105,8 @@ public class AdminServiceImpl implements AdminService {
             medicineRepository.save(medicine);
         }
         catch (Exception e){
-            log.error("Ошибка при сохранении лекарства",e);
-            return new Response(1,"Ошибка при сохранении лекарства: "+e.getMessage());
+            log.error(MessageTypes.SAVE_ERROR+"лекарства",e);
+            return new Response(1,MessageTypes.SAVE_ERROR+"лекарства: "+e.getMessage());
         }
         return new Response(0,resMessage);
     }
@@ -117,11 +117,11 @@ public class AdminServiceImpl implements AdminService {
             medicineRepository.deleteById(id);
         }
         catch (Exception e){
-            log.error("Ошибка при удалении лекарства",e);
-            return new Response(1,"Ошибка при удалении лекарства: "+e.getMessage());
+            log.error(MessageTypes.DELETE_ERROR+"лекарства",e);
+            return new Response(1,MessageTypes.DELETE_ERROR+"лекарства: "+e.getMessage());
         }
         return Response.builder()
-                .responseMessage("Лекарство успешно удалено")
+                .responseMessage(MessageTypes.DELETE_MEDICINE_SUCCESS_MSG)
                 .responseCode(0)
                 .build();
     }
@@ -138,13 +138,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveCountry(Country country) {
-        String resMessage= country.getId()==null? "Страна успешно добавлена!": EDIT_SUCCESS_MSG;
+        String resMessage= country.getId()==null?
+                MessageTypes.ADD_COUNTRY_SUCCESS_MSG: MessageTypes.EDIT_SUCCESS_MSG;
         try {
             countryRepository.save(country);
         }
         catch (Exception e){
-            log.error("Ошибка при сохранении страны",e);
-            return new Response(1,"Ошибка при сохранении страны: "+e.getMessage());
+            log.error(MessageTypes.SAVE_ERROR+"страны",e);
+            return new Response(1,MessageTypes.SAVE_ERROR+"страны: "+e.getMessage());
         }
         return new Response(0,resMessage);
     }
@@ -155,94 +156,14 @@ public class AdminServiceImpl implements AdminService {
             countryRepository.deleteById(id);
         }
         catch (Exception e){
-            log.error("Ошибка при удалении страны",e);
-            return new Response(1,"Ошибка при удалении страны: "+e.getMessage());
+            log.error(MessageTypes.DELETE_ERROR+"страны",e);
+            return new Response(1,MessageTypes.DELETE_ERROR+"страны: "+e.getMessage());
         }
         return Response.builder()
-                .responseMessage("Страна успешно удалена")
+                .responseMessage(MessageTypes.DELETE_COUNTRY_SUCCESS_MSG)
                 .responseCode(0)
                 .build();
     }
-
-//    @Override
-//    public City getCity(Long id) {
-//        return cityRepository.getById(id);
-//    }
-//
-//    @Override
-//    public List<City> getAllCities() {
-//        return cityRepository.findAll();
-//    }
-//
-//    @Override
-//    public Response saveCity(City city) {
-//        String resMessage=city.getId()==null? "Город успешно добавлен!": EDIT_SUCCESS_MSG;
-//        try {
-//            cityRepository.save(city);
-//        }
-//        catch (Exception e){
-//            log.error("Ошибка при сохранении города",e);
-//            return new Response(1,"Ошибка при сохранении города: "+e.getMessage());
-//        }
-//        return new Response(0,resMessage);
-//    }
-//
-//    @Override
-//    public Response deleteCity(Long id) {
-//        try {
-//            cityRepository.deleteById(id);
-//        }
-//        catch (Exception e){
-//            log.error("Ошибка при удалении города",e);
-//            return new Response(1,"Ошибка при удалении города: "+e.getMessage());
-//        }
-//        return Response.builder()
-//                .responseMessage("Город успешно удален")
-//                .responseCode(0)
-//                .build();    }
-//
-//    @Override
-//    public Region getRegion(Long id) {
-//        return regionRepository.getById(id);
-//    }
-//
-//    @Override
-//    public List<Region> getAllRegions() {
-//        return regionRepository.findAll();
-//    }
-//
-//    @Override
-//    public Response saveRegion(Region region) {
-//        String resMessage=region.getId()==null? "Регион успешно добавлен!" : EDIT_SUCCESS_MSG;
-//        try {
-//            if (region.getCity() == null) {
-//                return new Response(1," Ошибка : Пустой город");
-//            }
-//            val city = cityRepository.getById(region.getCity().getId());
-//            region.setCity(city);
-//            regionRepository.save(region);
-//        }
-//        catch (Exception e){
-//            log.error("Ошибка при сохранении региона",e);
-//            return new Response(1,"Ошибка при сохранении региона: "+e.getMessage());
-//        }
-//        return new Response(0,resMessage);
-//    }
-//
-//    @Override
-//    public Response deleteRegion(Long id) {
-//        try {
-//            regionRepository.deleteById(id);
-//        }
-//        catch (Exception e){
-//            log.error("Ошибка при удалении региона",e);
-//            return new Response(1,"Ошибка при удалении региона: "+e.getMessage());
-//        }
-//        return Response.builder()
-//                .responseMessage("Регион удален")
-//                .responseCode(0)
-//                .build();
-//    }
 
     @SneakyThrows
     @Override
@@ -258,7 +179,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Response saveCompany(Company company) {
-        String resMessage=company.getId()==null? "Компания успешно добавлена!" : EDIT_SUCCESS_MSG;
+        String resMessage=company.getId()==null?
+                MessageTypes.ADD_COMPANY_SUCCESS_MSG : MessageTypes.EDIT_SUCCESS_MSG;
         try {
             if (company.getCountry() == null) {
                 return new Response(1," Ошибка : Пустая страна");
@@ -268,8 +190,8 @@ public class AdminServiceImpl implements AdminService {
             companyRepository.save(company);
         }
         catch (Exception e){
-            log.error("Ошибка при сохранении компании",e);
-            return new Response(1,"Ошибка при сохранении компании: "+e.getMessage());
+            log.error(MessageTypes.SAVE_ERROR+"компании",e);
+            return new Response(1,MessageTypes.SAVE_ERROR+"компании: "+e.getMessage());
         }
         return new Response(0,resMessage);    }
 
@@ -279,11 +201,11 @@ public class AdminServiceImpl implements AdminService {
             companyRepository.deleteById(id);
         }
         catch (Exception e){
-            log.error("Ошибка при удалении компании",e);
-            return new Response(1,"Ошибка при удалении компании: "+e.getMessage());
+            log.error(MessageTypes.DELETE_ERROR+"компании",e);
+            return new Response(1,MessageTypes.DELETE_ERROR+"компании: "+e.getMessage());
         }
         return Response.builder()
-                .responseMessage("Компания удалена")
+                .responseMessage(MessageTypes.DELETE_COMPANY_SUCCESS_MSG)
                 .responseCode(0)
                 .build();    }
 

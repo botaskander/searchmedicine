@@ -36,7 +36,4 @@ public class PharmacyMedicine {
 
     @ManyToOne
     private Pharmacy pharmacy;
-
-
-
 }

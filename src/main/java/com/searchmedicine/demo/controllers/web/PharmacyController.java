@@ -1,11 +1,9 @@
 package com.searchmedicine.demo.controllers.web;
 
-import com.searchmedicine.demo.entities.ListReserver;
-import com.searchmedicine.demo.entities.PharmacyMedicine;
-import com.searchmedicine.demo.entities.Users;
-import com.searchmedicine.demo.entities.views.AdminHomeInfo;
+import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.PharmacyHomeInfo;
-import com.searchmedicine.demo.services.UserService;
+import com.searchmedicine.demo.entities.views.PharmacyMedicineView;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.services.WebPharmacyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +22,6 @@ public class PharmacyController {
 
     private final WebPharmacyService webPharmacyService;
 
-    @GetMapping("/check")
-    public boolean access() {
-        return true;
-    }
-
     @GetMapping("/users/get-home-info")
     public PharmacyHomeInfo getHomeInfo(@RequestParam("id") Long id){
         return  webPharmacyService.getPharmacyHomeInfo(id);
@@ -44,5 +37,19 @@ public class PharmacyController {
         return webPharmacyService.getPharmacyMedicines(id);
     }
 
+    @PostMapping("/medicines/save")
+    public Response savePharmacyMedicine(@RequestBody PharmacyMedicine pharmacyMedicine){
+        return webPharmacyService.savePharmacyMedicine(pharmacyMedicine);
+    }
 
+    @DeleteMapping("/medicines/delete")
+    public Response deletePharmacyMedicines(@RequestParam("pharmacyId") Long pharmacyId,
+                                            @RequestParam("pharmacyMedicineId") Long pharmacyMedicineId) {
+        return webPharmacyService.deletePharmacyMedicine(pharmacyId,pharmacyMedicineId);
+    }
+
+    @GetMapping("/medicines/get-one/{id}")
+    public PharmacyMedicineView getPharmacyMedicineDetailed(@RequestParam("id") Long id){
+        return webPharmacyService.getDetailedPharmacyMedicine(id);
+    }
 }

@@ -3,22 +3,19 @@ package com.searchmedicine.demo.controllers.mobileControllers;
 import com.searchmedicine.demo.dto.ListReserverRequestDto;
 import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.ListWaiter;
-import com.searchmedicine.demo.entities.Response;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.entities.Users;
 import com.searchmedicine.demo.services.*;
 
 import com.searchmedicine.demo.services.UserMedicineService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.swing.text.html.HTML;
 
 @RestController
 @RequiredArgsConstructor

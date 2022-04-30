@@ -1,8 +1,7 @@
 package com.searchmedicine.demo.services;
 
 import com.searchmedicine.demo.entities.ListWaiter;
-import com.searchmedicine.demo.entities.Medicine;
-import com.searchmedicine.demo.entities.Response;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.entities.Users;
 import java.util.List;
 

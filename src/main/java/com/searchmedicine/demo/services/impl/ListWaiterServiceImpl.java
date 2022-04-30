@@ -2,12 +2,10 @@ package com.searchmedicine.demo.services.impl;
 
 import com.searchmedicine.demo.entities.ListWaiter;
 import com.searchmedicine.demo.entities.Medicine;
-import com.searchmedicine.demo.entities.PharmacyMedicine;
-import com.searchmedicine.demo.entities.Response;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.entities.Users;
 import com.searchmedicine.demo.repositories.ListWaiterRepository;
 import com.searchmedicine.demo.repositories.MedicineRepository;
-import com.searchmedicine.demo.repositories.UsersRepository;
 import com.searchmedicine.demo.services.ListWaiterService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

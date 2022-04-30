@@ -1,4 +1,4 @@
-package com.searchmedicine.demo.entities;
+package com.searchmedicine.demo.entities.views;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

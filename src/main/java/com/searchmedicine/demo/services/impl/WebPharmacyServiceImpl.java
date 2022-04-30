@@ -1,16 +1,9 @@
-
 package com.searchmedicine.demo.services.impl;
 
-import com.searchmedicine.demo.entities.ListReserver;
-import com.searchmedicine.demo.entities.Pharmacy;
-import com.searchmedicine.demo.entities.PharmacyMedicine;
-import com.searchmedicine.demo.entities.Users;
-import com.searchmedicine.demo.entities.views.AdminHomeInfo;
-import com.searchmedicine.demo.entities.views.ChartLine;
-import com.searchmedicine.demo.entities.views.PharmacyHomeInfo;
+import com.searchmedicine.demo.entities.*;
+import com.searchmedicine.demo.entities.views.*;
 import com.searchmedicine.demo.repositories.*;
 import com.searchmedicine.demo.services.WebPharmacyService;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +23,14 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     private final PharmacyRepository pharmacyRepository;
     private final ListReserverRepository listReserverRepository;
     private final PharmacyMedicineRepository pharmacyMedicineRepository;
+    private final MedicineRepository medicineRepository;
 
     @SneakyThrows
     @Override
-    public PharmacyHomeInfo getPharmacyHomeInfo(Long id) {
+    public PharmacyHomeInfo getPharmacyHomeInfo(Long pharmacyId) {
 
-        val pharmacy= pharmacyRepository.getById(id);
-        val reserves = listReserverRepository.findAllByPharmacyId(pharmacy.getId());
+        val pharmacy = pharmacyRepository.getById(pharmacyId);
+        val reserves = listReserverRepository.findAllByPharmacy(pharmacy.getId());
         val lastMonthReserves = reserves.stream()
                 .filter(reserve ->
                         reserve.getReservedTime().isAfter(LocalDateTime.now().minusMonths(1)))
@@ -70,23 +64,74 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     }
 
     @Override
-    public Pharmacy getPharmacyByUserId(Long id) {
-        return pharmacyRepository.getByUser_Id(id).orElse(null);
+    public Pharmacy getPharmacyByUserId(Long userId) {
+        return pharmacyRepository.getByUser_Id(userId).orElse(null);
     }
 
     @SneakyThrows
     @Override
     public List<ListReserver> getPharmacyReserves(Long pharmacyId) {
         val list = listReserverRepository
-                .findAllByPharmacyIdOrderByReservedTimeDesc(pharmacyId)
-                .orElse(null);
-        return list;
+                .findAllByPharmacy(pharmacyId);
+        return list.size() > 0 ? list : null;
     }
 
     @Override
     public List<PharmacyMedicine> getPharmacyMedicines(Long pharmacyId) {
         val list = pharmacyMedicineRepository.findAllByPharmacyIdOrderByAddedDateDesc(pharmacyId);
         return list.size() == 0 ? null : list;
+    }
+
+    @Override
+    public Response deletePharmacyMedicine(Long pharmacyId, Long pharmacyMedicineId) {
+        try {
+            listReserverRepository.findAllByPharmacy(pharmacyId).forEach(reserve->{
+                listReserverRepository.delete(reserve);
+                log.info("Reserve deleted");
+            });
+            pharmacyMedicineRepository.deleteById(pharmacyMedicineId);
+        }
+        catch (Exception e){
+            log.error(MessageTypes.DELETE_ERROR+"компании",e);
+            return new Response(1,MessageTypes.DELETE_ERROR+"лекарства");
+        }
+        return Response.builder()
+                .responseMessage("Лекарство успешно удалена")
+                .responseCode(0)
+                .build();
+    }
+
+    @Override
+    public Response savePharmacyMedicine(PharmacyMedicine pharmacyMedicine) {
+        String resMessage=pharmacyMedicine.getId()==null?
+                MessageTypes.ADD_MEDICINE_SUCCESS_MSG : MessageTypes.EDIT_SUCCESS_MSG;
+        try {
+            if (pharmacyMedicine.getMedicine() == null) {
+                return new Response(1," Ошибка : Пустое лекарство");
+            }
+            val medicine = medicineRepository.getById(pharmacyMedicine.getMedicine().getId());
+            pharmacyMedicine.setMedicine(medicine);
+
+            if (pharmacyMedicine.getPharmacy() == null) {
+                return new Response(1," Ошибка : Пустая аптека");
+            }
+            val pharmacy = pharmacyRepository.getById(pharmacyMedicine.getPharmacy().getId());
+            pharmacyMedicine.setPharmacy(pharmacy);
+            pharmacyMedicineRepository.save(pharmacyMedicine);
+        }
+        catch (Exception e){
+            log.error(MessageTypes.SAVE_ERROR+"лекарства",e);
+            return new Response(1,MessageTypes.SAVE_ERROR+"лекарства: "+e.getMessage());
+        }
+        return new Response(0,resMessage);
+    }
+
+    @Override
+    public PharmacyMedicineView getDetailedPharmacyMedicine(Long pharmacyMedicineId) {
+        val pharmacyMedicine= pharmacyMedicineRepository.getById(pharmacyMedicineId);
+        return PharmacyMedicineView.builder()
+                .pharmacyMedicine(pharmacyMedicine)
+                .build();
     }
 }
 

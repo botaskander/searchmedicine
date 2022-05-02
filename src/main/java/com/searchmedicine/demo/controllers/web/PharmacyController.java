@@ -5,10 +5,10 @@ import com.searchmedicine.demo.dto.Address;
 import com.searchmedicine.demo.dto.PharmacyDTO;
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.PharmacyMedicine;
-import com.searchmedicine.demo.entities.Response;
 import com.searchmedicine.demo.entities.Users;
 import com.searchmedicine.demo.entities.views.PharmacyHomeInfo;
 import com.searchmedicine.demo.entities.views.PharmacyMedicineView;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.services.PharmacyMedicineService;
 import com.searchmedicine.demo.services.WebPharmacyService;
 import lombok.RequiredArgsConstructor;
@@ -98,7 +98,7 @@ public class PharmacyController {
     }
 
     @PutMapping("/edit-profile")
-    public Response  editProfile(@RequestBody PharmacyDTO pharmacyDTO){
+    public Response editProfile(@RequestBody PharmacyDTO pharmacyDTO){
             Pharmacy pharmacy=webPharmacyService.getPharmacy(pharmacyDTO.getPharmacyId());
             pharmacy.setName(pharmacyDTO.getName());
             pharmacy.setWhatsappNumber(pharmacyDTO.getWhatsappNumber());

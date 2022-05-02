@@ -3,7 +3,6 @@ package com.searchmedicine.demo.services.impl;
 import com.searchmedicine.demo.dto.Address;
 import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.Pharmacy;
-import com.searchmedicine.demo.entities.Response;
 import com.searchmedicine.demo.entities.views.ChartLine;
 import com.searchmedicine.demo.entities.views.PharmacyHomeInfo;
 import com.searchmedicine.demo.entities.*;
@@ -20,6 +19,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.searchmedicine.demo.entities.views.MessageTypes.EDIT_SUCCESS_MSG;
 
 @Service
 @RequiredArgsConstructor
@@ -159,7 +160,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     @Override
     public Response savePharmacyMedicine(PharmacyMedicine pharmacyMedicine) {
         String resMessage=pharmacyMedicine.getId()==null?
-                MessageTypes.ADD_MEDICINE_SUCCESS_MSG : MessageTypes.EDIT_SUCCESS_MSG;
+                MessageTypes.ADD_MEDICINE_SUCCESS_MSG : EDIT_SUCCESS_MSG;
         try {
             if (pharmacyMedicine.getMedicine() == null) {
                 return new Response(1," Ошибка : Пустое лекарство");

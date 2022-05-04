@@ -36,7 +36,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     public Medicine getMedicine(Long id) {
-        return medicineRepository.getOne(id);
+        return medicineRepository.getById(id);
     }
 
     @Override

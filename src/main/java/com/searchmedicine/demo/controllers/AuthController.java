@@ -6,38 +6,26 @@ import com.searchmedicine.demo.dto.JwtResponse;
 import com.searchmedicine.demo.dto.PharmacyJwtResponse;
 import com.searchmedicine.demo.dto.UserDTO;
 import com.searchmedicine.demo.entities.Pharmacy;
-import com.searchmedicine.demo.entities.Response;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.entities.Roles;
 import com.searchmedicine.demo.entities.Users;
 
 import com.searchmedicine.demo.jwt.JWTTokenGenerator;
-import com.searchmedicine.demo.repositories.RolesRepository;
-import com.searchmedicine.demo.repositories.UsersRepository;
 import com.searchmedicine.demo.services.UserService;
 import com.searchmedicine.demo.services.WebPharmacyService;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

@@ -4,6 +4,7 @@ import com.searchmedicine.demo.controllers.FileController;
 import com.searchmedicine.demo.dto.ResponseDTO;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
+import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.payload.UploadFileResponse;
 import com.searchmedicine.demo.services.AdminService;
 import com.searchmedicine.demo.services.FileStorageService;
@@ -31,7 +32,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -118,46 +118,6 @@ public class AdminController {
     @GetMapping("/countries/get-by-id/{id}")
     public Country getCountry(@PathVariable("id") Long id){
         return adminService.getCountry(id);
-    }
-
-    @GetMapping("/cities/get-all")
-    public List<City> getAllCities(){
-        return adminService.getAllCities();
-    }
-
-    @PostMapping("/cities/save")
-    public Response saveCity(@RequestBody City city){
-        return adminService.saveCity(city);
-    }
-
-    @DeleteMapping("/cities/delete/{id}")
-    public Response deleteCity(@PathVariable("id") Long id) {
-        return adminService.deleteCity(id);
-    }
-
-    @GetMapping("/cities/get-by-id/{id}")
-    public City getCity(@PathVariable("id") Long id){
-        return  adminService.getCity(id);
-    }
-
-    @GetMapping("/regions/get-by-id/{id}")
-    public Region getRegion(@PathVariable("id") Long id){
-        return  adminService.getRegion(id);
-    }
-
-    @GetMapping("/regions/get-all")
-    public List<Region> getAllRegions(){
-        return adminService.getAllRegions();
-    }
-
-    @PostMapping("/regions/save")
-    public Response saveRegion(@RequestBody Region region){
-        return adminService.saveRegion(region);
-    }
-
-    @DeleteMapping("/regions/delete/{id}")
-    public Response deleteRegion(@PathVariable("id") Long id) {
-        return adminService.deleteRegion(id);
     }
 
     @GetMapping("/companies/get-by-id/{id}")

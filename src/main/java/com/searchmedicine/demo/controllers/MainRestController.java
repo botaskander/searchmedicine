@@ -107,8 +107,6 @@ public class MainRestController {
         Address address = new Address();
         address.setLatitude(medicineExchange.getLatitude());
         address.setLongitude(medicineExchange.getLongitude());
-        String streetNumber = medicineExchange.getAddressName().replaceAll("[^0-9]", "");
-        address.setNumber(streetNumber);
         address.setName(medicineExchange.getAddressName());
         Address address1=userMedicineService.addAddress(address);
         userMedicine.setAddress(address1);
@@ -184,6 +182,12 @@ public class MainRestController {
         LocalDateTime localDateTime1 = localDate.atStartOfDay();
         userMedicine.setExpDate(localDateTime1);
         userMedicine.setPhone(medicineExchange.getPhone());
+        Address address = new Address();
+        address.setLatitude(medicineExchange.getLatitude());
+        address.setLongitude(medicineExchange.getLongitude());
+        address.setName(medicineExchange.getAddressName());
+        Address address1=userMedicineService.addAddress(address);
+        userMedicine.setAddress(address1);
         UserMedicine newUserMedicine= userMedicineService.editUserMedicine(userMedicine);
         return   new ResponseEntity<>( newUserMedicine, HttpStatus.OK);
     }

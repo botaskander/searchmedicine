@@ -3,6 +3,7 @@ package com.searchmedicine.demo.services;
 import com.searchmedicine.demo.dto.ResponseDTO;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
+import com.searchmedicine.demo.entities.views.Response;
 
 import java.util.List;
 
@@ -30,22 +31,6 @@ public interface AdminService {
   Response saveCountry(Country country);
 
   Response deleteCountry(Long id);
-
-  City getCity(Long id);
-
-  List<City> getAllCities();
-
-  Response saveCity(City city);
-
-  Response deleteCity(Long id);
-
-  Region getRegion(Long id);
-
-  List<Region> getAllRegions();
-
-  Response saveRegion(Region region);
-
-  Response deleteRegion(Long id);
 
   Company getCompany(Long id);
 

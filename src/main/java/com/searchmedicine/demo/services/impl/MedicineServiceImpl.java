@@ -1,7 +1,9 @@
 package com.searchmedicine.demo.services.impl;
 
+import com.searchmedicine.demo.entities.Image;
 import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.Medicine;
+import com.searchmedicine.demo.repositories.ImagesRepository;
 import com.searchmedicine.demo.repositories.MedicineRepository;
 import com.searchmedicine.demo.services.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class MedicineServiceImpl implements MedicineService {
     @Autowired
     private MedicineRepository medicineRepository;
 
+    @Autowired
+    private ImagesRepository imagesRepository;
 
     @Override
     public List<Medicine> getAllAvailableMedicine() {
@@ -72,6 +76,26 @@ public class MedicineServiceImpl implements MedicineService {
             return medicineRepository.findAllByFarmGroupId(id);
         }
         return null;
+    }
+
+    @Override
+    public Medicine saveMedicine(Medicine medicine) {
+        return medicineRepository.save(medicine);
+    }
+
+    @Override
+    public List<Image> getImageList(Long id) {
+        return imagesRepository.findByMedicineId(id);
+    }
+
+    @Override
+    public void deleteImagesAll(Long id) {
+        imagesRepository.deleteImagesById(id);
+    }
+
+    @Override
+    public Image addImage(Image image) {
+        return imagesRepository.save(image);
     }
 
 }

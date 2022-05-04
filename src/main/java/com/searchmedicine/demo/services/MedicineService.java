@@ -1,8 +1,6 @@
 package com.searchmedicine.demo.services;
 
-import com.searchmedicine.demo.entities.ListReserver;
-import com.searchmedicine.demo.entities.Medicine;
-import com.searchmedicine.demo.entities.UserMedicine;
+import com.searchmedicine.demo.entities.*;
 
 import java.util.List;
 
@@ -22,5 +20,11 @@ public interface MedicineService {
 
     List<Medicine> getMedicineByFarmGroup(Long id);
 
+    Medicine saveMedicine(Medicine medicine);
 
+    List<Image> getImageList(Long id);
+
+    void deleteImagesAll(Long id);
+
+    Image addImage(Image image);
 }

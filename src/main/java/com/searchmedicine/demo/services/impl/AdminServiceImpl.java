@@ -1,5 +1,6 @@
 package com.searchmedicine.demo.services.impl;
 
+import com.searchmedicine.demo.dto.ResponseDTO;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.entities.views.ChartLine;
@@ -91,24 +92,30 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Response saveMedicine(Medicine medicine) {
+    public ResponseDTO saveMedicine(Medicine medicine) {
+        Medicine medicine1;
         String resMessage=medicine.getId()==null? "Лекарство успешно добавлено!": EDIT_SUCCESS_MSG;
         try {
             if (medicine.getFarmGroup() == null) {
-                return new Response(1," Ошибка в группе: Пустая группа");
+                return new ResponseDTO(new Response(1," Ошибка в группе: Пустая группа"),null);
             }
             val farmGroup = farmGroupRepository.getById(medicine.getFarmGroup().getId());
             medicine.setFarmGroup(farmGroup);
             if (medicine.getId() == null) {
                 medicine.setAddedDate(LocalDateTime.now());
             }
-            medicineRepository.save(medicine);
+            medicine.setAddedDate(LocalDateTime.now());
+            medicine1=medicineRepository.save(medicine);
         }
         catch (Exception e){
             log.error("Ошибка при сохранении лекарства",e);
-            return new Response(1,"Ошибка при сохранении лекарства: "+e.getMessage());
+            return new ResponseDTO(new Response(1,"Ошибка при сохранении лекарства: "+e.getMessage()),null);
+
         }
-        return new Response(0,resMessage);
+        ResponseDTO responseDTO= new ResponseDTO();
+        responseDTO.setResponse(new Response(0,resMessage));
+        responseDTO.setMedicine(medicine1);
+        return responseDTO;
     }
 
     @Override

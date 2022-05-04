@@ -93,7 +93,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ResponseDTO saveMedicine(Medicine medicine) {
         Medicine medicine1;
-        String resMessage=medicine.getId()==null? "Лекарство успешно добавлено!": EDIT_SUCCESS_MSG;
+        String resMessage=medicine.getId()==null? "Лекарство успешно добавлено!": "Лекарство обновлено ";
         try {
             if (medicine.getFarmGroup() == null) {
                 return new ResponseDTO(new Response(1," Ошибка в группе: Пустая группа"),null);

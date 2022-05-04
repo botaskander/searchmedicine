@@ -103,7 +103,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
             Pharmacy pharmacy=pharmacyRepository.findById(address.getId()).get();
             System.out.println(pharmacy);
             com.searchmedicine.demo.entities.Address address1 = new com.searchmedicine.demo.entities.Address();
-            address1.setName(address.getStreet());
+            address1.setName(address.getName());
             address1.setLatitude(address.getLat());
             address1.setLongitude(address.getLang());
             System.out.println(address1);

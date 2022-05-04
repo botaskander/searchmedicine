@@ -1,15 +1,38 @@
 package com.searchmedicine.demo.controllers.web;
 
+import com.searchmedicine.demo.controllers.FileController;
+import com.searchmedicine.demo.dto.ResponseDTO;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.entities.views.Response;
+import com.searchmedicine.demo.payload.UploadFileResponse;
 import com.searchmedicine.demo.services.AdminService;
+import com.searchmedicine.demo.services.FileStorageService;
+import com.searchmedicine.demo.services.MedicineService;
+import com.searchmedicine.demo.services.UserMedicineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +43,13 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+    private final MedicineService medicineService;
+    @Autowired
+    UserMedicineService userMedicineService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping("/medicines/test")
     public void test(){
@@ -57,7 +87,7 @@ public class AdminController {
     }
 
     @PostMapping("/medicines/save")
-    public Response saveMedicine(@RequestBody Medicine medicine){
+    public ResponseDTO saveMedicine(@RequestBody Medicine medicine){
         return adminService.saveMedicine(medicine);
     }
 
@@ -124,6 +154,100 @@ public class AdminController {
     @GetMapping("/users/get-home-info")
     public AdminHomeInfo getLastUsersInfo(){
         return  adminService.getAdminHomeUserInfo();
+    }
+    @PostMapping(path="/uploadMultipleFiles", consumes = {"multipart/form-data"})
+    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam(name="files") MultipartFile[] files, @RequestParam(required=false,name="id") Object id) {
+        String stringToConvert = String.valueOf(id);
+        Long convertedLong = Long.parseLong(stringToConvert);
+        Medicine medicine= medicineService.getMedicine(convertedLong);
+        List<UploadFileResponse> listFile = Arrays.asList(files)
+                .stream()
+                .map(file -> uploadFile(file))
+                .collect(Collectors.toList());
+
+        long date=System.currentTimeMillis();
+        Date addeddate=new Date(date);
+        medicine.setUrl(listFile.get(0).getFileName());
+        Medicine medicine1=medicineService.saveMedicine(medicine);
+        System.out.println(medicine1);
+        for(int i=0;i<listFile.size();i++){
+            Image image=new Image();
+            System.out.println(listFile.get(i).getFileName());
+            image.setUrl(listFile.get(i).getFileName());
+            image.setMedicine(medicine1);
+            image.setAddedDate(addeddate);
+            medicineService.addImage(image);
+        }
+
+        return  listFile;
+    }
+    @PostMapping("/uploadFile")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file,getUser().getId());
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+
+
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+    @PostMapping(path="/editImage", consumes = {"multipart/form-data"})
+    public List<UploadFileResponse> editImage(@RequestParam("files") MultipartFile[] files,@RequestParam(required=false,name="id") Object id) throws IOException {
+        String stringToConvert = String.valueOf(id);
+        Long convertedLong = Long.parseLong(stringToConvert);
+        List<Image> images =new ArrayList<>();
+        Medicine medicine=adminService.getMedicine(convertedLong);
+        String filePath="C:\\Users\\бота\\IdeaProjects\\diploma\\downloadImages\\images\\";
+        images.addAll(medicineService.getImageList(medicine.getId()));
+        for(int i=0;i<images.size();i++){
+            String imagesPath=filePath+images.get(i).getUrl();
+            Files.delete( Paths.get(imagesPath));
+            System.out.println("File "
+                    + imagesPath
+                    + " successfully removed");
+        }
+        System.out.println(medicine);
+        List<UploadFileResponse> listFile =Arrays.asList(files)
+                .stream()
+                .map(file -> uploadFile(file))
+                .collect(Collectors.toList());
+
+        long date=System.currentTimeMillis();
+        Date addeddate=new Date(date);
+        System.out.println("****************error****************");
+        System.out.println(images.size());
+        medicine.setUrl(listFile.get(0).getFileName());
+        System.out.println("////////////error//////////////");
+        Medicine medicine1=medicineService.saveMedicine(medicine);
+        medicineService.deleteImagesAll(medicine.getId());
+        for(int i=0;i<listFile.size();i++){
+            Image image=new Image();
+            System.out.println(listFile.get(i).getFileName());
+            image.setUrl(listFile.get(i).getFileName());
+            image.setMedicine(medicine1);
+            image.setAddedDate(addeddate);
+            medicineService.addImage(image);
+        }
+        return  listFile;
+    }
+    private Users getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            return (Users) authentication.getPrincipal();
+        }
+        return null;
+    }
+    @GetMapping("/list-medicine/image/{id}")
+    public ResponseEntity<?> getListImageMedicine(@PathVariable Long id) {
+
+        System.out.println("-----------------------list of images  ------------------------"+id);
+        List<Image> images= new ArrayList<>();
+        images.addAll(medicineService.getImageList(id));
+        System.out.println(images);
+        return   new ResponseEntity<>( images, HttpStatus.OK);
     }
 
 }

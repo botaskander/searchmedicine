@@ -1,5 +1,6 @@
 package com.searchmedicine.demo.services;
 
+import com.searchmedicine.demo.dto.ResponseDTO;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.entities.views.Response;
@@ -19,7 +20,7 @@ public interface AdminService {
 
   List<Medicine> getAllMedicines();
 
-  Response saveMedicine(Medicine medicine);
+  ResponseDTO saveMedicine(Medicine medicine);
 
   Response deleteMedicine(Long id);
 

@@ -8,6 +8,7 @@ import com.searchmedicine.demo.entities.views.PharmacyHomeInfo;
 import com.searchmedicine.demo.entities.*;
 import com.searchmedicine.demo.entities.views.*;
 import com.searchmedicine.demo.repositories.*;
+import com.searchmedicine.demo.services.PharmacyMedicineService;
 import com.searchmedicine.demo.services.WebPharmacyService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -32,6 +33,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     private final ListReserverRepository listReserverRepository;
     private final AddressRepository addressRepository;
     private final PharmacyMedicineRepository pharmacyMedicineRepository;
+    private final PharmacyMedicineService pharmacyMedicineService;
 
     @SneakyThrows
     @Override
@@ -174,6 +176,8 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
             val pharmacy = pharmacyRepository.getById(pharmacyMedicine.getPharmacy().getId());
             pharmacyMedicine.setPharmacy(pharmacy);
             pharmacyMedicineRepository.save(pharmacyMedicine);
+            pharmacyMedicineService.sendNotification(pharmacyMedicine);
+
         }
         catch (Exception e){
             log.error(MessageTypes.SAVE_ERROR+"лекарства",e);

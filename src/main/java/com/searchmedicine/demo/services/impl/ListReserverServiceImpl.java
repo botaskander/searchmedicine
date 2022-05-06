@@ -46,6 +46,9 @@ private final PharmacyMedicineRepository pharmacyMedicineRepository;
   else if ("на час".equals(reserverRequestDto.getUntilTime())){
    untilTime = currentDate.plusHours(1);
   }
+  else if ("на 3 мин".equals(reserverRequestDto.getUntilTime())){
+   untilTime = currentDate.plusMinutes(3);
+  }
   else if ("на 24 часов".equals(reserverRequestDto.getUntilTime())){
    untilTime = currentDate.plusDays(1);
   }

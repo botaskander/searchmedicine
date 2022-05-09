@@ -12,6 +12,7 @@ import java.util.List;
 @Transactional
 @Repository
 public interface ImagesRepository extends JpaRepository<Image,Long> {
+    List<Image> findAllByMedicineId(Long medicineId);
 
     @Query(value = "SELECT * FROM images_medicine WHERE medicine_id=?",nativeQuery = true)
     List<Image> findByMedicineId(Long id);

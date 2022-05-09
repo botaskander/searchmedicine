@@ -34,6 +34,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     private final AddressRepository addressRepository;
     private final PharmacyMedicineRepository pharmacyMedicineRepository;
     private final PharmacyMedicineService pharmacyMedicineService;
+    private final ImagesRepository imagesRepository;
 
     @SneakyThrows
     @Override
@@ -46,7 +47,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
                         reserve.getReservedTime().isAfter(LocalDateTime.now().minusMonths(1)))
                 .collect(Collectors.toList());
 
-        val pharmacyMedicines = pharmacyMedicineRepository.findAllByPharmacyIdOrderByAddedDateDesc(pharmacy.getId());
+        val pharmacyMedicines = pharmacyMedicineRepository.findAllByPharmacyId(pharmacy.getId());
         val lastMonthPharmacyMedicines = pharmacyMedicines.stream()
                 .filter(medicine ->
                         medicine.getAddedDate().isAfter(LocalDateTime.now().minusMonths(1)))
@@ -136,7 +137,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
 
     @Override
     public List<PharmacyMedicine> getPharmacyMedicines(Long pharmacyId) {
-        val list = pharmacyMedicineRepository.findAllByPharmacyIdOrderByAddedDateDesc(pharmacyId);
+        val list = pharmacyMedicineRepository.findAllByPharmacyId(pharmacyId);
         return list.size() == 0 ? null : list;
     }
 
@@ -144,13 +145,18 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     public Response deletePharmacyMedicine(Long pharmacyId, Long pharmacyMedicineId) {
         try {
             listReserverRepository.findAllByPharmacy(pharmacyId).forEach(reserve->{
-                listReserverRepository.delete(reserve);
-                log.info("Reserve deleted");
+                if(!reserve.getIsDeleted()){
+                    reserve.setIsDeleted(true);
+                    listReserverRepository.save(reserve);
+                    log.info("Reserve deleted");
+                }
             });
-            pharmacyMedicineRepository.deleteById(pharmacyMedicineId);
+            val medicine=pharmacyMedicineRepository.getById(pharmacyMedicineId);
+            medicine.setArc(true);
+            pharmacyMedicineRepository.save(medicine);
         }
         catch (Exception e){
-            log.error(MessageTypes.DELETE_ERROR+"компании",e);
+            log.error(MessageTypes.DELETE_ERROR+"лекарства",e);
             return new Response(1,MessageTypes.DELETE_ERROR+"лекарства");
         }
         return Response.builder()
@@ -189,8 +195,10 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     @Override
     public PharmacyMedicineView getDetailedPharmacyMedicine(Long pharmacyMedicineId) {
         val pharmacyMedicine= pharmacyMedicineRepository.getById(pharmacyMedicineId);
+        val images= imagesRepository.findAllByMedicineId(pharmacyMedicine.getMedicine().getId());
         return PharmacyMedicineView.builder()
                 .pharmacyMedicine(pharmacyMedicine)
+                .images(images)
                 .build();
     }
 }

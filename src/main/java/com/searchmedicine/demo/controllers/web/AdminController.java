@@ -51,16 +51,6 @@ public class AdminController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @GetMapping("/medicines/test")
-    public void test(){
-        log.info("We're in test method");
-    }
-
-    @GetMapping("/check")
-    public boolean access() {
-        return true;
-    }
-
     @GetMapping("/farm-groups/get-all")
     public List<FarmGroup> getAllFarmGroups(){
         return adminService.getAllFarmGroups();

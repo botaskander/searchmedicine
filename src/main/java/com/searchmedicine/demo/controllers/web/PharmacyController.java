@@ -49,7 +49,7 @@ public class PharmacyController {
     }
 
     @GetMapping("/medicines/get-one/{id}")
-    public PharmacyMedicineView getPharmacyMedicineDetailed(@RequestParam("id") Long id){
+    public PharmacyMedicineView getPharmacyMedicineDetailed(@PathVariable("id") Long id){
         return webPharmacyService.getDetailedPharmacyMedicine(id);
     }
 }

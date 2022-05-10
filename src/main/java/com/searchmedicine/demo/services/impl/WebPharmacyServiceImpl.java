@@ -167,6 +167,7 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
 
     @Override
     public Response savePharmacyMedicine(PharmacyMedicine pharmacyMedicine) {
+        System.out.println(pharmacyMedicine);
         String resMessage=pharmacyMedicine.getId()==null?
                 MessageTypes.ADD_MEDICINE_SUCCESS_MSG : EDIT_SUCCESS_MSG;
         try {
@@ -181,24 +182,43 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
             }
             val pharmacy = pharmacyRepository.getById(pharmacyMedicine.getPharmacy().getId());
             pharmacyMedicine.setPharmacy(pharmacy);
-            pharmacyMedicineRepository.save(pharmacyMedicine);
+            val check = pharmacyMedicineRepository.findByPharmacyAndMedicineIds(pharmacyMedicine.getPharmacy().getId(),
+                    pharmacyMedicine.getMedicine().getId());
+            if(check!=null){
+                if(check.isArc()) {
+                    check.setArc(false);
+                    pharmacyMedicineRepository.save(check);
+                }
+                else{
+                    return new Response(1,"Данное лекарство уже существует в вашем списке");
+                }
+            }
+            else {
+                if (pharmacyMedicine.getAddedDate() == null) {
+                    pharmacyMedicine.setAddedDate(LocalDateTime.now());
+                }
+                pharmacyMedicineRepository.save(pharmacyMedicine);
+            }
             pharmacyMedicineService.sendNotification(pharmacyMedicine);
-
         }
         catch (Exception e){
             log.error(MessageTypes.SAVE_ERROR+"лекарства",e);
-            return new Response(1,MessageTypes.SAVE_ERROR+"лекарства: "+e.getMessage());
+            return new Response(1,MessageTypes.SAVE_ERROR+"лекарства");
         }
         return new Response(0,resMessage);
     }
 
     @Override
     public PharmacyMedicineView getDetailedPharmacyMedicine(Long pharmacyMedicineId) {
+        String filePathTalsh="D:/images_medicine";
+        String filePathBota="C:/Users/бота/IdeaProjects/diploma/downloadImages/images";
         val pharmacyMedicine= pharmacyMedicineRepository.getById(pharmacyMedicineId);
         val images= imagesRepository.findAllByMedicineId(pharmacyMedicine.getMedicine().getId());
+
         return PharmacyMedicineView.builder()
                 .pharmacyMedicine(pharmacyMedicine)
                 .images(images)
+//                .filePath(filePathTalsh)
                 .build();
     }
 }

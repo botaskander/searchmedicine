@@ -14,10 +14,17 @@ import java.util.List;
 public interface PharmacyMedicineRepository extends JpaRepository<PharmacyMedicine,Long> {
     List<PharmacyMedicine> findAllByMedicineId(Long id);
 
-    @Query("SELECT pm from PharmacyMedicine pm where pm.pharmacy.id=:id and pm.isArc=false ORDER BY pm.addedDate desc ")
+    @Query("SELECT pm from PharmacyMedicine pm " +
+            "where pm.pharmacy.id=:id and pm.isArc=false " +
+            "ORDER BY pm.addedDate desc ")
     List<PharmacyMedicine> findAllByPharmacyId(@Param("id") Long id);
+
     List<PharmacyMedicine> findAllByMedicine_Id(Long id);
 
+    @Query("SELECT pm from PharmacyMedicine pm " +
+            "where pm.pharmacy.id=:pharmacyId and  pm.medicine.id=:medicineId ")
+    PharmacyMedicine findByPharmacyAndMedicineIds(@Param("pharmacyId") Long pharmacyId,
+                                                  @Param("medicineId") Long medicineId);
 
 }
 

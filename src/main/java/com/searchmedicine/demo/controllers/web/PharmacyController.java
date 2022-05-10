@@ -75,14 +75,6 @@ public class PharmacyController {
         return webPharmacyService.getPharmacyByUserId(users.getId());
     }
 
-    private Users getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(authentication instanceof AnonymousAuthenticationToken)){
-            return (Users) authentication.getPrincipal();
-        }
-        return null;
-    }
-
     @PostMapping("/getLonglat")
     public ResponseEntity<?> getLonglat(@RequestBody Address address){
         System.out.println(address);
@@ -114,6 +106,14 @@ public class PharmacyController {
     @PutMapping("/edit-address")
     public Response  editAddress(@RequestBody Address address){
         return webPharmacyService.saveAddress(address);
+    }
+
+    private Users getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            return (Users) authentication.getPrincipal();
+        }
+        return null;
     }
 
 }

@@ -25,6 +25,7 @@ public interface WebPharmacyService {
     Response saveAddress(Address address);
 
     Pharmacy getPharmacy(Long id);
+
     Response deletePharmacyMedicine(Long pharmacyId, Long pharmacyMedicineId);
 
     Response savePharmacyMedicine(PharmacyMedicine pharmacyMedicine);

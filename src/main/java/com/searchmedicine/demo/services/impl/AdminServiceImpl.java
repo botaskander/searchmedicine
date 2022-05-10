@@ -102,6 +102,8 @@ public class AdminServiceImpl implements AdminService {
             medicine.setFarmGroup(farmGroup);
             if (medicine.getId() == null) {
                 medicine.setAddedDate(LocalDateTime.now());
+                medicine.setViewAmount(0);
+                medicine.setSearchAmount(0);
             }
             medicine.setAddedDate(LocalDateTime.now());
             medicine1=medicineRepository.save(medicine);

@@ -9,6 +9,7 @@ import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.PharmacyMedicine;
 import com.searchmedicine.demo.entities.UserMedicine;
 import com.searchmedicine.demo.entities.email.EmailSender;
+import com.searchmedicine.demo.repositories.ListWaiterRepository;
 import com.searchmedicine.demo.repositories.MedicineRepository;
 import com.searchmedicine.demo.repositories.PharmacyMedicineRepository;
 import com.searchmedicine.demo.repositories.UserMedicineRepository;
@@ -32,6 +33,7 @@ public class PharmacyMedicineServiceImpl implements
   private final MedicineRepository medicineRepository;
   private final EntityManager entityManager;
   private final EmailSender emailSender;
+  private  final ListWaiterRepository listWaiterRepository;
 
   public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc){
     Medicine medicine = medicineRepository.findById(id).orElse(null);
@@ -88,12 +90,17 @@ public class PharmacyMedicineServiceImpl implements
     String setSubject = "Notification about medicine";
     System.out.println("*******************************************");
     System.out.println("Send notification");
-    //emailSender.send(getUser().getEmail(),buildEmail(getUser().getFullName(), pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
-    for(ListWaiter lw: listWaiters){
-      emailSender.send(lw.getUsers().getEmail(),
-          buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy()),
-          setSubject);
+
+    if(listWaiters!=null){
+      for(ListWaiter lw: listWaiters) {
+        lw.setIsAppear(true);
+        emailSender.send(lw.getUsers().getEmail(),
+                buildEmail(lw.getUsers().getFullName(), pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy()),
+                setSubject);
+        listWaiterRepository.save(lw);
+      }
     }
+    //emailSender.send(getUser().getEmail(),buildEmail(getUser().getFullName(), pharmacyMedicine.getMedicine(), pharmacyMedicine.getPharmacy() ), setSubject);
   }
 
   public PharmacyMedicineDto getPharmacyMedicine(Long id){

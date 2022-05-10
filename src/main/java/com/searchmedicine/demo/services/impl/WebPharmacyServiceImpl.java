@@ -187,6 +187,8 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
             if(check!=null){
                 if(check.isArc()) {
                     check.setArc(false);
+                    check.setCount(pharmacyMedicine.getCount());
+                    check.setPrice(pharmacyMedicine.getPrice());
                     pharmacyMedicineRepository.save(check);
                 }
                 else{

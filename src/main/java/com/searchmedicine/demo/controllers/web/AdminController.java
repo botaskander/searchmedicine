@@ -45,21 +45,7 @@ public class AdminController {
     private final AdminService adminService;
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
     private final MedicineService medicineService;
-    @Autowired
-    UserMedicineService userMedicineService;
-
-    @Autowired
-    private FileStorageService fileStorageService;
-
-    @GetMapping("/medicines/test")
-    public void test(){
-        log.info("We're in test method");
-    }
-
-    @GetMapping("/check")
-    public boolean access() {
-        return true;
-    }
+    private final FileStorageService fileStorageService;
 
     @GetMapping("/farm-groups/get-all")
     public List<FarmGroup> getAllFarmGroups(){
@@ -81,6 +67,7 @@ public class AdminController {
         return adminService.getFarmGroup(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PHARMACY')")
     @GetMapping("/medicines/get-all")
     public List<Medicine> getAllMedicines(){
         return  adminService.getAllMedicines();

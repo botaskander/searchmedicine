@@ -64,7 +64,7 @@ public class PharmacyController {
     }
 
     @GetMapping("/medicines/get-one/{id}")
-    public PharmacyMedicineView getPharmacyMedicineDetailed(@RequestParam("id") Long id){
+    public PharmacyMedicineView getPharmacyMedicineDetailed(@PathVariable("id") Long id){
         return webPharmacyService.getDetailedPharmacyMedicine(id);
     }
 
@@ -73,14 +73,6 @@ public class PharmacyController {
         Users users=getUser();
         System.out.println(webPharmacyService.getPharmacyByUserId(users.getId()));
         return webPharmacyService.getPharmacyByUserId(users.getId());
-    }
-
-    private Users getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(authentication instanceof AnonymousAuthenticationToken)){
-            return (Users) authentication.getPrincipal();
-        }
-        return null;
     }
 
     @PostMapping("/getLonglat")
@@ -114,6 +106,14 @@ public class PharmacyController {
     @PutMapping("/edit-address")
     public Response  editAddress(@RequestBody Address address){
         return webPharmacyService.saveAddress(address);
+    }
+
+    private Users getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            return (Users) authentication.getPrincipal();
+        }
+        return null;
     }
 
 }

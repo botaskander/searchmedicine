@@ -31,6 +31,9 @@ public class PharmacyMedicine {
     @Column(name="added_date")
     private LocalDateTime addedDate;
 
+    @Column(name="is_arc")
+    private boolean isArc;
+
     @ManyToOne
     private Medicine medicine;
 

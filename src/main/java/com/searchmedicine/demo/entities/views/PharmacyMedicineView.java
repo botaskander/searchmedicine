@@ -16,4 +16,5 @@ import java.util.List;
 public class PharmacyMedicineView {
     private PharmacyMedicine pharmacyMedicine;
     private List<Image> images;
+    private String filePath;
 }

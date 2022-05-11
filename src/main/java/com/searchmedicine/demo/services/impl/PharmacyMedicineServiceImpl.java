@@ -39,7 +39,7 @@ public class PharmacyMedicineServiceImpl implements
     Medicine medicine = medicineRepository.findById(id).orElse(null);
     List<MedicineDto> medicineDtoList = new ArrayList<>();
     if(medicine != null) {
-      if ("Все".equals(type) || "Аптеки".equals(type)) {
+      if ("Все".equals(type) || "Аптеки".equals(type) || "all".equals(type)) {
         String sortBy = "ph.price";
         if (isAsc == null || isAsc) {
           sortBy += " asc";
@@ -62,7 +62,7 @@ public class PharmacyMedicineServiceImpl implements
           medicineDtoList.add(medicineDTO);
         }
       }
-      if ("Все".equals(type) || "Пользователи".equals(type)) {
+      if ("Все".equals(type) || "Пользователи".equals(type) ||"all".equals(type)) {
         List<UserMedicine> userMedicines = userMedicineRepository.findAllByMedicine_Id(id);
         for (UserMedicine u : userMedicines) {
           MedicineDto medicineDTO = new MedicineDto();

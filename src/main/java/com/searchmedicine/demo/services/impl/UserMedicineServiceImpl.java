@@ -46,7 +46,7 @@ public class UserMedicineServiceImpl implements UserMedicineService {
     }
     @Override
     public UserMedicineDto getUserMedicineDetail(Long id) {
-        UserMedicine userMedicine = getUserMedicine(id);
+        UserMedicine userMedicine =userMedicineRepository.findById(id).get();;
         UserMedicineDto userMedicineDto = new UserMedicineDto();
 
         userMedicineDto.setFullName(userMedicine.getUser().getFullName());
@@ -54,10 +54,11 @@ public class UserMedicineServiceImpl implements UserMedicineService {
         userMedicineDto.setMedicineName(userMedicine.getMedicine().getName());
         userMedicineDto.setIndications(userMedicine.getMedicine().getIndications());
         userMedicineDto.setInstructions(userMedicine.getMedicine().getInstructions());
-        userMedicineDto.setInstructions(userMedicine.getMedicine().getDescription());
-        userMedicineDto.setInstructions(userMedicine.getMedicine().getCompany().getName());
+        userMedicineDto.setDescription(userMedicine.getMedicine().getDescription());
+        userMedicineDto.setCompanyName(userMedicine.getMedicine().getCompany().getName());
         userMedicineDto.setAddress(userMedicine.getAddress().getName());
         userMedicineDto.setUrl(userMedicine.getUrlImage());
+        userMedicineDto.setPhone(userMedicine.getPhone());
 
         return userMedicineDto;
     }

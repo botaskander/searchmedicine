@@ -75,6 +75,7 @@ public class AdminController {
 
     @PostMapping("/medicines/save")
     public ResponseDTO saveMedicine(@RequestBody Medicine medicine){
+        System.out.println(medicine);
         return adminService.saveMedicine(medicine);
     }
 

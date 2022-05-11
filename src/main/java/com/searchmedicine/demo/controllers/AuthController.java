@@ -52,6 +52,7 @@ public class AuthController {
         if(user!=null){
 
             if (passwordEncoder.matches(request.getPassword(),user.getPassword())){
+
                 authenticate(request.getEmail(), request.getPassword());
                 final UserDetails userDetails =
                         userService.loadUserByUsername(request.getEmail());

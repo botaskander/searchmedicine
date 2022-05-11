@@ -134,8 +134,9 @@ public class MainRestController {
     public ResponseEntity<?> getListExchangeUser() {
         System.out.println("-----------------------list of exchange  ------------------------");
         Users user = getUser();
+        System.out.println(user);
         List<UserMedicine> userMedicine= userMedicineService.getUserMedicineByUser(user.getId());
-
+        System.out.println(userMedicine);
         return   new ResponseEntity<>( userMedicine, HttpStatus.OK);
     }
     @GetMapping("/listImageUser/{id}")

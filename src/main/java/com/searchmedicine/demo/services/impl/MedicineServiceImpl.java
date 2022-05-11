@@ -4,6 +4,7 @@ import com.searchmedicine.demo.entities.Image;
 import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.Medicine;
 import com.searchmedicine.demo.repositories.ImagesRepository;
+import com.searchmedicine.demo.repositories.ListReserverRepository;
 import com.searchmedicine.demo.repositories.MedicineRepository;
 import com.searchmedicine.demo.services.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class MedicineServiceImpl implements MedicineService {
     @Autowired
     private ImagesRepository imagesRepository;
 
+    @Autowired
+    private  ListReserverRepository listReserverRepository;
+
     @Override
     public List<Medicine> getAllAvailableMedicine() {
         return medicineRepository.getAllByIsExchangeTrue();
@@ -52,16 +56,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     public List<Medicine> getMedicineTopReserved() {
-        String sql="SELECT id, description, indications, instructions, is_pres_only, name, storage_condition, farm_group_id,company_id from medicines where id = (SELECT medicine_id FROM list_reserver GROUP BY medicine_id ORDER BY COUNT(*) desc LIMIT 30)";
-        Query query= em.createNativeQuery(sql);
-        List<Object[]> list=query.getResultList();
-        List<Medicine> medicineList=new ArrayList<>();
-        for(Object[] resultItem:list){
-            Medicine medicine=new Medicine();
-            BigInteger medicineId=(BigInteger)resultItem[0];
-            medicine=medicineRepository.findById(medicineId.longValue()).get();
-            medicineList.add(medicine);
-        }
+        List<Medicine> medicineList=listReserverRepository.findTop();
         return medicineList;
     }
 

@@ -52,6 +52,8 @@ public class MobileController {
     return new ResponseEntity<>(pharmacyMedicineService.getPharmacyMedicine(id),HttpStatus.OK);
   }
 
+
+
   @GetMapping("/all-reservation")
   public ResponseEntity<?> getAllReservation(){
     return new ResponseEntity<>(listReserverService.getAllReservation(),HttpStatus.OK);

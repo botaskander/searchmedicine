@@ -116,14 +116,9 @@ public class MainRestController {
     }
 
     private String convertDate(String month,String year){
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("MMMM")
-                .withLocale(Locale.ENGLISH);
-        TemporalAccessor accessor = parser.parse(month);
-        int monthInt=accessor.get(ChronoField.MONTH_OF_YEAR);
-        System.out.println(monthInt);
-        String monthString=String.valueOf(monthInt);
+        String monthString=String.valueOf(month);
         if(monthString.length()==1){
-            monthString="0"+String.valueOf(monthInt);
+            monthString="0"+String.valueOf(month);
         }
         String date=year+"-"+monthString+"-01";
         return  date;

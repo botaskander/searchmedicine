@@ -38,6 +38,7 @@ public class PharmacyMedicineServiceImpl implements
   public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc){
     Medicine medicine = medicineRepository.findById(id).orElse(null);
     List<MedicineDto> medicineDtoList = new ArrayList<>();
+    System.out.println();
     if(medicine != null) {
       if ("Все".equals(type) || "Аптеки".equals(type) || "all".equals(type)) {
         String sortBy = "ph.price";
@@ -48,7 +49,7 @@ public class PharmacyMedicineServiceImpl implements
         }
         List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
                 "SELECT ph FROM PharmacyMedicine ph "
-                    + " WHERE ph.medicine.id =" + id
+                    + " WHERE ph.medicine.id =" + id+" and ph.isArc=false"
                     + " ORDER BY " + sortBy)
             .getResultList();
         for (PharmacyMedicine ph : pharmacyMedicines) {

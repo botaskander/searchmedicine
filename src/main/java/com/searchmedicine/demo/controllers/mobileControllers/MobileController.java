@@ -43,8 +43,8 @@ public class MobileController {
 
     String filterType = type.orElse("Все");
     Boolean isAsc = isSortAsc.orElse(false);
-    System.out.println("Diana salem");
-    return new ResponseEntity<>(pharmacyMedicineService.getAllPharmacyUserMedicine(id,filterType,isAsc),HttpStatus.OK);
+    Users users=getUser();
+    return new ResponseEntity<>(pharmacyMedicineService.getAllPharmacyUserMedicine(id,filterType,isAsc,users),HttpStatus.OK);
   }
 
   @GetMapping("/medicine/pharmacy/{id}")

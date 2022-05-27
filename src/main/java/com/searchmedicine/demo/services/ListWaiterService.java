@@ -9,6 +9,7 @@ public interface ListWaiterService {
   List<ListWaiter> getNotification(Long medicineId);
   Response saveListWaiter(Long id, Users users);
   List<ListWaiter> getWaiterByUserId(Long id);
+  List<ListWaiter> getWaiterByUserIdAndMedicineId(Long userId, Long medicineId);
   void deleteListWaiter(ListWaiter listWaiter);
   ListWaiter  save(ListWaiter listWaiter);
 }

@@ -60,6 +60,11 @@ public class ListWaiterServiceImpl implements ListWaiterService {
   }
 
   @Override
+  public List<ListWaiter> getWaiterByUserIdAndMedicineId(Long userId, Long medicineId) {
+    return listWaiterRepository.findAllByUsers_IdAndMedicine_Id(userId, medicineId);
+  }
+
+  @Override
   public void deleteListWaiter(ListWaiter listWaiter) {
     listWaiterRepository.delete(listWaiter);
   }

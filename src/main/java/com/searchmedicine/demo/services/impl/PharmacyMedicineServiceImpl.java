@@ -8,6 +8,7 @@ import com.searchmedicine.demo.entities.Medicine;
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.PharmacyMedicine;
 import com.searchmedicine.demo.entities.UserMedicine;
+import com.searchmedicine.demo.entities.Users;
 import com.searchmedicine.demo.entities.email.EmailSender;
 import com.searchmedicine.demo.repositories.ListWaiterRepository;
 import com.searchmedicine.demo.repositories.MedicineRepository;
@@ -38,9 +39,8 @@ public class PharmacyMedicineServiceImpl implements
   public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc){
     Medicine medicine = medicineRepository.findById(id).orElse(null);
     List<MedicineDto> medicineDtoList = new ArrayList<>();
-    System.out.println();
+    boolean length = false;
     if(medicine != null) {
-      if ("Все".equals(type) || "Аптеки".equals(type) || "all".equals(type)) {
         String sortBy = "ph.price";
         if (isAsc == null || isAsc) {
           sortBy += " asc";
@@ -49,9 +49,11 @@ public class PharmacyMedicineServiceImpl implements
         }
         List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
                 "SELECT ph FROM PharmacyMedicine ph "
-                    + " WHERE ph.medicine.id =" + id+" and ph.isArc=false"
+                    + " WHERE ph.medicine.id =" + id
                     + " ORDER BY " + sortBy)
             .getResultList();
+        if (pharmacyMedicines.size() > 0) length = true;
+      if ("Все".equals(type)|| "all".equals(type)|| "Аптеки".equals(type) ) {
         for (PharmacyMedicine ph : pharmacyMedicines) {
           MedicineDto medicineDTO = new MedicineDto();
           medicineDTO.setId(ph.getId());
@@ -63,8 +65,9 @@ public class PharmacyMedicineServiceImpl implements
           medicineDtoList.add(medicineDTO);
         }
       }
-      if ("Все".equals(type) || "Пользователи".equals(type) ||"all".equals(type)) {
-        List<UserMedicine> userMedicines = userMedicineRepository.findAllByMedicine_Id(id);
+      List<UserMedicine> userMedicines = userMedicineRepository.findAllByMedicine_Id(id);
+      if (userMedicines.size() > 0) length = true;
+      if ( "Все".equals(type)|| "all".equals(type)||  "Пользователи".equals(type) ) {
         for (UserMedicine u : userMedicines) {
           MedicineDto medicineDTO = new MedicineDto();
           medicineDTO.setType("user");
@@ -76,6 +79,14 @@ public class PharmacyMedicineServiceImpl implements
           medicineDtoList.add(medicineDTO);
         }
       }
+      MedicineDto medicineDTO = new MedicineDto();
+      medicineDTO.setEmptyMed(length);
+      if(!length && users != null){
+        List<ListWaiter> listWaiters = listWaiterServiceImpl.getWaiterByUserIdAndMedicineId(users.getId(),medicine.getId());
+        if(listWaiters.size() >0) medicineDTO.setWaiter(true);
+      }
+
+      medicineDtoList.add(medicineDTO);
 
       int amount = medicine.getSearchAmount();
       amount +=1;

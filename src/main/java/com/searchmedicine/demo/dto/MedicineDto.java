@@ -17,5 +17,7 @@ public class MedicineDto {
   private String owner;
   private Address address;
   private String phoneNumber;
-
+  private boolean isEmptyMed;
+  private boolean isWaiter;
 }
+

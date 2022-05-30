@@ -8,7 +8,7 @@ import com.searchmedicine.demo.entities.Users;
 import java.util.List;
 
 public interface PharmacyMedicineService {
-  List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc, Users user);
+  List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc, Users users);
   void sendNotification( PharmacyMedicine pharmacyMedicine);
   PharmacyMedicineDto getPharmacyMedicine(Long id);
 

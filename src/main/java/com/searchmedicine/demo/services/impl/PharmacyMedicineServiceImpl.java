@@ -36,23 +36,24 @@ public class PharmacyMedicineServiceImpl implements
   private final EmailSender emailSender;
   private  final ListWaiterRepository listWaiterRepository;
 
-  public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc){
+  @Override
+  public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type, Boolean isAsc, Users users) {
     Medicine medicine = medicineRepository.findById(id).orElse(null);
     List<MedicineDto> medicineDtoList = new ArrayList<>();
     boolean length = false;
     if(medicine != null) {
-        String sortBy = "ph.price";
-        if (isAsc == null || isAsc) {
-          sortBy += " asc";
-        } else {
-          sortBy += " desc";
-        }
-        List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
-                "SELECT ph FROM PharmacyMedicine ph "
-                    + " WHERE ph.medicine.id =" + id
-                    + " ORDER BY " + sortBy)
-            .getResultList();
-        if (pharmacyMedicines.size() > 0) length = true;
+      String sortBy = "ph.price";
+      if (isAsc == null || isAsc) {
+        sortBy += " asc";
+      } else {
+        sortBy += " desc";
+      }
+      List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
+              "SELECT ph FROM PharmacyMedicine ph "
+                      + " WHERE ph.medicine.id =" + id
+                      + " ORDER BY " + sortBy)
+              .getResultList();
+      if (pharmacyMedicines.size() > 0) length = true;
       if ("Все".equals(type)|| "all".equals(type)|| "Аптеки".equals(type) ) {
         for (PharmacyMedicine ph : pharmacyMedicines) {
           MedicineDto medicineDTO = new MedicineDto();
@@ -97,7 +98,7 @@ public class PharmacyMedicineServiceImpl implements
     return medicineDtoList;
   }
 
-  public void sendNotification( PharmacyMedicine pharmacyMedicine){
+  public void sendNotification(PharmacyMedicine pharmacyMedicine){
     List<ListWaiter> listWaiters = listWaiterServiceImpl.getNotification(pharmacyMedicine.getMedicine().getId());
     String setSubject = "Notification about medicine";
     System.out.println("*******************************************");

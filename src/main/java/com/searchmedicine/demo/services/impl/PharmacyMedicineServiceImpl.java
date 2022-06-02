@@ -36,23 +36,24 @@ public class PharmacyMedicineServiceImpl implements
   private final EmailSender emailSender;
   private  final ListWaiterRepository listWaiterRepository;
 
-  public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type,Boolean isAsc, Users users){
+  @Override
+  public List<MedicineDto> getAllPharmacyUserMedicine(Long id, String type, Boolean isAsc, Users users) {
     Medicine medicine = medicineRepository.findById(id).orElse(null);
     List<MedicineDto> medicineDtoList = new ArrayList<>();
     boolean length = false;
     if(medicine != null) {
-        String sortBy = "ph.price";
-        if (isAsc == null || isAsc) {
-          sortBy += " asc";
-        } else {
-          sortBy += " desc";
-        }
-        List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
-                "SELECT ph FROM PharmacyMedicine ph "
-                    + " WHERE ph.medicine.id =" + id
-                    + " ORDER BY " + sortBy)
-            .getResultList();
-        if (pharmacyMedicines.size() > 0) length = true;
+      String sortBy = "ph.price";
+      if (isAsc == null || isAsc) {
+        sortBy += " asc";
+      } else {
+        sortBy += " desc";
+      }
+      List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
+              "SELECT ph FROM PharmacyMedicine ph "
+                      + " WHERE ph.medicine.id =" + id
+                      + " ORDER BY " + sortBy)
+              .getResultList();
+      if (pharmacyMedicines.size() > 0) length = true;
       if ("Все".equals(type)|| "all".equals(type)|| "Аптеки".equals(type) ) {
         for (PharmacyMedicine ph : pharmacyMedicines) {
           MedicineDto medicineDTO = new MedicineDto();
@@ -97,7 +98,7 @@ public class PharmacyMedicineServiceImpl implements
     return medicineDtoList;
   }
 
-  public void sendNotification( PharmacyMedicine pharmacyMedicine){
+  public void sendNotification(PharmacyMedicine pharmacyMedicine){
     List<ListWaiter> listWaiters = listWaiterServiceImpl.getNotification(pharmacyMedicine.getMedicine().getId());
     String setSubject = "Notification about medicine";
     System.out.println("*******************************************");
@@ -167,7 +168,7 @@ public class PharmacyMedicineServiceImpl implements
         "                  \n" +
         "                    </td>\n" +
         "                    <td style=\"font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\">\n" +
-        "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Notification about medicine</span>\n" +
+        "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Уведомление о поступление лекарства</span>\n" +
         "                    </td>\n" +
         "                  </tr>\n" +
         "                </tbody></table>\n" +
@@ -205,11 +206,11 @@ public class PharmacyMedicineServiceImpl implements
         "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
         "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
         "        \n" +
-        "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for clicking notifications. I want to please you, <b>"+ medicine.getName() +" </b> drugs that you wanted to buy came to the <b> "+pharmacy.getName()+"</b> </p>\n <p>Address: "+pharmacy.getAddress().getName()+
-        " \n Phone number: " + pharmacy.getPhoneNumber() +
-        "\n Whatsapp number: " + pharmacy.getWhatsappNumber() +
-        "\n Work time: "+ pharmacy.getWorkStartTime() + " - " + pharmacy.getWorkEndTime() +
-        "</p> \n<p>See you soon</p>" +
+        "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Спасибо за ожидание лекарства. Мы сообщаем вам , <b>"+ medicine.getName() +" </b> лекарство поступило в  аптеку <b> "+pharmacy.getName()+"</b>  </p>\n <p>Адрес: "+pharmacy.getAddress().getName()+
+        " \n Номер телефона: " + pharmacy.getPhoneNumber() +
+        "\n Whatsapp номер: " + pharmacy.getWhatsappNumber() +
+        "\n Время работы: "+ pharmacy.getWorkStartTime() + " - " + pharmacy.getWorkEndTime() +
+        "</p> \n<p>До скорого</p>" +
         "        \n" +
         "      </td>\n" +
         "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

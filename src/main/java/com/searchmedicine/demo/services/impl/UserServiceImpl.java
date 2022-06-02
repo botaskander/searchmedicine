@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        String link = "http://localhost:8081/authentication/register/confirm?token=" + token;
+        String link = "http://192.168.1.67:8081/authentication/register/confirm?token=" + token;
         emailSender.send(
                 user.getEmail(),
                 buildEmail(user.getFullName(), link),

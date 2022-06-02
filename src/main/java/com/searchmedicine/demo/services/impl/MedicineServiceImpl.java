@@ -56,7 +56,18 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     public List<Medicine> getMedicineTopReserved() {
-        List<Medicine> medicineList=listReserverRepository.findTop();
+        String sql="select ph.medicine_id  from list_reserver ls inner join pharmacies_medicines ph on ls.pharmacy_medicine_id=ph.id group by ph.medicine_id  order by count(ph.id) desc";
+        Query query= em.createNativeQuery(sql);
+        List<Object[]> list=query.getResultList();
+
+        List<Medicine> medicineList=new ArrayList<>();
+        System.out.println(list);
+        for(Object resultItem:list){
+            Long variable = Long.valueOf(resultItem.toString());
+            Medicine medicine=new Medicine();
+            medicine=medicineRepository.findById(variable).get();
+            medicineList.add(medicine);
+        }
         return medicineList;
     }
 

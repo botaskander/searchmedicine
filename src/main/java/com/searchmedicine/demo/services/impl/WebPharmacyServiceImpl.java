@@ -1,6 +1,7 @@
 package com.searchmedicine.demo.services.impl;
 
 import com.searchmedicine.demo.dto.Address;
+import com.searchmedicine.demo.dto.PharmacyDTO;
 import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.views.ChartLine;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,6 +38,13 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     private final PharmacyMedicineRepository pharmacyMedicineRepository;
     private final PharmacyMedicineService pharmacyMedicineService;
     private final ImagesRepository imagesRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UsersRepository userRepository;
+
 
     @SneakyThrows
     @Override
@@ -222,6 +232,31 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
                 .images(images)
 //                .filePath(filePathTalsh)
                 .build();
+    }
+
+    @Override
+    public Response editPassword(PharmacyDTO pharmacyDTO,Users users) {
+        String resMessage=pharmacyDTO.getPharmacyId()==null? "Пароль успешно изменен!" : EDIT_SUCCESS_MSG;
+        String password= pharmacyDTO.getOldPassword();
+        String newPassword=passwordEncoder.encode(pharmacyDTO.getNewPassword());
+        try {
+            if (pharmacyDTO == null) {
+                return new Response(1,"Ошибка : Пустое поле");
+            }
+            if(passwordEncoder.matches(password,users.getPassword())){
+                users.setPassword(newPassword);
+                userRepository.save(users);
+            }
+            else{
+                return new Response(1,"Ошибка : Пароли не совпадают");
+            }
+
+        }
+        catch (Exception e){
+            log.error("Ошибка при сохранении ",e);
+            return new Response(1,"Ошибка при сохранении : "+e.getMessage());
+        }
+        return new Response(0,resMessage);
     }
 }
 

@@ -22,4 +22,6 @@ public class PharmacyDTO {
     private String phoneNumber;
     private String whatsappNumber;
     private String offPhone;
+    private String oldPassword;
+    private String newPassword;
 }

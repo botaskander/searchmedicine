@@ -115,5 +115,11 @@ public class PharmacyController {
         }
         return null;
     }
+    @PutMapping("/edit-password")
+    public Response  editPassword(@RequestBody PharmacyDTO pharmacyDTO){
+        Users users=getUser();
+        return webPharmacyService.editPassword(pharmacyDTO,users);
+    }
+
 
 }

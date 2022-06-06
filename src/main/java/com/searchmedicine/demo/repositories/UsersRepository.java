@@ -13,7 +13,9 @@ import java.util.Optional;
 @Transactional
 @Repository
 public interface UsersRepository extends JpaRepository<Users,Long> {
+
     Users findByEmail(String email);
+
     @Transactional
     @Modifying
     @Query("UPDATE Users u " +

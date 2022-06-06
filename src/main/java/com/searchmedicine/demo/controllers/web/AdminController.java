@@ -206,7 +206,8 @@ public class AdminController {
         Long convertedLong = Long.parseLong(stringToConvert);
         List<Image> images =new ArrayList<>();
         Medicine medicine=adminService.getMedicine(convertedLong);
-        String filePath="C:\\Users\\бота\\IdeaProjects\\diploma\\downloadImages\\images\\";
+        String filePath="D:\\images_medicine\\";
+//        String filePath="C:\\Users\\бота\\IdeaProjects\\diploma\\downloadImages\\images\\";
         images.addAll(medicineService.getImageList(medicine.getId()));
         for(int i=0;i<images.size();i++){
             String imagesPath=filePath+images.get(i).getUrl();

@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,7 @@ public class AdminServiceImpl implements AdminService {
     private final ListWaiterRepository listWaiterRepository;
     private final PharmacyRequestRepository pharmacyRequestRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMedicineRepository userMedicineRepository;
 
     @Autowired(required = false)
     private EmailSender emailSender;
@@ -305,12 +308,21 @@ public class AdminServiceImpl implements AdminService {
         val lastMonthMedicines = medicines.stream()
                 .filter(medicine -> medicine.getAddedDate().isAfter(LocalDateTime.now().minusMonths(1)))
                 .collect(Collectors.toList());
+
+        val exchanges = userMedicineRepository.findAll();
+
+        LocalDateTime ldt = LocalDateTime.now().minusMonths(1);
+        Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        val lastMonthExchanges= exchanges.stream()
+                .filter(exchange-> exchange.getAddedDate().after(out))
+                .collect(Collectors.toList());
+
         return AdminHomeInfo.builder()
                 .chartLineList(chartLineList)
                 .lastMonthUsers(lastMonthUsers.size())
                 .totalUsers(users.size())
-                .lastMonthExchanges(0)
-                .totalExchanges(0)
+                .lastMonthExchanges(lastMonthExchanges.size())
+                .totalExchanges(exchanges.size())
                 .lastMonthMedicines(lastMonthMedicines.size())
                 .totalMedicines(medicines.size())
                 .lastRegisteredUsers(users.size() > 3 ? users.subList(0, 3) : users)
@@ -440,7 +452,7 @@ public class AdminServiceImpl implements AdminService {
                 "                  \n" +
                 "                    </td>\n" +
                 "                    <td style=\"font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\">\n" +
-                "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Уведомление о поступление лекарства</span>\n" +
+                "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Уведомление о регистрации в SEARCHMEDICINE</span>\n" +
                 "                    </td>\n" +
                 "                  </tr>\n" +
                 "                </tbody></table>\n" +

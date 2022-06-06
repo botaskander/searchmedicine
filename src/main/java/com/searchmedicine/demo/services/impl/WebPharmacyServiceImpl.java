@@ -292,13 +292,13 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
                     .whatsappNumber("+"+registerRequest.getWhatsappNumber().trim())
                     .workStartTime(LocalTime.parse(registerRequest.getWorkStartTime()))
                     .workEndTime(LocalTime.parse(registerRequest.getWorkEndTime()))
-                    .staticPassword(passwordEncoder.encode("nv%5$EE&3q"))
+                    .staticPassword("nv%5$EE&3q")
                     .address(savedAddress)
                     .isDone(false)
                     .isSeen(false)
                     .build());
-
             return new Response(0, SEND_REQUEST_SUCCESS);
+
         } catch (Exception e) {
             log.error(SAVE_ERROR ,e);
             return new Response(1, SEND_REQUEST_ERROR);

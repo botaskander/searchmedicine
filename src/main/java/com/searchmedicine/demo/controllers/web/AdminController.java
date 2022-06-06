@@ -3,6 +3,7 @@ package com.searchmedicine.demo.controllers.web;
 import com.searchmedicine.demo.controllers.FileController;
 import com.searchmedicine.demo.dto.ResponseDTO;
 import com.searchmedicine.demo.entities.*;
+import com.searchmedicine.demo.entities.views.AcceptPharmacyRequest;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.payload.UploadFileResponse;
@@ -139,12 +140,29 @@ public class AdminController {
         return  adminService.getAllUsers(roleCode);
     }
 
+    @GetMapping("/pharmacy-request/get-all")
+    public List<RegisterRequests> getAllPharmacyRequests() {
+        return adminService.getAllPharmaciesRequests();
+    }
+
+    @PostMapping("/pharmacy-request/accept")
+    public Response acceptPharmacyRequest(@RequestBody AcceptPharmacyRequest request){
+        return adminService.acceptPharmacyRequest(request);
+    }
+
+    @GetMapping("/pharmacy-request/change-seen-status/{requestId}")
+    public Response acceptPharmacyRequest(@PathVariable("requestId") Long requestId){
+        return adminService.changeSeenStatusOfPharmacyRequest(requestId);
+    }
+
     @GetMapping("/users/get-home-info")
     public AdminHomeInfo getLastUsersInfo(){
         return  adminService.getAdminHomeUserInfo();
     }
+
     @PostMapping(path="/uploadMultipleFiles", consumes = {"multipart/form-data"})
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam(name="files") MultipartFile[] files, @RequestParam(required=false,name="id") Object id) {
+    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam(name="files") MultipartFile[] files,
+                                                        @RequestParam(required=false,name="id") Object id) {
         String stringToConvert = String.valueOf(id);
         Long convertedLong = Long.parseLong(stringToConvert);
         Medicine medicine= medicineService.getMedicine(convertedLong);
@@ -228,13 +246,11 @@ public class AdminController {
         }
         return null;
     }
+
     @GetMapping("/list-medicine/image/{id}")
     public ResponseEntity<?> getListImageMedicine(@PathVariable Long id) {
-
-        System.out.println("-----------------------list of images  ------------------------"+id);
         List<Image> images= new ArrayList<>();
         images.addAll(medicineService.getImageList(id));
-        System.out.println(images);
         return   new ResponseEntity<>( images, HttpStatus.OK);
     }
 

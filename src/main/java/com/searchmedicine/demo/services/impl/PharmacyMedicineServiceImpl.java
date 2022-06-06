@@ -21,19 +21,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PharmacyMedicineServiceImpl implements
-    PharmacyMedicineService {
+public class PharmacyMedicineServiceImpl implements PharmacyMedicineService {
 
   private final PharmacyMedicineRepository pharmacyMedicineRepository;
   private final UserMedicineRepository userMedicineRepository;
   private final ListWaiterServiceImpl listWaiterServiceImpl;
   private final MedicineRepository medicineRepository;
   private final EntityManager entityManager;
-  private final EmailSender emailSender;
+  @Autowired(required = false)
+  private EmailSender emailSender;
   private  final ListWaiterRepository listWaiterRepository;
 
   @Override

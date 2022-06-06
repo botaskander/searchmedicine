@@ -2,12 +2,14 @@ package com.searchmedicine.demo.services;
 
 import com.searchmedicine.demo.dto.ResponseDTO;
 import com.searchmedicine.demo.entities.*;
+import com.searchmedicine.demo.entities.views.AcceptPharmacyRequest;
 import com.searchmedicine.demo.entities.views.AdminHomeInfo;
 import com.searchmedicine.demo.entities.views.Response;
 
 import java.util.List;
 
 public interface AdminService {
+
   List<FarmGroup> getAllFarmGroups();
 
   Response saveFarmGroup(FarmGroup farmGroup);
@@ -73,4 +75,10 @@ public interface AdminService {
   Response saveRole(Roles role);
 
   Response deleteRoles(Long id);
+
+  List<RegisterRequests> getAllPharmaciesRequests();
+
+  Response acceptPharmacyRequest(AcceptPharmacyRequest request);
+
+  Response changeSeenStatusOfPharmacyRequest(Long requestId);
 }

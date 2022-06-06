@@ -11,6 +11,7 @@ import com.searchmedicine.demo.services.impl.ListReserverServiceImpl;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +21,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 @RequiredArgsConstructor
 public class CheckJob {
   private final ListReserverService listReserverService;
-  private final EmailSender emailSender;
+
+  @Autowired(required = false)
+  private  EmailSender emailSender;
 
   @Scheduled(fixedDelay = 60000)
   public void run(){

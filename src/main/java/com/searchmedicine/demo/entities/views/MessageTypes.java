@@ -26,4 +26,7 @@ public class MessageTypes {
 
     public static final String SEND_REQUEST_ERROR="Произошла ошибка при отправке запроса. Проверьте корректность данных и попробуйте позже еще раз.";
     public static final String SEND_REQUEST_SUCCESS="Запрос на регистрацию был успешно отправлен.\n При успешной регистрации мы напишем ответ на указанную Вами почту.";
+
+    public static final String ACCEPT_REQUEST_ERROR_MSG="Произошла ошибка при сохранении: ";
+    public static final String ACCEPT_REQUEST_SUCCESS_MSG="Аптека успешно добавлена. Сообщение отправлено";
 }

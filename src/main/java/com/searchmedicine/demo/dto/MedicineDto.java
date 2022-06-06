@@ -15,6 +15,7 @@ public class MedicineDto {
   private Medicine medicine;
   private double price;
   private String owner;
+  private String title;
   private Address address;
   private String phoneNumber;
   private boolean isEmptyMed;

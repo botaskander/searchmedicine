@@ -60,8 +60,8 @@ public class ListWaiterServiceImpl implements ListWaiterService {
   }
 
   @Override
-  public List<ListWaiter> getWaiterByUserIdAndMedicineId(Long userId, Long medicineId) {
-    return listWaiterRepository.findAllByUsers_IdAndMedicine_Id(userId, medicineId);
+  public List<ListWaiter> getWaiterByUserIdAndMedicineId(Long userId, Long medicineId, boolean isApear) {
+    return listWaiterRepository.findAllByUsers_IdAndMedicine_IdAndIsAppear(userId, medicineId, isApear);
   }
 
   @Override

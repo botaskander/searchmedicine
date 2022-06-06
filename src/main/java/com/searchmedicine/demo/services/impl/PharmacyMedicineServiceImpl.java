@@ -51,6 +51,7 @@ public class PharmacyMedicineServiceImpl implements
       List<PharmacyMedicine> pharmacyMedicines = entityManager.createQuery(
               "SELECT ph FROM PharmacyMedicine ph "
                       + " WHERE ph.medicine.id =" + id
+                      + " and ph.isArc = false"
                       + " ORDER BY " + sortBy)
               .getResultList();
       if (pharmacyMedicines.size() > 0) length = true;
@@ -58,6 +59,7 @@ public class PharmacyMedicineServiceImpl implements
         for (PharmacyMedicine ph : pharmacyMedicines) {
           MedicineDto medicineDTO = new MedicineDto();
           medicineDTO.setId(ph.getId());
+          medicineDTO.setTitle(ph.getPharmacy().getName() + ", цена: " + ph.getPrice() + " тг") ;
           medicineDTO.setMedicine(ph.getMedicine());
           medicineDTO.setAddress(ph.getPharmacy().getAddress());
           medicineDTO.setOwner(ph.getPharmacy().getName());
@@ -83,7 +85,11 @@ public class PharmacyMedicineServiceImpl implements
       MedicineDto medicineDTO = new MedicineDto();
       medicineDTO.setEmptyMed(length);
       if(!length && users != null){
-        List<ListWaiter> listWaiters = listWaiterServiceImpl.getWaiterByUserIdAndMedicineId(users.getId(),medicine.getId());
+        List<ListWaiter> listWaiters = listWaiterServiceImpl.getWaiterByUserIdAndMedicineId(users.getId(),medicine.getId(), false);
+        System.out.println("List waiter");
+        for(ListWaiter lw: listWaiters){
+          System.out.println(lw.getMedicine() + " " + lw.getIsAppear());
+        }
         if(listWaiters.size() >0) medicineDTO.setWaiter(true);
       }
 

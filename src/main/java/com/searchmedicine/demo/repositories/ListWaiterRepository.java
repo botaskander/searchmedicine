@@ -18,6 +18,6 @@ public interface ListWaiterRepository extends JpaRepository<ListWaiter,Long> {
 
   List<ListWaiter> findAllByUsers_Id(Long id);
 
-  List<ListWaiter> findAllByUsers_IdAndMedicine_Id(Long userId, Long medicineId);
+  List<ListWaiter> findAllByUsers_IdAndMedicine_IdAndIsAppear(Long userId, Long medicineId, boolean isApear);
 }
 

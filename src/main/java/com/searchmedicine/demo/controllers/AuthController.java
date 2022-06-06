@@ -1,10 +1,7 @@
 package com.searchmedicine.demo.controllers;
 
 
-import com.searchmedicine.demo.dto.JwtRequest;
-import com.searchmedicine.demo.dto.JwtResponse;
-import com.searchmedicine.demo.dto.PharmacyJwtResponse;
-import com.searchmedicine.demo.dto.UserDTO;
+import com.searchmedicine.demo.dto.*;
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.views.Response;
 import com.searchmedicine.demo.entities.Roles;
@@ -78,8 +75,8 @@ public class AuthController {
     @RequestMapping(value = "/web/sign-in" , method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> signIn(@RequestBody JwtRequest request){
         Users user= userService.getUser(request.getEmail());
-
         if(user!=null){
+            System.out.println(user);
             boolean admin=false,pha=false;
             for(Roles r: user.getRoles()){
                 if(r.getRole().equals("ROLE_ADMIN")) admin=true;
@@ -168,7 +165,10 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-
+    @PostMapping("/web/register")
+    public Response register(@RequestBody PharmacyRegisterDTO request){
+        return webPharmacyService.registerPharmacy(request);
+    }
 
 
 

@@ -2,6 +2,7 @@ package com.searchmedicine.demo.services.impl;
 
 import com.searchmedicine.demo.dto.Address;
 import com.searchmedicine.demo.dto.PharmacyDTO;
+import com.searchmedicine.demo.dto.PharmacyRegisterDTO;
 import com.searchmedicine.demo.entities.ListReserver;
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.views.ChartLine;
@@ -18,13 +19,15 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.searchmedicine.demo.entities.views.MessageTypes.EDIT_SUCCESS_MSG;
+import static com.searchmedicine.demo.entities.views.MessageTypes.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,18 +41,15 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
     private final PharmacyMedicineRepository pharmacyMedicineRepository;
     private final PharmacyMedicineService pharmacyMedicineService;
     private final ImagesRepository imagesRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UsersRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UsersRepository userRepository;
+    private final PharmacyRequestRepository pharmacyRequestRepository;
 
 
     @SneakyThrows
     @Override
     public PharmacyHomeInfo getPharmacyHomeInfo(Long pharmacyId) {
-
+//        System.out.println(listReserverRepository.ff());
         val pharmacy = pharmacyRepository.getById(pharmacyId);
         val reserves = listReserverRepository.findAllByPharmacy(pharmacy.getId());
         val lastMonthReserves = reserves.stream()
@@ -214,8 +214,8 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
             pharmacyMedicineService.sendNotification(pharmacyMedicine);
         }
         catch (Exception e){
-            log.error(MessageTypes.SAVE_ERROR+"лекарства",e);
-            return new Response(1,MessageTypes.SAVE_ERROR+"лекарства");
+            log.error(SAVE_ERROR+"лекарства",e);
+            return new Response(1, SAVE_ERROR+"лекарства");
         }
         return new Response(0,resMessage);
     }
@@ -253,11 +253,58 @@ public class WebPharmacyServiceImpl implements WebPharmacyService {
 
         }
         catch (Exception e){
-            log.error("Ошибка при сохранении ",e);
-            return new Response(1,"Ошибка при сохранении : "+e.getMessage());
+            log.error(SAVE_ERROR,e);
+            return new Response(1,SAVE_ERROR+e.getMessage());
         }
         return new Response(0,resMessage);
     }
+
+    @Override
+    public Response registerPharmacy(PharmacyRegisterDTO registerRequest) {
+        System.out.println(registerRequest);
+        try {
+            val user = userRepository.findByEmail(registerRequest.getEmail());
+            if (user != null && user.getEmail() != null) {
+                return new Response(1, "Пользователь с email-ом " + registerRequest.getEmail() + " уже существует");
+            }
+
+            val address = addressRepository.findByNameAndLatitudeAndLongitude(registerRequest.getAddressName(),
+                    registerRequest.getAddressLatitude(),
+                    registerRequest.getAddressLongitude()).orElse(null);
+            if(address!=null){
+                return new Response(1,"Аптека с данным адресом существует");
+            }
+            addressRepository.save(com.searchmedicine.demo.entities.Address.builder()
+                    .latitude(registerRequest.getAddressLatitude())
+                    .longitude(registerRequest.getAddressLongitude())
+                    .name(registerRequest.getAddressName())
+                    .build());
+            val savedAddress = addressRepository.findByNameAndLatitudeAndLongitude(registerRequest.getAddressName(),
+                    registerRequest.getAddressLatitude(),
+                    registerRequest.getAddressLongitude()).orElse(null);
+
+            pharmacyRequestRepository.save(RegisterRequests.builder()
+                    .email(registerRequest.getEmail())
+                    .fullName(registerRequest.getEmployeeFullName())
+                    .name(registerRequest.getPharmacyName())
+                    .phoneNumber("+"+registerRequest.getPhoneNumber().trim())
+                    .registerDate(LocalDateTime.now())
+                    .whatsappNumber("+"+registerRequest.getWhatsappNumber().trim())
+                    .workStartTime(LocalTime.parse(registerRequest.getWorkStartTime()))
+                    .workEndTime(LocalTime.parse(registerRequest.getWorkEndTime()))
+                    .staticPassword("nv%5$EE&3q")
+                    .address(savedAddress)
+                    .isDone(false)
+                    .isSeen(false)
+                    .build());
+            return new Response(0, SEND_REQUEST_SUCCESS);
+
+        } catch (Exception e) {
+            log.error(SAVE_ERROR ,e);
+            return new Response(1, SEND_REQUEST_ERROR);
+        }
+    }
+
 }
 
 

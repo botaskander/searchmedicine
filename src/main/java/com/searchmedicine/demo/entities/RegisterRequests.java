@@ -1,5 +1,6 @@
 package com.searchmedicine.demo.entities;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,13 +10,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "pharmacies")
-public class Pharmacy {
+@Table(name="pharmacy_requests")
+public class RegisterRequests {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="id")
@@ -24,14 +25,17 @@ public class Pharmacy {
     @Column(name = "name",columnDefinition = "TEXT")
     private String name;
 
+    @Column(name = "email",columnDefinition = "TEXT")
+    private String email;
+
+    @Column(name = "password",columnDefinition = "TEXT")
+    private String staticPassword;
+
     @Column(name = "work_start_time",columnDefinition = "time")
     private LocalTime workStartTime;
 
     @Column(name = "work_end_time",columnDefinition = "time")
     private LocalTime workEndTime;
-
-    @Column(name = "is_work")
-    private Boolean isWork;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -39,15 +43,21 @@ public class Pharmacy {
     @Column(name = "whatsapp_number")
     private String whatsappNumber;
 
-    @Column(name = "off_phone")
-    private String offPhone;
+    @Column(name = "is_seen")
+    private Boolean isSeen;
 
-    @Column(name="last_update_date")
-    private LocalDateTime lastUpdateDate;
+    @Column(name = "is_done")
+    private Boolean isDone;
 
-    @ManyToOne
-    private Address address;
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name="register_date")
+    private LocalDateTime registerDate;
 
     @OneToOne
-    private Users user;
+    private Address address;
+
+
+
 }

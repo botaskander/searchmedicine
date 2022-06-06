@@ -30,6 +30,11 @@ public interface ListReserverRepository extends JpaRepository<ListReserver, Long
     @Query("SELECT lr.pharmacyMedicine.medicine  from ListReserver lr  order by  count(lr.pharmacyMedicine.medicine) desc   ")
     List<Medicine> findTop();
 
+    @Query("SELECT lr.pharmacyMedicine.medicine "
+            + "FROM ListReserver lr "+
+            "GROUP BY (lr.pharmacyMedicine.medicine.id)")
+    List<Medicine> ff();
+
     List<ListReserver> findAllByUsersId(Long id);
 
 

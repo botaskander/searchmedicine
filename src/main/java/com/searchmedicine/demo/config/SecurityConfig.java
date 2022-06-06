@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/chang/mobile").permitAll()
                 .antMatchers("/api/img/**").permitAll()
                 .antMatchers("/web/sign-in").permitAll()
+                .antMatchers("/web/register").permitAll()
                 .anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement().
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS);

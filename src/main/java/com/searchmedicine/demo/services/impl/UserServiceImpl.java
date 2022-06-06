@@ -8,6 +8,7 @@ import com.searchmedicine.demo.entities.token.ConfirmationTokenService;
 import com.searchmedicine.demo.repositories.RolesRepository;
 import com.searchmedicine.demo.repositories.UsersRepository;
 import com.searchmedicine.demo.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
-    @Autowired
+    @Autowired(required = false)
     private EmailSender emailSender;
 
     @Override

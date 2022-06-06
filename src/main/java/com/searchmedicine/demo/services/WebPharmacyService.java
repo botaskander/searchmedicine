@@ -3,6 +3,7 @@ package com.searchmedicine.demo.services;
 
 import com.searchmedicine.demo.dto.Address;
 import com.searchmedicine.demo.dto.PharmacyDTO;
+import com.searchmedicine.demo.dto.PharmacyRegisterDTO;
 import com.searchmedicine.demo.entities.Pharmacy;
 import com.searchmedicine.demo.entities.Users;
 import com.searchmedicine.demo.entities.*;
@@ -34,4 +35,6 @@ public interface WebPharmacyService {
     PharmacyMedicineView getDetailedPharmacyMedicine(Long pharmacyMedicineId);
 
     Response editPassword(PharmacyDTO pharmacyDTO,Users users);
+
+    Response registerPharmacy(PharmacyRegisterDTO registerRequest);
 }
